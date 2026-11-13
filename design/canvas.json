@@ -1,0 +1,23 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-11-12T23:12:00Z" },
+  "title": "Nuggetfinder Screens",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 390, "h": 844, "title": "1 Map", "radius": 28 },
+    "Spot.dc.html": { "x": 470, "y": 0, "w": 390, "h": 844, "title": "2 Spot", "radius": 28 },
+    "Beef.dc.html": { "x": 940, "y": 0, "w": 390, "h": 844, "title": "3 Beef", "radius": 28 },
+    "Take.dc.html": { "x": 1410, "y": 0, "w": 390, "h": 844, "title": "4 Drop a take", "radius": 28 },
+    "Prices.dc.html": { "x": 1880, "y": 0, "w": 390, "h": 844, "title": "5 Store prices", "radius": 28 },
+    "Badges.dc.html": { "x": 2350, "y": 0, "w": 390, "h": 844, "title": "6 Badges and ledger", "radius": 28 }
+  },
+  "order": ["Main.dc.html", "Spot.dc.html", "Beef.dc.html", "Take.dc.html", "Prices.dc.html", "Badges.dc.html"],
+  "notes": {
+    "title": { "x": 0, "y": -260, "text": "Nuggetfinder: hybrid street + clinical", "kind": "title1", "maxW": 2740 },
+    "loud": { "x": 0, "y": 964, "w": 360, "text": "LOUD LAYER: wordmark, status blocks, feud cards, stickers, verdicts, empty states. Thick ink outlines, flat color, hard shadows, chunky display type.", "fill": "pink", "size": "m" },
+    "calm": { "x": 440, "y": 964, "w": 360, "text": "CALM LAYER: map, ratings, prices, timestamps. Quiet colors, plain grotesk type, generous spacing. Status always shows a word and an icon, never color alone.", "fill": "blue", "size": "m" },
+    "sample": { "x": 880, "y": 964, "w": 360, "text": "All place names, scores, votes and prices on these screens are sample data. Illustrations are original placeholder shapes; swap in a commissioned illustrator's characters later.", "fill": "orange", "size": "m" }
+  },
+  "designSystems": []
+}

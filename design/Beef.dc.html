@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nuggetfinder Beef</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:'Space Grotesk',system-ui,sans-serif}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F5F0E6; color: #161514; font-family: 'Space Grotesk', system-ui, sans-serif; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 14px">
+
+  <!-- header -->
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="background: #161514; color: #F5F0E6; padding: 4px 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.08em">BEEF</span>
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em">SAUCE WAR · ROUND 2</span>
+    </div>
+    <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 28px; line-height: 1.02; letter-spacing: 0.01em">CANE'S SAUCE<br>VS CHICK-FIL-A SAUCE</span>
+  </div>
+
+  <!-- matchup blocks (loud) -->
+  <div style="display: flex; gap: 16px">
+    <div style="flex: 1; box-sizing: border-box; height: 168px; background: #C8321F; color: #FFFFFF; border: 3px solid #161514; box-shadow: 5px 5px 0 #161514; padding: 12px; display: flex; flex-direction: column; justify-content: space-between">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between">
+        <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 17px; line-height: 1.05">CANE'S<br>SAUCE</span>
+        <svg aria-hidden="true" width="40" height="40" viewBox="0 0 44 44"><path d="M8 14h28l-3 24H11z" fill="#F5F0E6" stroke="#161514" stroke-width="3" stroke-linejoin="round"/><path d="M6 14h32" stroke="#161514" stroke-width="4" stroke-linecap="round"/><path d="M12 22h20l-1.4 10H13.4z" fill="#F4B223" stroke="#161514" stroke-width="2"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 52px; line-height: 1">61%</span>
+        <span style="font-size: 13px; font-weight: 500">1,284 votes</span>
+      </div>
+    </div>
+    <div style="flex: 1; box-sizing: border-box; height: 168px; background: #F4B223; color: #161514; border: 3px solid #161514; box-shadow: 5px 5px 0 #161514; padding: 12px; display: flex; flex-direction: column; justify-content: space-between">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between">
+        <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 17px; line-height: 1.05">CHICK-FIL-A<br>SAUCE</span>
+        <svg aria-hidden="true" width="40" height="40" viewBox="0 0 44 44"><path d="M8 14h28l-3 24H11z" fill="#F5F0E6" stroke="#161514" stroke-width="3" stroke-linejoin="round"/><path d="M6 14h32" stroke="#161514" stroke-width="4" stroke-linecap="round"/><path d="M12 22h20l-1.4 10H13.4z" fill="#C8321F" stroke="#161514" stroke-width="2"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 52px; line-height: 1">39%</span>
+        <span style="font-size: 13px; font-weight: 500">821 votes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- split bar -->
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <div style="display: flex; height: 18px; border: 3px solid #161514; background: #F4B223"><div style="width: 61%; background: #C8321F"></div></div>
+    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5A554C"><span>2,105 votes total</span><span>Round ends in 2 days</span></div>
+  </div>
+
+  <!-- vote buttons -->
+  <div style="display: flex; gap: 12px">
+    <button style="flex: 1; height: 48px; background: #F5F0E6; color: #161514; border: 3px solid #161514; font-weight: 700; font-size: 13px; letter-spacing: 0.05em; cursor: pointer">VOTE CANE'S</button>
+    <button style="flex: 1; height: 48px; background: #F5F0E6; color: #161514; border: 3px solid #161514; font-weight: 700; font-size: 13px; letter-spacing: 0.05em; cursor: pointer">VOTE CHICK-FIL-A</button>
+  </div>
+
+  <!-- takes -->
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 16px; letter-spacing: 0.04em">THE TAKES</span>
+    <div style="display: flex; gap: 8px">
+      <button style="height: 36px; padding: 0 12px; background: #161514; color: #F5F0E6; border: 2px solid #161514; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">HOT</button>
+      <button style="height: 36px; padding: 0 12px; background: #F5F0E6; color: #161514; border: 2px solid #161514; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">NEW</button>
+    </div>
+  </div>
+
+  <!-- take 1 -->
+  <div style="display: flex; gap: 12px">
+    <div style="position: relative; flex: none; width: 84px; height: 112px; background: #2A2926; border: 2px solid #161514; overflow: hidden">
+      <div style="position: absolute; left: 0; right: 0; top: 0; background: #C8321F; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 3px 5px">TEAM CANE'S</div>
+      <div style="position: absolute; left: 0; right: 0; top: 36px; display: flex; justify-content: center">
+        <svg aria-hidden="true" width="30" height="30" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" fill="#F5F0E6" stroke="#161514" stroke-width="2"/><path d="M14 10l11 7-11 7z" fill="#161514"/></svg>
+      </div>
+      <div style="position: absolute; left: 5px; bottom: 5px; background: #F5F0E6; color: #161514; font-size: 11px; font-weight: 700; padding: 2px 5px">0:18</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span style="font-weight: 700; font-size: 15px">@tenderloyalist</span>
+        <span style="background: #FF4FA3; border: 2px solid #161514; padding: 1px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em">SAUCE HERETIC</span>
+      </div>
+      <span style="font-size: 15px; line-height: 1.3">Cane's sauce on a plain tender beats a whole sauce flight.</span>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <button style="height: 44px; padding: 0 14px; background: #F5F0E6; color: #161514; border: 2px solid #161514; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">REBUT</button>
+        <span style="font-size: 13px; color: #5A554C">34 clowned · 12 rebuttals</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- take 2: rebuttal -->
+  <div style="display: flex; gap: 12px; margin-left: 20px; padding-left: 12px; border-left: 3px solid #161514">
+    <div style="position: relative; flex: none; width: 84px; height: 112px; background: #2A2926; border: 2px solid #161514; overflow: hidden">
+      <div style="position: absolute; left: 0; right: 0; top: 0; background: #F4B223; color: #161514; font-size: 11px; font-weight: 700; padding: 3px 5px">TEAM CFA</div>
+      <div style="position: absolute; left: 0; right: 0; top: 36px; display: flex; justify-content: center">
+        <svg aria-hidden="true" width="30" height="30" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" fill="#F5F0E6" stroke="#161514" stroke-width="2"/><path d="M14 10l11 7-11 7z" fill="#161514"/></svg>
+      </div>
+      <div style="position: absolute; left: 5px; bottom: 5px; background: #F5F0E6; color: #161514; font-size: 11px; font-weight: 700; padding: 2px 5px">0:22</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span style="font-weight: 700; font-size: 15px">@crispyintent</span>
+        <span style="background: #161514; color: #F5F0E6; padding: 2px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em">REBUTTAL</span>
+      </div>
+      <span style="font-size: 15px; line-height: 1.3">Sweet, tangy, a little smoky. It never needed backup.</span>
+      <span style="font-size: 13px; color: #5A554C">21 clowned · 4 rebuttals</span>
+    </div>
+  </div>
+
+  <!-- bottom CTA -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 76px; box-sizing: border-box; background: #161514; padding: 12px 16px">
+    <button style="width: 100%; height: 52px; background: #FF4FA3; color: #161514; border: 3px solid #F5F0E6; font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 17px; letter-spacing: 0.04em; cursor: pointer">DROP A TAKE</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

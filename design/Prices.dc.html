@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nuggetfinder Store Prices</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:'Space Grotesk',system-ui,sans-serif}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F5F0E6; color: #161514; font-family: 'Space Grotesk', system-ui, sans-serif; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 12px">
+
+  <!-- header -->
+  <div style="display: flex; flex-direction: column; gap: 4px">
+    <span style="font-family: 'Archivo Black', 'Arial Black', sans-serif; font-size: 28px; line-height: 1; letter-spacing: 0.01em">PRICES</span>
+    <span style="font-size: 14px; color: #5A554C">Frozen nuggets, sorted by cost per nugget</span>
+  </div>
+
+  <!-- store card -->
+  <div style="background: #FFFDF8; border: 2px solid #161514; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-weight: 700; font-size: 17px">Safeway · Marina</span>
+      <span style="font-size: 13px; color: #5A554C">0.8 mi · listing updated today, 9:40 AM</span>
+    </div>
+    <span style="display: inline-flex; align-items: center; gap: 5px; flex: none; background: #161514; color: #F5F0E6; padding: 5px 8px; font-weight: 700; font-size: 11px; letter-spacing: 0.06em">
+      <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>VERIFIED STORE</span>
+  </div>
+
+  <!-- sponsored banner (reserved blue) -->
+  <div style="background: #2446C9; color: #FFFFFF; border: 3px solid #161514; box-shadow: 4px 4px 0 #161514; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+    <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+      <span style="align-self: flex-start; background: #FFFFFF; color: #2446C9; padding: 2px 6px; font-weight: 700; font-size: 11px; letter-spacing: 0.1em">SPONSORED</span>
+      <span style="font-weight: 700; font-size: 15px">Brand X Chicken Tenders</span>
+      <span style="font-size: 13px">$3 per bag until Nov 18, sold here</span>
+    </div>
+    <button style="flex: none; height: 44px; padding: 0 14px; background: #F5F0E6; color: #161514; border: 2px solid #161514; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">SEE DEAL</button>
+  </div>
+
+  <!-- filters -->
+  <div style="display: flex; gap: 8px">
+    <button style="height: 44px; padding: 0 14px; background: #161514; color: #F5F0E6; border: 2px solid #161514; font-weight: 700; font-size: 13px; letter-spacing: 0.05em; cursor: pointer">PER NUGGET</button>
+    <button style="height: 44px; padding: 0 14px; background: #F5F0E6; color: #161514; border: 2px solid #161514; font-weight: 700; font-size: 13px; letter-spacing: 0.05em; cursor: pointer">BRAND</button>
+    <button style="height: 44px; padding: 0 14px; background: #F5F0E6; color: #161514; border: 2px solid #161514; font-weight: 700; font-size: 13px; letter-spacing: 0.05em; cursor: pointer">ALLERGENS</button>
+  </div>
+
+  <!-- table head -->
+  <div style="display: flex; align-items: center; gap: 8px; height: 28px; border-bottom: 2px solid #161514; font-size: 12px; font-weight: 700; letter-spacing: 0.06em">
+    <span style="flex: 1">ITEM</span>
+    <span style="width: 52px">PACK</span>
+    <span style="width: 56px; text-align: right">PRICE</span>
+    <span style="width: 72px; text-align: right">PER NUGGET</span>
+  </div>
+
+  <!-- rows -->
+  <div style="display: flex; flex-direction: column">
+
+    <div style="display: flex; align-items: center; gap: 8px; min-height: 88px; padding: 6px 0; border-bottom: 1.5px solid #CFC8B8; background: #FFF3CF">
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-weight: 700; font-size: 15px; line-height: 1.2">Store brand nuggets</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #0E5A46">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>IN STOCK · store listing</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px">
+          <span style="display: inline-flex; align-items: center; gap: 4px; background: #161514; color: #F5F0E6; padding: 2px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em">
+            <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>PEANUT OIL FREE</span>
+          <span style="display: inline-flex; align-items: center; border: 2px dashed #161514; color: #161514; padding: 0 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em">GF?</span>
+        </div>
+      </div>
+      <span style="width: 52px; font-size: 14px">48 ct</span>
+      <span style="width: 56px; text-align: right; font-size: 14px">$9.99</span>
+      <div style="width: 72px; display: flex; flex-direction: column; align-items: flex-end; gap: 3px">
+        <span style="font-weight: 700; font-size: 17px">20.8¢</span>
+        <span style="background: #F4B223; border: 2px solid #161514; padding: 0 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap">BEST DEAL</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; min-height: 88px; padding: 6px 0; border-bottom: 1.5px solid #CFC8B8">
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-weight: 700; font-size: 15px; line-height: 1.2">Brand A nuggets</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #0E5A46">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>IN STOCK · store listing</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px">
+          <span style="display: inline-flex; align-items: center; gap: 4px; border: 2px solid #C8321F; color: #C8321F; padding: 0 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em">
+            <svg aria-hidden="true" width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M8 2l6.5 11.5h-13z"/><path d="M8 7v3M8 12v.5"/></svg>PEANUT OIL</span>
+          <span style="display: inline-flex; align-items: center; border: 2px dashed #161514; color: #161514; padding: 0 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em">GF?</span>
+        </div>
+      </div>
+      <span style="width: 52px; font-size: 14px">40 ct</span>
+      <span style="width: 56px; text-align: right; font-size: 14px">$8.99</span>
+      <span style="width: 72px; text-align: right; font-weight: 700; font-size: 17px">22.5¢</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; min-height: 88px; padding: 6px 0; border-bottom: 1.5px solid #CFC8B8">
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-weight: 700; font-size: 15px; line-height: 1.2">Brand B nuggets</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #161514">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>LOW · crowd report, 1 hr ago</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px">
+          <span style="display: inline-flex; align-items: center; gap: 4px; background: #161514; color: #F5F0E6; padding: 2px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em">
+            <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>GLUTEN FREE</span>
+        </div>
+      </div>
+      <span style="width: 52px; font-size: 14px">36 ct</span>
+      <span style="width: 56px; text-align: right; font-size: 14px">$9.49</span>
+      <span style="width: 72px; text-align: right; font-weight: 700; font-size: 17px">26.4¢</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; min-height: 88px; padding: 6px 0; border-bottom: 1.5px solid #CFC8B8">
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-weight: 700; font-size: 15px; line-height: 1.2">Brand C nuggets</span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #C8321F">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M4 4l8 8M12 4l-8 8"/></svg>OUT · store listing</span>
+        <span style="font-size: 12px; color: #5A554C">No allergen info yet. Suggest one.</span>
+      </div>
+      <span style="width: 52px; font-size: 14px">20 ct</span>
+      <span style="width: 56px; text-align: right; font-size: 14px">$7.99</span>
+      <span style="width: 72px; text-align: right; font-weight: 700; font-size: 17px">40.0¢</span>
+    </div>
+  </div>
+
+  <!-- footnote -->
+  <span style="font-size: 13px; line-height: 1.35; color: #5A554C">Solid badges are confirmed by the store. Dashed and outlined badges are user suggestions. Always check the package.</span>
+
+  <!-- tab bar -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 72px; box-sizing: border-box; background: #161514; color: #F5F0E6; display: flex; align-items: stretch; justify-content: space-around; padding: 0 8px">
+    <button style="flex: 1; min-width: 44px; background: transparent; border: 0; color: #F5F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; cursor: pointer">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M11 20s-6.5-5.6-6.5-10.5a6.5 6.5 0 0 1 13 0C17.5 14.4 11 20 11 20z"/><circle cx="11" cy="9.5" r="2.3"/></svg>MAP</button>
+    <button style="flex: 1; min-width: 44px; background: transparent; border: 0; color: #F5F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; cursor: pointer">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M3 4h7v7H3zM12 11h7v7h-7z"/><path d="M12 4l7 0M3 18l7 0"/></svg>BEEF</button>
+    <button aria-label="Report" style="flex: 1; min-width: 44px; background: transparent; border: 0; color: #161514; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <span style="width: 48px; height: 48px; margin-top: -10px; background: #FF4FA3; border: 3px solid #F5F0E6; border-radius: 14px; display: flex; align-items: center; justify-content: center">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#161514" stroke-width="3.5" stroke-linecap="square"><path d="M12 4v16M4 12h16"/></svg>
+      </span></button>
+    <button style="flex: 1; min-width: 44px; background: transparent; border: 0; color: #F4B223; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; cursor: pointer">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M3 3h8l8 8-8 8-8-8z"/><circle cx="8" cy="8" r="1.5"/></svg>PRICES</button>
+    <button style="flex: 1; min-width: 44px; background: transparent; border: 0; color: #F5F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; cursor: pointer">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="7.5" r="3.8"/><path d="M3.5 20c1-4.4 4-6.4 7.5-6.4s6.5 2 7.5 6.4"/></svg>ME</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
