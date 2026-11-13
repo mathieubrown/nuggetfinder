@@ -1,0 +1,2 @@
+name,kind,address,city,lat,lng,brand,sells,hours_note,allergen_notes,source,discovered_by,notes
+EXAMPLE DELETE ME,independent,123 Example St,San Francisco,37.7749,-122.4194,,"nuggets;tenders;sauce","Mon-Sun 10-9","fried in peanut oil per staff",visit,mat,"Great honey mustard"
