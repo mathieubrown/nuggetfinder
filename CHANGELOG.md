@@ -35,3 +35,10 @@
 - Ran both JavaScript tests and applied all migrations to a local PostgreSQL test database. Verified anonymous read access, private report rows, agreement by distinct users, cooldown shared with map reports, the 60-report limit, bans, two-hour and 24-hour expiration, and the daily points cap.
 - Live Supabase migrations, live sign-in, and production data remain untested.
 - Playwright captured each item at 390px and 1280px. All ten runs checked console errors and horizontal overflow. The stamp ran only with motion enabled. The downloaded PNG measured 1080 × 1920. Browser runs used a simulated Supabase session and stock responses.
+
+## Wave 1 polish
+
+- Product and profile screens use thicker Spot-style cards, hard shadows, status stamps and a mascot for empty states. Community discovery cards get a foil treatment. The starter spots have no verified rarity data.
+- Sticker buttons replay their peel and slap. The product screen celebrates when it detects a signed-in account's first confirmed stock report. The celebration can be dismissed. Motion respects the device setting.
+- Share cards wait for Archivo Black, show the site address and the signed-in username when available, and use the same status wording as the product page. Removed the sample pin label from both.
+- Automated tests confirmed that one report draws UNCONFIRMED on the PNG and that drawing waits for the font. Playwright checked the product and profile at 390px and 1280px with simulated data. Live Supabase and real rarity data remain untested.

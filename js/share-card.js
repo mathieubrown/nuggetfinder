@@ -16,7 +16,10 @@ window.NuggetfinderShare = (function () {
   }
 
   async function makeCard(details) {
-    if (document.fonts) await document.fonts.load('48px "Archivo Black"').catch(function () {});
+    if (document.fonts) {
+      await document.fonts.load('900 48px "Archivo Black"', details.product + details.place + details.label);
+      await document.fonts.ready;
+    }
     var canvas = document.createElement('canvas');
     canvas.width = 1080;
     canvas.height = 1920;
@@ -70,8 +73,12 @@ window.NuggetfinderShare = (function () {
 
     ctx.fillStyle = ink;
     if (details.lastSeen) fitText(ctx, details.lastSeen, 80, 1450, 920, 38);
-    if (details.sample) fitText(ctx, 'SAMPLE MAP PIN', 80, 1515, 920, 38);
-    fitText(ctx, 'SF · SOUTH CITY · DALY CITY', 80, 1800, 920, 43);
+    ctx.fillStyle = '#F4B223';
+    ctx.fillRect(0, 1570, 1080, 350);
+    ctx.fillStyle = ink;
+    ctx.fillRect(0, 1570, 1080, 8);
+    fitText(ctx, details.username || 'NUGGETFINDER COMMUNITY', 80, 1710, 920, 56);
+    fitText(ctx, 'mathieubrown.github.io/nuggetfinder', 80, 1810, 920, 44);
 
     return new Promise(function (resolve, reject) {
       canvas.toBlob(function (blob) {

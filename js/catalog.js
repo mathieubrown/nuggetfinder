@@ -16,6 +16,8 @@ window.NuggetfinderCatalog = (function () {
     pending: '⋯ UNCONFIRMED', stale: '◷ STALE', none: '− NO REPORTS'
   };
 
+  function statusLabel(status) { return labels[status]; }
+
   function dateLabel(value) {
     return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
   }
@@ -36,6 +38,26 @@ window.NuggetfinderCatalog = (function () {
       });
     }
 
+    function placeIsRare(card) {
+      var place = links.find(function (link) { return link.place_id === card.dataset.place; }).places;
+      return place.source === 'community' || place.source === 'community_discovery';
+    }
+
+
+    async function checkFirstConfirmation() {
+      var user = options.user();
+      if (!user || !client) return;
+      try {
+        var response = await client.rpc('my_wave_profile').single();
+        if (response.error || options.user()?.id !== user.id || !root.contains(feedback)) return;
+        var points = Number(response.data.points);
+        if (pointsByUser.get(user.id) === 0 && points > 0) NuggetfinderSparkle.celebrate(root);
+        pointsByUser.set(user.id, points);
+      } catch (error) {
+        // Reporting still works if profile points cannot be fetched.
+      }
+    }
+
     var stockRequest = 0;
     async function refresh() {
       var request = ++stockRequest;
@@ -49,10 +71,11 @@ window.NuggetfinderCatalog = (function () {
           var row = stockRows.get(card.dataset.place);
           var status = NuggetfinderWave.stockStatus(row);
           var stamp = card.querySelector('.stat');
-          stamp.className = 'stat s-' + status;
+          stamp.className = 'stat stock-stamp s-' + status;
           stamp.dataset.stampKey = card.dataset.place;
           stamp.dataset.stampStatus = status;
-          stamp.textContent = labels[status];
+          stamp.textContent = statusLabel(status);
+
           card.querySelector('.last-seen').textContent = row && row.last_seen_at
             ? 'Last seen: ' + dateLabel(row.last_seen_at) : 'Last seen: no recent sightings';
           card.querySelector('.last-report').textContent = row
@@ -60,6 +83,7 @@ window.NuggetfinderCatalog = (function () {
         });
         stampHistory = NuggetfinderStamp.update(root.querySelectorAll('[data-stamp-key]'), stampHistory);
         available = true;
+        checkFirstConfirmation();
       } catch (error) {
         if (request !== stockRequest || id !== renderId || !root.contains(feedback)) return;
         available = false;
@@ -69,6 +93,7 @@ window.NuggetfinderCatalog = (function () {
     }
 
     cards.forEach(function (card) {
+      card.classList.toggle('spot-foil', placeIsRare(card));
       var share = card.querySelector('[data-share]');
       var place = links.find(function (link) { return link.place_id === card.dataset.place; }).places;
       share.addEventListener('click', async function () {
@@ -78,8 +103,8 @@ window.NuggetfinderCatalog = (function () {
         try {
           await NuggetfinderShare.download({
             brand: product.brand, product: product.name, productId: product.id,
-            place: place.name, area: place.area, status: status, label: available ? labels[status] : '− STOCK UNAVAILABLE',
-            sample: place.source === 'map_sample',
+            place: place.name, area: place.area, status: status, label: available ? statusLabel(status) : '− STOCK UNAVAILABLE',
+            username: options.username(),
             lastSeen: row && row.last_seen_at ? 'Last seen: ' + dateLabel(row.last_seen_at) : ''
           });
         } catch (error) {
@@ -114,6 +139,7 @@ window.NuggetfinderCatalog = (function () {
     return refresh;
   }
 
+  var pointsByUser = new Map();
   var renderId = 0;
   var refreshStock;
   async function show(root, route, client, esc, options) {
@@ -131,25 +157,24 @@ window.NuggetfinderCatalog = (function () {
     if (route.page === 'product') {
       var product = catalog.products.find(function (entry) { return entry.id === route.productId; });
       if (!product) {
-        root.innerHTML = '<a href="#/products">All products</a><p>Product not found.</p>';
+        root.innerHTML = '<a href="#/products">All products</a>' + NuggetfinderSparkle.empty('Product not found.');
         return;
       }
       var links = catalog.links.filter(function (link) {
         return link.product_id === product.id && link.places;
       });
       root.innerHTML = '<a class="wave-link" href="#/products">← All products</a>' +
-        '<p class="tag">' + esc(product.kind.toUpperCase()) + '</p>' +
-        '<h1>' + esc(product.name) + '</h1><p>' + esc(product.brand) + '</p><h2>Where to buy</h2><p class="stock-feedback" role="status"></p>' +
+        '<header class="wave-hero"><p class="tag">' + esc(product.kind.toUpperCase()) + '</p>' +
+        '<h1>' + esc(product.name) + '</h1><p>' + esc(product.brand) + '</p></header><h2>Where to buy</h2><p class="stock-feedback" role="status"></p>' +
         '<div class="wave-grid">' + links.map(function (link) {
           var place = link.places;
-          return '<article class="wave-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3><p>' + esc(place.area) +
-            (place.source === 'map_sample' ? ' · Sample map pin' : '') +
-            '</p><span class="stat s-none" aria-live="polite">− NO REPORTS</span>' +
+          return '<article class="wave-card spot-trading-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3><p>' + esc(place.area) +
+            '</p><span class="stat stock-stamp s-none" aria-live="polite">− NO REPORTS</span>' +
             '<p class="small last-seen"></p><p class="small last-report"></p>' +
             '<div class="btns"><button class="big pink" type="button" data-stock="seen" disabled>Seen it</button>' +
             '<button class="big ghost" type="button" data-stock="sold_out" disabled>Sold out</button></div><button class="big ghost" type="button" data-share>Download share card</button></article>';
         }).join('') + '</div>';
-      if (!root.querySelector('article')) root.querySelector('.wave-grid').textContent = 'No places listed yet.';
+      if (!links.length) root.querySelector('.wave-grid').innerHTML = NuggetfinderSparkle.empty('No places listed yet.');
       refreshStock = showStock(root, product, links, client, options, id);
       return;
     }
@@ -170,11 +195,11 @@ window.NuggetfinderCatalog = (function () {
       }).map(function (product) {
         return '<a class="wave-card" href="#/product/' + encodeURIComponent(product.id) + '"><strong>' +
           esc(product.name) + '</strong><span>' + esc(product.brand) + ' · ' + esc(product.kind) + '</span></a>';
-      }).join('') || '<p>No matching products.</p>';
+      }).join('') || NuggetfinderSparkle.empty('No matching products.');
     }
     input.addEventListener('input', search);
     search();
   }
 
-  return { show: show, refresh: function () { if (refreshStock) refreshStock(); } };
+  return { show: show, statusLabel: statusLabel, refresh: function () { if (refreshStock) refreshStock(); } };
 })();

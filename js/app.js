@@ -631,7 +631,9 @@ function showRoute(route) {
   mapApp.hidden = catalog || profile;
   if (profile) return showProfile();
   if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc, {
-    user: function () { return state.user; }, signIn: openAuth, reportError: errorText
+    user: function () { return state.user; }, username: function () {
+      return state.user && !whoEl.hidden ? whoEl.textContent : '';
+    }, signIn: openAuth, reportError: errorText
   });
   map.invalidateSize();
   var id = route.spotId;
