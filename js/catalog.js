@@ -169,7 +169,7 @@ window.NuggetfinderCatalog = (function () {
         '<div class="wave-grid">' + links.map(function (link) {
           var place = link.places;
           return '<article class="wave-card spot-trading-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3><p>' + esc(place.area) +
-            '</p><span class="stat stock-stamp s-none" aria-live="polite">− NO REPORTS</span>' +
+            '</p><a class="wave-link" href="#/spot/' + encodeURIComponent(place.id) + '">View on map</a><span class="stat stock-stamp s-none" aria-live="polite">− NO REPORTS</span>' +
             '<p class="small last-seen"></p><p class="small last-report"></p>' +
             '<div class="btns"><button class="big pink" type="button" data-stock="seen" disabled>Seen it</button>' +
             '<button class="big ghost" type="button" data-stock="sold_out" disabled>Sold out</button></div><button class="big ghost" type="button" data-share>Download share card</button></article>';

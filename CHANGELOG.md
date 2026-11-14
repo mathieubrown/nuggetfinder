@@ -42,3 +42,9 @@
 - Sticker buttons replay their peel and slap. The product screen celebrates when it detects a signed-in account's first confirmed stock report. The celebration can be dismissed. Motion respects the device setting.
 - Share cards wait for Archivo Black, show the site address and the signed-in username when available, and use the same status wording as the product page. Removed the sample pin label from both.
 - Automated tests confirmed that one report draws UNCONFIRMED on the PNG and that drawing waits for the font. Playwright checked the product and profile at 390px and 1280px with simulated data. Live Supabase and real rarity data remain untested.
+
+## Real store IDs
+
+- Replaced invented starter pins with 31 locations from an OpenStreetMap snapshot. The catalog links 15 products to stores of the same brand.
+- Product cards link to their map spot. The map includes the same snapshot even when its live location search fails. Both screens show the OpenStreetMap credit.
+- Only the unapplied product seed migration changed. The live database remains pending review.

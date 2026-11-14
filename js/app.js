@@ -120,13 +120,16 @@ var CACHE_TTL = 24 * 60 * 60 * 1000;
 var SUPABASE_URL = 'https://jytfarejfcqexxbtnlqu.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_kGEH96ESdQ2xhebZFr5A5A_tQ9BWJqn';
 
-var SEED = [
-  { id: 'seed/1', name: "McDonald's", chain: 'mcdonalds', lat: 37.7879, lng: -122.4075, place: 'Union Square' },
-  { id: 'seed/2', name: 'Chick-fil-A', chain: 'cfa', lat: 37.7849, lng: -122.3974, place: 'SOMA' },
-  { id: 'seed/3', name: 'Popeyes', chain: 'popeyes', lat: 37.7599, lng: -122.4148, place: 'Mission' },
-  { id: 'seed/4', name: 'KFC', chain: 'kfc', lat: 37.7941, lng: -122.4078, place: 'Chinatown' },
-  { id: 'seed/5', name: "Raising Cane's", chain: 'canes', lat: 37.7609, lng: -122.4350, place: 'Castro' }
-];
+function withCatalogPlaces(mapPlaces) {
+  var places = new Map(mapPlaces.map(function (place) { return [place.id, place]; }));
+  NuggetfinderSeed.places.forEach(function (place) {
+    places.set(place.id, {
+      id: place.id, name: place.name, chain: place.chain,
+      lat: place.latitude, lng: place.longitude, place: place.area
+    });
+  });
+  return Array.from(places.values());
+}
 
 var ICONS = {
   yes: '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M3 8.5l3.2 3.2L13 5"/></svg>',
@@ -209,7 +212,7 @@ function parseOverpass(json) {
 function fetchPlaces() {
   var cached = loadJSON(CACHE_KEY, null);
   if (cached && cached.places && cached.places.length && Date.now() - cached.ts < CACHE_TTL) {
-    return Promise.resolve({ places: cached.places, seed: false });
+    return Promise.resolve({ places: withCatalogPlaces(cached.places.filter(function (place) { return /^(node|way|relation)\/[0-9]+$/.test(place.id); })), seed: false });
   }
   var q = '[out:json][timeout:40];(' +
     'nwr["amenity"="fast_food"]["name"~"McDonald|Chick-fil-A|Popeyes|KFC|Kentucky Fried|Raising Cane|Wendy|Jack in the Box",i](' + BBOX + ');' +
@@ -230,10 +233,10 @@ function fetchPlaces() {
     var places = parseOverpass(json);
     if (!places.length) throw new Error('No places returned');
     saveJSON(CACHE_KEY, { ts: Date.now(), places: places });
-    return { places: places, seed: false };
+    return { places: withCatalogPlaces(places), seed: false };
   }).catch(function () {
     clearTimeout(timer);
-    return { places: SEED, seed: true };
+    return { places: withCatalogPlaces([]), seed: true };
   });
 }
 
@@ -323,7 +326,7 @@ function renderPanel() {
   list.sort(function (a, b) { return miles(ref.lat, ref.lng, a.lat, a.lng) - miles(ref.lat, ref.lng, b.lat, b.lng); });
 
   if (state.usingSeed) {
-    html += '<div class="note">Showing 5 sample spots. Could not reach OpenStreetMap right now. Reload to try again.</div>';
+    html += '<div class="note">Showing saved OpenStreetMap locations. Reload to retry the live map search.</div>';
   }
   html += '<div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR THE MAP CENTER') + '</span>' +
     '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>';
