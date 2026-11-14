@@ -615,7 +615,9 @@ function showRoute(route) {
   var catalog = route.page === 'products' || route.page === 'product';
   wavePage.hidden = !catalog;
   mapApp.hidden = catalog;
-  if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc);
+  if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc, {
+    user: function () { return state.user; }, signIn: openAuth, reportError: errorText
+  });
   map.invalidateSize();
   var id = route.spotId;
   var found = id && state.places.some(function (place) { return place.id === id; });
@@ -642,6 +644,7 @@ function start() {
   setInterval(function () {
     var a = document.activeElement;
     if (a && a.id === 'q') return;
+    if (!wavePage.hidden) NuggetfinderCatalog.refresh();
     refreshStatuses().then(function () {
       renderMarkers();
       renderPanel();
