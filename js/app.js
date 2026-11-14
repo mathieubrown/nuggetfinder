@@ -255,8 +255,8 @@ function visiblePlaces(now) {
   });
 }
 
-function statHTML(st) {
-  return '<span class="stat s-' + st + '">' + ICONS[st].replace('width="18" height="18"', 'width="14" height="14"') + esc(WORDS[st]) + '</span>';
+function statHTML(st, key) {
+  return '<span class="stat s-' + st + '" data-stamp-key="' + esc(key) + '" data-stamp-status="' + st + '">' + ICONS[st].replace('width="18" height="18"', 'width="14" height="14"') + esc(WORDS[st]) + '</span>';
 }
 
 function metaText(p, s, now) {
@@ -296,11 +296,17 @@ function renderMarkers() {
   });
 }
 
+var stampsByPlace = new Map();
+function updatePlaceStamps() {
+  var changed = NuggetfinderStamp.update(panel.querySelectorAll('[data-stamp-key]'), stampsByPlace);
+  changed.forEach(function (status, key) { stampsByPlace.set(key, status); });
+}
+
 function renderPanel() {
   var now = Date.now();
   var html = '';
   var sel = state.selected && state.places.filter(function (p) { return p.id === state.selected; })[0];
-  if (sel) { panel.innerHTML = detailHTML(sel, now); return; }
+  if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps(); return; }
 
   var menus = ['all', 'nuggets', 'tenders', 'sauce', 'sides'];
   html += '<div class="search"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#161514" stroke-width="2.5" stroke-linecap="square"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg>' +
@@ -328,12 +334,13 @@ function renderPanel() {
   html += '<div class="list">';
   list.slice(0, 40).forEach(function (p) {
     var s = statusOf(p.id, now);
-    html += '<button class="row" data-id="' + esc(p.id) + '"><span class="rowmain"><span class="rname">' + esc(p.name) + '</span><span class="rmeta">' + esc((p.place ? p.place + ' · ' : '') + metaText(p, s, now)) + '</span></span>' + statHTML(s.state) + '</button>';
+    html += '<button class="row" data-id="' + esc(p.id) + '"><span class="rowmain"><span class="rname">' + esc(p.name) + '</span><span class="rmeta">' + esc((p.place ? p.place + ' · ' : '') + metaText(p, s, now)) + '</span></span>' + statHTML(s.state, p.id) + '</button>';
   });
   if (!list.length) html += '<p class="small">Nothing matches. Try clearing a filter.</p>';
   if (list.length > 40) html += '<p class="small">Showing the nearest 40. Search or filter to narrow it down.</p>';
   html += '</div>';
   panel.innerHTML = html;
+  updatePlaceStamps();
 }
 
 function detailHTML(p, now) {
@@ -352,7 +359,7 @@ function detailHTML(p, now) {
   var cls = 's-' + s.state;
   var h = '<button class="back" data-action="back"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M11 3L5 9l6 6"/></svg>ALL SPOTS</button>';
   h += '<div><div class="dname">' + esc(p.name.toUpperCase()) + '</div><div class="small">' + esc(p.place || '') + (p.place ? ' · ' : '') + esc(metaText(p, s, now).split(' · ')[0]) + ' away</div></div>';
-  h += '<div class="block ' + cls + '"><div class="word' + (WORDS[s.state].length > 8 ? ' long' : '') + '">' + ICONS[s.state].replace('width="18" height="18"', 'width="34" height="34"') + esc(WORDS[s.state]) + '</div><div>' + esc(sub) + '</div>' +
+  h += '<div class="block ' + cls + '" data-stamp-key="' + esc(p.id) + '" data-stamp-status="' + s.state + '"><div class="word' + (WORDS[s.state].length > 8 ? ' long' : '') + '">' + ICONS[s.state].replace('width="18" height="18"', 'width="34" height="34"') + esc(WORDS[s.state]) + '</div><div>' + esc(sub) + '</div>' +
     '<div class="btns"><button class="big yes" data-report="yes">NUGGETS HERE</button><button class="big no" data-report="nope">NOPE</button></div></div>';
   if (ch) {
     h += '<div><div class="heading">TYPICAL MENU</div><div class="tags" style="margin-top:8px">';

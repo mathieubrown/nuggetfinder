@@ -150,3 +150,12 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .wave-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
 .wave-card { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; background: var(--card); border: 3px solid var(--ink); box-shadow: 4px 4px var(--ink); color: var(--ink); overflow-wrap: anywhere; }
 .wave-card h3, .wave-card p { margin: 0; }
+
+@keyframes stamp-drop {
+  0% { transform: translateY(-8px) scale(1.18) rotate(-5deg); }
+  65% { transform: translateY(1px) scale(.96) rotate(1deg); }
+  100% { transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-drop { animation: stamp-drop 300ms ease-out both; }
+}

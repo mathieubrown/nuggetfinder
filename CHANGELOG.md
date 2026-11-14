@@ -13,3 +13,7 @@
 - Two people must agree for a confirmed status. Reports count for two hours and remain visible as stale for up to 24 hours. Stock and map reports share the 10-minute cooldown per spot and 60-report rolling limit. Banned accounts cannot submit.
 - Needs design review: stock reporting controls on the product page. The report buttons follow the Spot mockup.
 - Ran automated stock classification tests. The live database migration is pending approval.
+
+## Status stamps
+
+- Status labels stamp into place when the displayed status changes. Reduced motion skips the animation.

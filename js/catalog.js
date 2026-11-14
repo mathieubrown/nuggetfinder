@@ -23,6 +23,7 @@ window.NuggetfinderCatalog = (function () {
   function showStock(root, product, client, options, id) {
     var cards = Array.from(root.querySelectorAll('[data-place]'));
     if (!cards.length) return;
+    var stampHistory = new Map();
     var available = false;
     var submitting = false;
     var feedback = root.querySelector('.stock-feedback');
@@ -46,12 +47,15 @@ window.NuggetfinderCatalog = (function () {
           var status = NuggetfinderWave.stockStatus(row);
           var stamp = card.querySelector('.stat');
           stamp.className = 'stat s-' + status;
+          stamp.dataset.stampKey = card.dataset.place;
+          stamp.dataset.stampStatus = status;
           stamp.textContent = labels[status];
           card.querySelector('.last-seen').textContent = row && row.last_seen_at
             ? 'Last seen: ' + dateLabel(row.last_seen_at) : 'Last seen: no recent sightings';
           card.querySelector('.last-report').textContent = row
             ? 'Latest report: ' + dateLabel(row.last_report_at) : '';
         });
+        stampHistory = NuggetfinderStamp.update(root.querySelectorAll('[data-stamp-key]'), stampHistory);
         available = true;
       } catch (error) {
         if (id !== renderId || root.hidden) return;
