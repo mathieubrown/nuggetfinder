@@ -17,3 +17,10 @@
 ## Status stamps
 
 - Status labels stamp into place when the displayed status changes. Reduced motion skips the animation.
+
+## Profile and points
+
+- My profile shows your username, points, level and sticker shelf. It explains how points and stickers are earned.
+- A confirmed stock report can earn one point whether it says Seen it or Sold out. Points are capped at 10 awards per UTC day. Level thresholds are 1, 10 and 30.
+- Needs design review: profile, levels and stickers.
+- Ran automated tests for levels and stickers. Live awards and sign-in are pending database approval and a signed-in session.

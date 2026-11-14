@@ -15,3 +15,15 @@ test('stock uses votes from distinct reporters counted by the database', () => {
   assert.equal(reportCounts(2, 1), 'yes');
   assert.equal(reportCounts(0, 2), 'nope');
 });
+
+test('levels and stickers unlock at the published thresholds', () => {
+  const { profileProgress } = require('../js/wave-logic.js');
+  assert.deepEqual(profileProgress(0), { level: 'Newcomer', stickers: [] });
+  assert.equal(profileProgress(1).level, 'Spotter');
+  assert.equal(profileProgress(9).stickers.length, 1);
+  assert.equal(profileProgress(10).level, 'Regular');
+  assert.equal(profileProgress(29).stickers.length, 2);
+  assert.deepEqual(profileProgress(30), {
+    level: 'Nugget Scout', stickers: ['First stamp', 'On the trail', 'Golden nugget']
+  });
+});

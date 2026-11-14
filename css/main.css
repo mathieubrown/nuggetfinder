@@ -159,3 +159,6 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 @media (prefers-reduced-motion: no-preference) {
   .stamp-drop { animation: stamp-drop 300ms ease-out both; }
 }
+
+.sticker-shelf { display: flex; flex-wrap: wrap; gap: 12px; }
+.sticker { padding: 8px 12px; background: var(--gold); border: 3px solid var(--ink); box-shadow: 3px 3px var(--ink); font-weight: 700; }

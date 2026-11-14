@@ -468,6 +468,7 @@ function closeAuth() {
 
 function setUser(u) {
   state.user = u;
+  if (location.hash === '#/me' && !wavePage.hidden) showProfile();
   authBtn.textContent = u ? 'SIGN OUT' : 'SIGN IN';
   whoEl.textContent = '';
   whoEl.hidden = true;
@@ -618,10 +619,16 @@ function initMap() {
 var wavePage = document.getElementById('wavePage');
 var mapApp = document.getElementById('mapApp');
 
+function showProfile() {
+  NuggetfinderProfile.show(wavePage, sb, state.user, esc, openAuth, openName);
+}
+
 function showRoute(route) {
   var catalog = route.page === 'products' || route.page === 'product';
-  wavePage.hidden = !catalog;
-  mapApp.hidden = catalog;
+  var profile = route.page === 'me';
+  wavePage.hidden = !(catalog || profile);
+  mapApp.hidden = catalog || profile;
+  if (profile) return showProfile();
   if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc, {
     user: function () { return state.user; }, signIn: openAuth, reportError: errorText
   });
@@ -651,7 +658,7 @@ function start() {
   setInterval(function () {
     var a = document.activeElement;
     if (a && a.id === 'q') return;
-    if (!wavePage.hidden) NuggetfinderCatalog.refresh();
+    if (!wavePage.hidden && location.hash.startsWith('#/product/')) NuggetfinderCatalog.refresh();
     refreshStatuses().then(function () {
       renderMarkers();
       renderPanel();
