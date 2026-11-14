@@ -524,6 +524,7 @@ document.getElementById('nameForm').addEventListener('submit', function (e) {
     whoEl.textContent = '@' + v;
     state.handleSet = true;
     closeName();
+    if (location.hash === '#/me') showProfile();
     toast('Welcome, @' + v + '.');
   }).catch(function () { nameMsg.textContent = nameErrorText(''); nameSave.disabled = false; });
 });

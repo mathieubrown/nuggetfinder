@@ -24,3 +24,14 @@
 - A confirmed stock report can earn one point whether it says Seen it or Sold out. Points are capped at 10 awards per UTC day. Level thresholds are 1, 10 and 30.
 - Needs design review: profile, levels and stickers.
 - Ran automated tests for levels and stickers. Live awards and sign-in are pending database approval and a signed-in session.
+
+## Share card
+
+- Download a 1080 × 1920 PNG from any product and place card. It includes the Nuggetfinder logo, product, location and current status. The browser draws the image locally.
+- Needs design review: portrait share card.
+
+## Verification
+
+- Ran both JavaScript tests and applied all migrations to a local PostgreSQL test database. Verified anonymous read access, private report rows, agreement by distinct users, cooldown shared with map reports, the 60-report limit, bans, two-hour and 24-hour expiration, and the daily points cap.
+- Live Supabase migrations, live sign-in, and production data remain untested.
+- Playwright captured each item at 390px and 1280px. All ten runs checked console errors and horizontal overflow. The stamp ran only with motion enabled. The downloaded PNG measured 1080 × 1920. Browser runs used a simulated Supabase session and stock responses.
