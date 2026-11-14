@@ -608,7 +608,15 @@ function initMap() {
   window.addEventListener('resize', function () { map.invalidateSize(); });
 }
 
+var wavePage = document.getElementById('wavePage');
+var mapApp = document.getElementById('mapApp');
+
 function showRoute(route) {
+  var catalog = route.page === 'products' || route.page === 'product';
+  wavePage.hidden = !catalog;
+  mapApp.hidden = catalog;
+  if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc);
+  map.invalidateSize();
   var id = route.spotId;
   var found = id && state.places.some(function (place) { return place.id === id; });
   showSpot(found ? id : null, !!found);
@@ -619,12 +627,17 @@ function start() {
   initMap();
   initSupabase();
   panel.innerHTML = '<p class="small">Loading spots from OpenStreetMap...</p>';
+  var currentRoute;
+  NuggetfinderRouter.listen(function (route) {
+    currentRoute = route;
+    if (state.places.length || route.page !== 'spot') showRoute(route);
+  });
   fetchPlaces().then(function (res) {
     state.places = res.places;
     state.usingSeed = res.seed;
     return refreshStatuses();
   }).then(function () {
-    NuggetfinderRouter.listen(showRoute);
+    if (!mapApp.hidden) showRoute(currentRoute);
   });
   setInterval(function () {
     var a = document.activeElement;

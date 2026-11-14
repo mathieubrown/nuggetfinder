@@ -13,8 +13,12 @@ window.NuggetfinderRouter = (function () {
       }
     }
 
+    if (hash.indexOf('#/product/') === 0) {
+      try { return { page: 'product', productId: decodeURIComponent(hash.slice(10)) }; }
+      catch (error) { return { page: 'products' }; }
+    }
     var page = hash.slice(2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me'].indexOf(page) !== -1) {
+    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me', 'products'].indexOf(page) !== -1) {
       return { page: page };
     }
     return { page: 'home' };

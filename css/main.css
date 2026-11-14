@@ -139,3 +139,14 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .big.ghost { background: var(--paper); color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+[hidden] { display: none !important; }
+.wave-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 16px; border-bottom: 3px solid var(--ink); }
+.wave-nav a, .wave-link { min-height: 44px; display: inline-flex; align-items: center; font-weight: 700; color: var(--ink); }
+.wave-page { flex: 1; min-height: 0; overflow: auto; width: 100%; padding: 16px max(16px, calc((100% - 1000px) / 2)) 32px; }
+.wave-page h1, .wave-page h2 { font-family: var(--display); overflow-wrap: anywhere; }
+.wave-page h1 { font-size: clamp(24px, 5vw, 44px); margin: 12px 0; }
+.wave-page input { display: block; width: 100%; min-height: 48px; padding: 8px 12px; font: inherit; border: 3px solid var(--ink); margin: 6px 0 16px; }
+.wave-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
+.wave-card { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; background: var(--card); border: 3px solid var(--ink); box-shadow: 4px 4px var(--ink); color: var(--ink); overflow-wrap: anywhere; }
+.wave-card h3, .wave-card p { margin: 0; }
