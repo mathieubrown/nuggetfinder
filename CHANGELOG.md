@@ -99,3 +99,5 @@
 - Researched Map data and tiles. The note lists official sources, open questions and what still needs verification.
 
 - Researched Open Food Facts seed options. The note lists official sources, open questions and what still needs verification.
+
+- Researched FDA and USDA recall feeds. The note lists official sources, open questions and what still needs verification.
