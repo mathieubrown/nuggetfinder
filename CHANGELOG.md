@@ -93,4 +93,5 @@
 ## Shopper data
 
 - Added a grocery snapshot and ten product records with official source URLs. Store brands link to their own chain. National-brand links are places to check.
-- The extract had no matching Walmart in the area. Some product sizes need package verification. No stock or allergen claims were added.
+- The extract had no matching Walmart in the area. No stock or allergen claims were added.
+- Local PostgreSQL also checked first-take visibility, reaction totals, reply review, own-data export, block filtering, Beef votes, weekly history and store-brand links.
