@@ -104,3 +104,5 @@
 - Local PostgreSQL checked matching, restricted profile reads and the own-take rejection. Browser previews checked the shopper copy at both sizes. Live deployment remains on hold.
 
 - Researched Map data and tiles. The note lists official sources, open questions and what still needs verification.
+
+- Researched Open Food Facts seed options. The note lists official sources, open questions and what still needs verification.
