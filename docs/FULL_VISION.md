@@ -3,7 +3,7 @@
 This is the whole product, built in waves. It replaces any older advice to build a smaller version or to park features. Nothing here is "later, maybe." Every wave must feel finished and sparkly when it ships, and no wave ships looking like a plain data tool.
 
 ## One-line pitch
-Find the nuggets, tenders and sauces near you, call out what you saw, start beef, collect the weird spots, and get rewarded for it.
+Find the nuggets, tenders and sauces near you, call out what you saw, start showdown, collect the weird spots, and get rewarded for it.
 
 ## Three people it serves (all day one)
 - **Shopper:** wants to know which store has the product, right now, without driving to four.
@@ -16,7 +16,7 @@ The look stays the hybrid: street layer (Archivo Black, thick ink outlines, hard
 - **Stamp physics.** Every status change slams in like a rubber stamp: scale down fast, small shake, ink splat. Words stay: CONFIRMED, NOPE, MIXED, UNCONFIRMED.
 - **Sticker economy.** Points and badges are collectible stickers with a peel-and-slap animation. Unlock packs by confirmed actions, never by sentiment.
 - **Rarity cards.** Every spot is a trading card. Rarity (Common, Rare, Legendary) reflects how obscure the spot is and how few people have found it. Rare and Legendary get a foil shimmer (CSS conic gradients).
-- **Beef VS screen.** Matchups open with a fighting-game splash: two sides, big VS, vote meter that fills with a bounce.
+- **Showdown VS screen.** Matchups open with a fighting-game splash: two sides, big VS, vote meter that fills with a bounce.
 - **Punchcard tear.** The Nugget Card has perforated edges and a satisfying tear and stamp when you earn a punch.
 - **Confetti nuggets** for first discovery, streaks and milestones. Short, skippable.
 - **Mascot** with moods (hungry, smug, shocked) for empty states, errors and toasts. Original character. Name is a placeholder. It must not resemble any existing brand or mascot, and the name must not collide with any real brand (Nuggs is a real brand, avoid it).
@@ -26,14 +26,14 @@ The look stays the hybrid: street layer (Archivo Black, thick ink outlines, hard
 
 ## App map (every screen)
 Core: Onboarding with neutral 13+ age gate, Map and list, Spot (card), Product page with "where to buy", Search, Report flow (seen it, sold out, price, with product picker).
-Social: Take composer, Feed grid, Swipe feed (full screen), Respond sheet, Beef home, Beef matchup (VS), Taste Test (swipe cards that feed Beef votes), Creator profile, Share card builder.
+Social: Take composer, Feed grid, Swipe feed (full screen), Respond sheet, Showdown home, Showdown matchup (VS), Taste Test (swipe cards that feed Showdown votes), Creator profile, Share card builder.
 Collect: Profile (record, points, status, stickers), Field Guide (your discoveries with rarity), Nugget Card (punchcards, brand funded), Notifications and alerts.
 Business: Add a spot, Claim a business, Suggest an edit, Price ledger, Sponsored units (cobalt), Brand dashboard (aggregate only), Recall alert.
 Trust and admin: Moderator queue, Strikes and appeals, Settings, Privacy, Delete my account, Report and block.
 
 ## Build waves (each wave ends polished and shareable)
 **Wave 1: It's alive.** Refactor and router, products and "where to buy", stock reports with dates, stamp animations, profile with points and status, first share card.
-**Wave 2: Talk trash.** Moderation queue and strikes FIRST, then takes feed (text and photo), Respond, Beef matchups with the VS screen, creator challenges.
+**Wave 2: Talk trash.** Moderation queue and strikes FIRST, then takes feed (text and photo), Respond, Showdown matchups with the VS screen, creator challenges.
 **Wave 3: Collect.** Add a spot, Field Guide with rarity cards and first-discoverer credit, Taste Test swipe, Nugget Card punchcards, sticker packs and badges.
 **Wave 4: Business.** Claim flow, price ledger, sponsored system, brand dashboards (aggregate only), alerts, recall feeds, creator Critic badge.
 **Wave 5: Video and app.** Video takes with captions, AI triage plus human review, push notifications, the native iPhone app.

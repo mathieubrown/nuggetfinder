@@ -382,7 +382,7 @@ function detailHTML(p, now) {
     ch.menu.forEach(function (m) { h += '<span class="tag">' + m.toUpperCase() + '</span>'; });
     h += '</div><div class="small" style="margin-top:6px">' + MENU_NOTE + '</div></div>';
   }
-  h += '<div class="soon"><span class="heading">BEEF</span><span>Sauce wars and takes for this spot are coming next.</span></div>';
+  h += '<div class="soon"><span class="heading">' + NuggetfinderShowdown.active + '</span><span><a class="wave-link" href="#/showdown">' + NuggetfinderShowdown.pick + '</a></span></div>';
   h += '<div class="soon alt"><span class="heading">PRICES</span><span>Store listings and the price ledger are coming next.</span></div>';
   h += '<a class="maps-link" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.lat + ',' + p.lng) + '">Get directions</a>';
   if (NuggetfinderSeed.places.some(function (place) { return place.id === p.id; })) {
