@@ -31,6 +31,9 @@ declare actor uuid:=public.require_social_user(); reply_id bigint; visibility te
 begin
  if not public.take_visible(p_take) then raise exception 'take_unavailable'; end if;
  if p_reaction in ('with','against') and p_body is null then
+  if exists(select 1 from public.takes where id=p_take and author_id=actor) then
+   raise exception 'cannot_react_to_own_take';
+  end if;
   if (select count(*) from public.take_reactions where user_id=actor and updated_at>now()-interval '24 hours')>=60
   then raise exception 'reaction_limit'; end if;
   insert into public.take_reactions(take_id,user_id,reaction) values(p_take,actor,p_reaction)
