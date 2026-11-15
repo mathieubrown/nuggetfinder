@@ -74,3 +74,8 @@
 
 - Added two changeable reactions and short replies. Replies go through moderator review before appearing.
 - Both reactions count equally in Hot. Replies can be reported, and blocked authors are hidden.
+
+## Beef matchups
+
+- Seeded ten starter matchups. The matchup screen shows two sides, a vote meter and a link to post a take. Each account gets one vote and can switch sides.
+- A signed-in member can copy a challenge link with their handle. Visitor links open the selected matchup.
