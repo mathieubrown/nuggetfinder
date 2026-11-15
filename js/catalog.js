@@ -5,8 +5,11 @@ window.NuggetfinderCatalog = (function () {
     if (!client) return NuggetfinderSeed;
     var [products, links] = await Promise.all([
       client.from('products').select('id,brand,name,kind').order('name'),
-      client.from('place_products').select('product_id,place_id,places(id,name,area,source)')
+      client.from('place_products').select('product_id,place_id,link_kind,places(id,name,area,source)')
     ]);
+    if (links.error && links.error.code === '42703') {
+      links = await client.from('place_products').select('product_id,place_id,places(id,name,area,source)');
+    }
     if (products.error || links.error) throw new Error('Catalog unavailable');
     return { products: products.data, links: links.data };
   }
@@ -168,8 +171,9 @@ window.NuggetfinderCatalog = (function () {
         '<h1>' + esc(product.name) + '</h1><p>' + esc(product.brand) + '</p><a class="wave-link" href="#/take?kind=product&ref=' + encodeURIComponent(product.id) + '&label=' + encodeURIComponent(product.name) + '">Drop a take</a></header><h2>Where to buy</h2><p class="stock-feedback" role="status"></p>' +
         '<div class="wave-grid">' + links.map(function (link) {
           var place = link.places;
-          return '<article class="wave-card spot-trading-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3><p>' + esc(place.area) +
-            '</p>' + (place.source === 'openstreetmap' ? '<p class="small">Place to check</p>' : '') +
+          return '<article class="wave-card spot-trading-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3>' +
+            (place.area && place.area.trim() ? '<p>' + esc(place.area) + '</p>' : '') +
+            (link.link_kind === 'place_to_check' ? '<p class="small">Might be here. Not confirmed.</p>' : '') +
             '<a class="wave-link" href="#/spot/' + encodeURIComponent(place.id) + '">View on map</a><span class="stat stock-stamp s-none" aria-live="polite">− NO REPORTS</span>' +
             '<p class="small last-seen"></p><p class="small last-report"></p>' +
             '<div class="btns"><button class="big pink" type="button" data-stock="seen" disabled>Seen it</button>' +

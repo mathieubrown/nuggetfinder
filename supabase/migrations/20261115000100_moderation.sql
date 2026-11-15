@@ -185,4 +185,83 @@ revoke execute on function public.is_nugget_moderator(),public.set_user_block(uu
 grant execute on function public.is_nugget_moderator(),public.set_user_block(uuid,boolean),public.report_content(text,text,text),
  public.moderation_inbox(),public.review_content(bigint,text),public.issue_strike(uuid),public.my_strikes(),
  public.appeal_strike(bigint,text),public.review_appeal(bigint,text),public.reset_reported_username(uuid) to authenticated;
+create function public.moderation_words(p_value text)
+returns text language sql immutable strict set search_path='' as $$
+ select btrim(regexp_replace(
+  translate(
+   regexp_replace(regexp_replace(regexp_replace(lower(p_value),
+    '([a-z0-9])@(?=[a-z0-9])','\1a','g'),
+    '([a-z0-9])\$(?=[a-z0-9])','\1s','g'),
+    '([a-z0-9])!(?=[a-z0-9])','\1i','g'),
+   '0134578','oieastb'),
+  '[^a-z0-9]+',' ','g'))
+$$;
+
+create function public.contains_moderation_term(p_value text,p_term text)
+returns boolean language sql immutable strict set search_path='' as $$
+ select public.moderation_words(p_term) <> ''
+  and strpos(' ' || public.moderation_words(p_value) || ' ',
+             ' ' || public.moderation_words(p_term) || ' ') > 0
+$$;
+revoke execute on function public.moderation_words(text),public.contains_moderation_term(text,text)
+ from public,anon,authenticated;
+
+create or replace function public.set_handle(p_handle text)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid := auth.uid();
+  h text := lower(btrim(coalesce(p_handle, '')));
+  prof public.profiles;
+begin
+  if uid is null then raise exception 'sign_in_required'; end if;
+  select * into prof from public.profiles where id = uid;
+  if not found then raise exception 'sign_in_required'; end if;
+  if prof.banned then raise exception 'banned'; end if;
+
+  if h !~ '^[a-z0-9_]{3,20}$' then raise exception 'handle_invalid'; end if;
+
+  -- Keeping the same name is always fine.
+  if h = lower(prof.handle) then
+    update public.profiles set handle_set = true where id = uid;
+    return h;
+  end if;
+
+  -- After choosing once, a change is allowed every 30 days.
+  if prof.handle_set and prof.handle_changed_at is not null
+     and prof.handle_changed_at > now() - interval '30 days' then
+    raise exception 'handle_cooldown';
+  end if;
+
+  -- Reserved words, and the auto-generated pattern so nobody squats on it.
+  if exists (select 1 from unnest(array['admin','moderator','nuggetfinder','support','staff','official','verified']) word
+          where public.contains_moderation_term(h, word))
+     or h ~ '^nugget([0-9a-f]{6}|[0-9a-f]{14})$' then
+    raise exception 'handle_reserved';
+  end if;
+
+  if exists (
+    select 1 from public.blocked_handle_terms t
+    where public.contains_moderation_term(h, t.term)
+  ) then
+    raise exception 'handle_blocked';
+  end if;
+
+  begin
+    update public.profiles
+       set handle = h, handle_set = true, handle_changed_at = now()
+     where id = uid;
+  exception when unique_violation then
+    raise exception 'handle_taken';
+  end;
+  return h;
+end;
+$$;
+
+revoke all on function public.set_handle(text) from public;
+grant execute on function public.set_handle(text) to authenticated;
+
 commit;
