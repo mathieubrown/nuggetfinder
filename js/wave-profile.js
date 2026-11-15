@@ -4,7 +4,7 @@ window.NuggetfinderProfile = (function () {
   var request = 0;
   async function show(root, client, user, esc, signIn, rename) {
     var id = ++request;
-    root.innerHTML = '<header class="wave-hero"><h1>My profile</h1></header><div class="wave-card" id="profileSummary"></div>' +
+    root.innerHTML = '<header class="wave-hero"><h1>My profile</h1></header><a class="wave-link" href="#/strikes">My strikes and appeals</a><div class="wave-card" id="profileSummary"></div>' +
       '<h2>Sticker shelf</h2><div class="sticker-shelf" id="stickerShelf"></div>' +
       '<h2>How points work</h2><p>Earn one point when another person reports the same stock status for the same product and place within two hours. Seen it and Sold out are worth the same.</p>' +
       '<p>Each report can earn one point. You can earn up to 10 points per day. The cap resets at midnight UTC.</p>' +

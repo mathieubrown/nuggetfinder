@@ -471,6 +471,10 @@ function closeAuth() {
 
 function setUser(u) {
   state.user = u;
+  var page = location.hash.slice(2).split(/[/?]/)[0];
+  if (NuggetfinderCommunity.pages[page] && !wavePage.hidden) {
+    setTimeout(function () { window.dispatchEvent(new Event('hashchange')); }, 0);
+  }
   if (location.hash === '#/me' && !wavePage.hidden) showProfile();
   authBtn.textContent = u ? 'SIGN OUT' : 'SIGN IN';
   whoEl.textContent = '';
@@ -630,8 +634,10 @@ function showProfile() {
 function showRoute(route) {
   var catalog = route.page === 'products' || route.page === 'product';
   var profile = route.page === 'me';
-  wavePage.hidden = !(catalog || profile);
-  mapApp.hidden = catalog || profile;
+  var community = NuggetfinderCommunity.pages[route.page];
+  wavePage.hidden = !(catalog || profile || community);
+  mapApp.hidden = catalog || profile || !!community;
+  if (community) return community(wavePage, route, sb, state.user, esc, openAuth, state.places);
   if (profile) return showProfile();
   if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc, {
     user: function () { return state.user; }, username: function () {
