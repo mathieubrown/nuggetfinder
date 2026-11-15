@@ -18,7 +18,7 @@ window.NuggetfinderRouter = (function () {
       catch (error) { return { page: 'products' }; }
     }
     var page = hash.slice(2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me', 'products', 'mod', 'strikes'].indexOf(page) !== -1) {
+    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca'].indexOf(page) !== -1) {
       return { page: page };
     }
     return { page: 'home' };
