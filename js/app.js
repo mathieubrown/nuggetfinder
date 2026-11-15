@@ -372,6 +372,10 @@ function detailHTML(p, now) {
   h += '<div class="soon"><span class="heading">BEEF</span><span>Sauce wars and takes for this spot are coming next.</span></div>';
   h += '<div class="soon alt"><span class="heading">PRICES</span><span>Store listings and the price ledger are coming next.</span></div>';
   h += '<a class="maps-link" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.lat + ',' + p.lng) + '">Get directions</a>';
+  if (NuggetfinderSeed.places.some(function (place) { return place.id === p.id; })) {
+    h += '<a class="wave-link" href="#/take?kind=place&ref=' + encodeURIComponent(p.id) +
+      '&label=' + encodeURIComponent(p.name) + '">Drop a take</a>';
+  }
   return h;
 }
 

@@ -13,7 +13,9 @@
       '<nav class="wave-nav" aria-label="Policies"><a href="#/terms">Terms</a><a href="#/privacy">Privacy</a><a href="#/dmca">DMCA contact</a></nav>');
     action(root.querySelector('#exportData'), async () => {
       if (!user) return signIn('Sign in to export your data.');
-      download(await rpc(client, 'export_my_data'));
+      const data = await rpc(client, 'export_my_data');
+      Object.assign(data, await rpc(client, 'export_wave2_take_data'));
+      download(data);
     }, root.querySelector('[role=status]'));
   };
   const drafts = {

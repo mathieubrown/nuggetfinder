@@ -165,7 +165,7 @@ window.NuggetfinderCatalog = (function () {
       });
       root.innerHTML = '<a class="wave-link" href="#/products">← All products</a>' +
         '<header class="wave-hero"><p class="tag">' + esc(product.kind.toUpperCase()) + '</p>' +
-        '<h1>' + esc(product.name) + '</h1><p>' + esc(product.brand) + '</p></header><h2>Where to buy</h2><p class="stock-feedback" role="status"></p>' +
+        '<h1>' + esc(product.name) + '</h1><p>' + esc(product.brand) + '</p><a class="wave-link" href="#/take?kind=product&ref=' + encodeURIComponent(product.id) + '&label=' + encodeURIComponent(product.name) + '">Drop a take</a></header><h2>Where to buy</h2><p class="stock-feedback" role="status"></p>' +
         '<div class="wave-grid">' + links.map(function (link) {
           var place = link.places;
           return '<article class="wave-card spot-trading-card" data-place="' + esc(link.place_id) + '"><h3>' + esc(place.name) + '</h3><p>' + esc(place.area) +
