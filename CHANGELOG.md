@@ -54,3 +54,8 @@
 - Added a private review desk, a four-step strike ladder, appeals, username resets, account blocks and content reports.
 - Moderator access is granted through SQL. The browser cannot grant it. Future automated triage can fill the queue's AI fields server-side. A moderator makes every strike decision.
 - This migration is for review and local testing. The live database was untouched.
+
+## Account basics
+
+- Added an export for your own account and report data, plus draft terms, privacy and copyright contact screens.
+- Added reusable report and block controls. Account deletion is documented for a server function and awaits deployment and testing with a disposable account.
