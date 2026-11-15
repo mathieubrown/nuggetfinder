@@ -69,3 +69,8 @@
 
 - Added a grid and a swipe view with Hot, Recent and Following. Follow buttons populate the Following tab. Blocked accounts are filtered in both directions.
 - Hot gives fresh responses more weight when the Respond migration is present. Before that, it falls back to recent posts.
+
+## Respond
+
+- Added two changeable reactions and short replies. Replies go through moderator review before appearing.
+- Both reactions count equally in Hot. Replies can be reported, and blocked authors are hidden.
