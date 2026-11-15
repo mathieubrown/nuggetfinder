@@ -1,7 +1,7 @@
 (function (community) {
   const {pages,rpc,shell,action} = community;
   pages.beef = async function(root,route,client,user,esc,signIn) {
-    shell(root,'Sauce beef','<p role="status">Loading matchups…</p><div id="beefResults" class="wave-grid"></div>');
+    shell(root,'Sauce beef','<p role="status">Loading matchups…</p><a class="wave-link" href="#/weekly">Weekly results</a><div id="beefResults" class="wave-grid"></div>');
     const feedback=root.querySelector('[role=status]');
     const results=root.querySelector('#beefResults');
     try {
