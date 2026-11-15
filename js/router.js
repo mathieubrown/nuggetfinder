@@ -17,9 +17,9 @@ window.NuggetfinderRouter = (function () {
       try { return { page: 'product', productId: decodeURIComponent(hash.slice(10)) }; }
       catch (error) { return { page: 'products' }; }
     }
-    var page = hash.slice(2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca'].indexOf(page) !== -1) {
-      return { page: page };
+    var [page, query] = hash.slice(2).split("?", 2);
+    if (hash.indexOf('#/') === 0 && ['feed', 'beef', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take'].indexOf(page) !== -1) {
+      return { page: page, query: query };
     }
     return { page: 'home' };
   }

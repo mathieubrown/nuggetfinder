@@ -59,3 +59,8 @@
 
 - Added an export for your own account and report data, plus draft terms, privacy and copyright contact screens.
 - Added reusable report and block controls. Account deletion is documented for a server function and awaits deployment and testing with a disposable account.
+
+## Text takes
+
+- Users can post up to 280 characters about a catalog place or product. Matchup support connects when Beef is added.
+- Accounts need a moderator-approved take before later takes appear immediately. Blocked terms are managed in SQL and hits are hidden for review. Each account can send up to ten takes per rolling day.
