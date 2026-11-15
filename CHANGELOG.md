@@ -108,3 +108,5 @@
 - Researched Open Food Facts seed options. The note lists official sources, open questions and what still needs verification.
 
 - Researched FDA and USDA recall feeds. The note lists official sources, open questions and what still needs verification.
+
+- Researched Supabase quotas and custom sign-in email. The note lists official sources, open questions and what still needs verification.
