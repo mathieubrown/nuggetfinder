@@ -79,3 +79,7 @@
 
 - Seeded ten starter matchups. The matchup screen shows two sides, a vote meter and a link to post a take. Each account gets one vote and can switch sides.
 - A signed-in member can copy a challenge link with their handle. Visitor links open the selected matchup.
+
+## Take and Beef share cards
+
+- Takes and matchup results have downloadable 9:16 images. They reuse the stock card's logo, type, outline and result stamp. Longer takes wrap across lines.
