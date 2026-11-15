@@ -105,3 +105,5 @@
 - Researched Supabase quotas and custom sign-in email. The note lists official sources, open questions and what still needs verification.
 
 - Researched Video hosting, transcription and moderation costs. The note lists official sources, open questions and what still needs verification.
+
+- Researched Child safety and media launch. The note lists official sources, open questions and what still needs verification.
