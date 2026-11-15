@@ -64,3 +64,8 @@
 
 - Users can post up to 280 characters about a catalog place or product. Matchup support connects when Beef is added.
 - Accounts need a moderator-approved take before later takes appear immediately. Blocked terms are managed in SQL and hits are hidden for review. Each account can send up to ten takes per rolling day.
+
+## Takes feed
+
+- Added a grid and a swipe view with Hot, Recent and Following. Follow buttons populate the Following tab. Blocked accounts are filtered in both directions.
+- Hot gives fresh responses more weight when the Respond migration is present. Before that, it falls back to recent posts.
