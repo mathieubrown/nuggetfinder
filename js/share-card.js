@@ -15,6 +15,29 @@ window.NuggetfinderShare = (function () {
     context.fillText(text, x, y, maxWidth);
   }
 
+  function wrapText(context, text, x, y, maxWidth) {
+    for (var size = 66; size >= 34; size -= 4) {
+      context.font = '900 ' + size + 'px "Archivo Black", "Arial Black", sans-serif';
+      var lines = [''];
+      Array.from(text).forEach(function (character) {
+        var last = lines.length - 1;
+        var line = lines[last] + character;
+        if (context.measureText(line).width > maxWidth) {
+          var split = line.lastIndexOf(' ');
+          if (split > 0) {
+            lines[last] = line.slice(0, split);
+            lines.push(line.slice(split + 1));
+          } else lines.push(character);
+        } else lines[last] = line;
+      });
+      if (lines.length * (size + 8) <= 320) {
+        lines.forEach(function (line, index) { context.fillText(line, x, y + index * (size + 8)); });
+        return;
+      }
+    }
+    fitText(context, text, x, y, maxWidth, 52);
+  }
+
   async function makeCard(details) {
     if (document.fonts) {
       await document.fonts.load('900 48px "Archivo Black"', details.product + details.place + details.label);
@@ -55,9 +78,9 @@ window.NuggetfinderShare = (function () {
     ctx.strokeRect(80, 400, 920, 490);
     ctx.fillStyle = ink;
     fitText(ctx, details.brand.toUpperCase(), 130, 530, 820, 42);
-    fitText(ctx, details.product, 130, 650, 820, 88);
-    fitText(ctx, details.place, 130, 760, 820, 58);
-    fitText(ctx, details.area, 130, 826, 820, 40);
+    wrapText(ctx, details.product, 130, 620, 820);
+    fitText(ctx, details.place, 80, 975, 920, 48);
+    fitText(ctx, details.area, 80, 1035, 920, 38);
 
     ctx.save();
     ctx.translate(540, 1170);
