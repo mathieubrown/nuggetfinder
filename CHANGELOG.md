@@ -89,3 +89,8 @@
 - Shows the previous completed UTC week and the last side each voter picked during that week. Later vote changes leave those weekly picks in history.
 - Each result links to its matchup and has a share image. No scheduler or paid service is needed.
 - Wave 2 screen previews use simulated sign-in and content. Local PostgreSQL applied all migrations and checked moderation roles and appeals. Live sign-in, deletion and production deployment are outside these reviews.
+
+## Shopper data
+
+- Added a grocery snapshot and ten product records with official source URLs. Store brands link to their own chain. National-brand links are places to check.
+- The extract had no matching Walmart in the area. Some product sizes need package verification. No stock or allergen claims were added.
