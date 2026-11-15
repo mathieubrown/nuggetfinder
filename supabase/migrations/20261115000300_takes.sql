@@ -21,7 +21,7 @@ returns boolean language sql stable security definer set search_path='' as $$
 $$;
 create function public.social_text_blocked(p_body text)
 returns boolean language sql stable security definer set search_path='' as $$
- select exists(select 1 from public.blocked_terms where strpos(lower(p_body),lower(term))>0)
+ select exists(select 1 from public.blocked_terms where public.contains_moderation_term(p_body,term))
 $$;
 create function public.submit_take(p_kind text,p_ref text,p_body text)
 returns text language plpgsql security definer set search_path='' as $$
