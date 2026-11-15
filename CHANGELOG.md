@@ -96,6 +96,13 @@
 - The extract had no matching Walmart in the area. No stock or allergen claims were added.
 - Local PostgreSQL also checked first-take visibility, reaction totals, reply review, own-data export, block filtering, Beef votes, weekly history and store-brand links.
 
+## Migration review changes
+
+- Public profile queries can read only the ID, handle, handle setup flag and creation date. The browser uses only those columns.
+- Take and username checks share whole-word and phrase matching, with common character swaps. The public source list is stored outside Git. The local import added 403 terms to each table.
+- Authors cannot react to their own take. Grocery leads say “Might be here. Not confirmed.” Empty addresses are omitted.
+- Local PostgreSQL checked matching, restricted profile reads and the own-take rejection. Browser previews checked the shopper copy at both sizes. Live deployment remains on hold.
+
 - Researched Map data and tiles. The note lists official sources, open questions and what still needs verification.
 
 - Researched Open Food Facts seed options. The note lists official sources, open questions and what still needs verification.

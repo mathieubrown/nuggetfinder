@@ -8,6 +8,9 @@
       '<label>Short reply <textarea maxlength="180" rows="2"></textarea></label>' +
       '<button class="big ghost" value="reply">Send reply</button><div data-replies></div></div>';
     card.append(details);
+    if (user && user.id === row.author_id) {
+      details.querySelector('.btns').remove();
+    }
     async function refresh() {
       const result = await rpc(client,'take_responses',{p_take:row.id});
       if (!result) return;
