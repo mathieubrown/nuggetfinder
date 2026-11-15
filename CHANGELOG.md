@@ -102,3 +102,5 @@
 - Take and username checks share whole-word and phrase matching, with common character swaps. The public source list is stored outside Git. The local import added 403 terms to each table.
 - Authors cannot react to their own take. Grocery leads say “Might be here. Not confirmed.” Empty addresses are omitted.
 - Local PostgreSQL checked matching, restricted profile reads and the own-take rejection. Browser previews checked the shopper copy at both sizes. Live deployment remains on hold.
+
+- Researched Map data and tiles. The note lists official sources, open questions and what still needs verification.
