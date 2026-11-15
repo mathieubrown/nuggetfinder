@@ -6,7 +6,7 @@ Read README.md and docs/CODEX_BRIEF.md first. Where this file disagrees with the
 
 Do one step at a time. After each: screenshots at 390px and 1280px, no console errors, no horizontal scroll, and a note on what you could not test.
 
-0. Refactor into files plus a hash router (index, #/spot/<id>, #/feed, #/beef, #/me). No visible change.
+0. Refactor into files plus a hash router (index, #/spot/<id>, #/feed, #/showdown, #/me). No visible change.
 1. Products. Data model for products, not just places. Propose the schema and show me the SQL first. Sketch: products (brand, name, kind = nuggets|tenders|sauce|side, size, upc, allergens, source, created_by), place_products (place_id, product_id, status, last_seen_at) with the same two-person agreement rule as place status. Brands table with verified owner accounts later.
 2. Places import and adding places.
    - A CSV importer (data/places_template.csv is the format) that loads into a places table in our own database, so we stop depending on live map queries. Keep source and discovered_by columns. Do not scrape Google, Yelp or any site that forbids it.
@@ -18,25 +18,25 @@ Do one step at a time. After each: screenshots at 390px and 1280px, no console e
 6. Takes feed. Text and photo takes first, video later.
    - Grid page of thumbnails plus a full-screen swipe feed, same data.
    - Tabs: Hot (votes weighted toward fresh), Recent, Nearby, Following.
-   - Every take attaches to a spot, a product or a Beef matchup.
+   - Every take attaches to a spot, a product or a Showdown matchup.
    - A Respond button offers: I'm with them, I'm against, or a short reply.
    - Profile page: my votes, my record in feuds, points and status.
    - Points only vest after two or three other people confirm. Reward actions, never positive sentiment.
-7. Beef matchups (text), including creator challenges that deep-link into a matchup so a creator can send followers straight to it.
+7. Showdown matchups (text), including creator challenges that deep-link into a matchup so a creator can send followers straight to it.
 8. Sponsored system.
    - Tables for advertisers, campaigns and placements. Cobalt SPONSORED sticker plus "Paid by <brand>" on every paid item. Cobalt is used for nothing else.
-   - Placements: highlighted map spot, brand-issued Beef challenge, "where to buy" listing, sponsored take in the feed. Feed schedule is fixed at 1 sponsored item in 8.
+   - Placements: highlighted map spot, brand-issued Showdown challenge, "where to buy" listing, sponsored take in the feed. Feed schedule is fixed at 1 sponsored item in 8.
    - Sponsored items never change ratings, votes or status, never carry organic vote counts, and are never styled as a normal user.
    - A creator's paid post gets the Sponsored label and a built-in disclosure automatically.
 9. Creator program: verified Critic badge, creator profile with links, challenge links. Paid creator content always labeled.
-10. Sharing and search. Share links with preview cards for takes, spots and Beef results. Individual spot pages that Google can read. GitHub Pages is static, so propose options (a scheduled GitHub Action that generates static pages from the database, or Cloudflare Pages or Netlify with edge functions) with cost and effort, and let me choose.
+10. Sharing and search. Share links with preview cards for takes, spots and Showdown results. Individual spot pages that Google can read. GitHub Pages is static, so propose options (a scheduled GitHub Action that generates static pages from the database, or Cloudflare Pages or Netlify with edge functions) with cost and effort, and let me choose.
 11. Recall alerts for frozen chicken products from public federal feeds, shown on affected products and optionally pushed to people who opted in. Research first (Part C).
 12. Business and brand dashboards (aggregates only). Do not build until I confirm a lawyer has reviewed it.
     - Aggregate by neighborhood only, with a minimum group size of 10 reports. Hide any number built on fewer.
     - Never export per-user data. Never sell or share user-level data.
     - Metrics: stock by area, price over time, matchup results, out-of-stock heatmap.
 13. Account basics and legal pages: delete my account in-app, export my data, neutral 13+ age gate, report and block everywhere, terms, privacy policy naming AI moderation providers, DMCA contact, copyright and trademark complaint form.
-14. Later: video takes (hosting, speech-to-text captions, LLM triage, human review, cost caps), Nugget Card punchcards, push notifications, retention loop (weekly Beef results), native iOS app.
+14. Later: video takes (hosting, speech-to-text captions, LLM triage, human review, cost caps), Nugget Card punchcards, push notifications, retention loop (weekly Showdown results), native iOS app.
 
 ## Part B. Research and infill for Mat (human work, in this order)
 
@@ -46,7 +46,7 @@ Do one step at a time. After each: screenshots at 390px and 1280px, no console e
 4. Take 10 shelf photos with price and date at 5 stores for the first price entries.
 5. Creators: list 10 local SF food creators with handle, platform, email. Prefer small and enthusiastic over famous.
 6. Brands: list 20 nugget, tender and sauce brands with a marketing contact each.
-7. Starter Beef matchups: write 20 (Cane's sauce vs Chick-fil-A sauce, and so on) so day one has something to vote on.
+7. Starter Showdown matchups: write 20 (Cane's sauce vs Chick-fil-A sauce, and so on) so day one has something to vote on.
 8. Business and legal: decide the entity (LLC), find a lawyer for terms, privacy and the data product, run a trademark search on "Nuggetfinder", buy the domain, set up a business email for sign-in mail and DMCA notices.
 
 ## Part C. Research tasks for Codex (no code changes)
