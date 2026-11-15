@@ -209,6 +209,19 @@ function parseOverpass(json) {
   return out;
 }
 
+async function readCatalogMapPlaces() {
+  if (!sb) return [];
+  try {
+    var result = await sb.from('places').select('id,name,area,latitude,longitude');
+    if (result.error) return [];
+    return result.data.flatMap(function (place) {
+      var chain = matchChain(place.name);
+      return chain ? [{id:place.id,name:place.name,chain:chain.id,lat:place.latitude,
+        lng:place.longitude,place:place.area}] : [];
+    });
+  } catch (error) { return []; }
+}
+
 function fetchPlaces() {
   var cached = loadJSON(CACHE_KEY, null);
   if (cached && cached.places && cached.places.length && Date.now() - cached.ts < CACHE_TTL) {
@@ -664,8 +677,11 @@ function start() {
     currentRoute = route;
     if (state.places.length || route.page !== 'spot') showRoute(route);
   });
-  fetchPlaces().then(function (res) {
-    state.places = res.places;
+  Promise.all([fetchPlaces(), readCatalogMapPlaces()]).then(function (results) {
+    var res = results[0];
+    var places = new Map(res.places.map(function (place) { return [place.id, place]; }));
+    results[1].forEach(function (place) { places.set(place.id, place); });
+    state.places = Array.from(places.values());
     state.usingSeed = res.seed;
     return refreshStatuses();
   }).then(function () {

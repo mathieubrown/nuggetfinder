@@ -89,3 +89,16 @@
 - Shows the previous completed UTC week and the last side each voter picked during that week. Later vote changes leave those weekly picks in history.
 - Each result links to its matchup and has a share image. No scheduler or paid service is needed.
 - Wave 2 screen previews use simulated sign-in and content. Local PostgreSQL applied all migrations and checked moderation roles and appeals. Live sign-in, deletion and production deployment are outside these reviews.
+
+## Shopper data
+
+- Added a grocery snapshot and ten product records with official source URLs. Store brands link to their own chain. National-brand links are places to check.
+- The extract had no matching Walmart in the area. No stock or allergen claims were added.
+- Local PostgreSQL also checked first-take visibility, reaction totals, reply review, own-data export, block filtering, Beef votes, weekly history and store-brand links.
+
+## Migration review changes
+
+- Public profile queries can read only the ID, handle, handle setup flag and creation date. The browser uses only those columns.
+- Take and username checks share whole-word and phrase matching, with common character swaps. The public source list is stored outside Git. The local import added 403 terms to each table.
+- Authors cannot react to their own take. Grocery leads say “Might be here. Not confirmed.” Empty addresses are omitted.
+- Local PostgreSQL checked matching, restricted profile reads and the own-take rejection. Browser previews checked the shopper copy at both sizes. Live deployment remains on hold.
