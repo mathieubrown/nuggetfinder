@@ -113,3 +113,5 @@
 - Researched California privacy and aggregate data. The note lists official sources, open questions and what still needs verification.
 
 - Researched Stripe billing for brand customers. The note lists official sources, open questions and what still needs verification.
+
+- Researched Static SEO and share previews. The note lists official sources, open questions and what still needs verification.
