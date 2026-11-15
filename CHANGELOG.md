@@ -48,3 +48,9 @@
 - Replaced invented starter pins with 31 locations from an OpenStreetMap snapshot. The catalog links 15 products to stores of the same brand.
 - Product cards link to their map spot. The map includes the same snapshot even when its live location search fails. Both screens show the OpenStreetMap credit.
 - Only the unapplied product seed migration changed. The live database remains pending review.
+
+## Wave 2 moderation
+
+- Added a private review desk, a four-step strike ladder, appeals, username resets, account blocks and content reports.
+- Moderator access is granted through SQL. The browser cannot grant it. Future automated triage can fill the queue's AI fields server-side. A moderator makes every strike decision.
+- This migration is for review and local testing. The live database was untouched.
