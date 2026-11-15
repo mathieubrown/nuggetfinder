@@ -111,3 +111,5 @@
 - Researched FTC endorsements and review rules. The note lists official sources, open questions and what still needs verification.
 
 - Researched California privacy and aggregate data. The note lists official sources, open questions and what still needs verification.
+
+- Researched Stripe billing for brand customers. The note lists official sources, open questions and what still needs verification.
