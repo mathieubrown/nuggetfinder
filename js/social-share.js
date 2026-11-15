@@ -20,7 +20,7 @@
       productId:'beef-'+row.id,place:left+' votes · '+right+' votes',area:'Beef results',
       status:left===right?'mixed':'yes',
       label:!left&&!right?'− NO VOTES':left===right?'= TIE':'★ '+(left>right?row.left_label:row.right_label),
-      lastSeen:'Results at '+new Date().toLocaleDateString()
+      lastSeen:row.week_of?'Week of '+row.week_of:'Results at '+new Date().toLocaleDateString()
     },feedback);
   };
 })(NuggetfinderCommunity);

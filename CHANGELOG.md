@@ -83,3 +83,9 @@
 ## Take and Beef share cards
 
 - Takes and matchup results have downloadable 9:16 images. They reuse the stock card's logo, type, outline and result stamp. Longer takes wrap across lines.
+
+## Weekly Beef results
+
+- Shows the previous completed UTC week and the last side each voter picked during that week. Later vote changes leave those weekly picks in history.
+- Each result links to its matchup and has a share image. No scheduler or paid service is needed.
+- Wave 2 screen previews use simulated sign-in and content. Local PostgreSQL applied all migrations and checked moderation roles and appeals. Live sign-in, deletion and production deployment are outside these reviews.
