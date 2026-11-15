@@ -202,3 +202,6 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .swipe-feed { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px 6px 12px 0; gap: 12px; }
 .swipe-feed > article { scroll-snap-align: start; min-height: min(55vh, 480px); }
 [aria-current="page"] { text-decoration-thickness: 3px; }
+.response-box { display: grid; gap: 10px; }
+.response-box button[aria-pressed="true"] { box-shadow: 3px 3px var(--ink); }
+.wave-card details { width: 100%; }
