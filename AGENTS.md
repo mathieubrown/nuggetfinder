@@ -15,6 +15,7 @@ The publishable key inside index.html is public by design. Nothing else secret m
 - AGENTS.md (this file): how to work.
 - README.md: how to run and publish.
 - docs/CODEX_BRIEF.md: ground rules, design system, trust rules, moderation principles.
+- docs/FULL_VISION.md: the whole product, the sparkle system, every screen and the five build waves. Read this right after this file. It overrides any older advice to build smaller or to park features.
 - docs/CODEX_ADDENDUM.md: the build order (Part A), Mat's research and data tasks (Part B), your research tasks (Part C). Where it disagrees with the brief, the addendum wins.
 - design/*.dc.html: mockups (Main, Spot, Beef, Take, Prices, Badges). Plain HTML with inline styles. Read them as markup.
 - supabase/migrations/: database history. Add new timestamped files only. Never edit one that has been applied.
