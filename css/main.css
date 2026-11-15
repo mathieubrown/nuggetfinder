@@ -205,3 +205,10 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .response-box { display: grid; gap: 10px; }
 .response-box button[aria-pressed="true"] { box-shadow: 3px 3px var(--ink); }
 .wave-card details { width: 100%; }
+.beef-card { width: 100%; }
+.beef-vs { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 10px; width: 100%; }
+.beef-vs strong { min-height: 115px; padding: 12px; background: var(--gold); border: 3px solid var(--ink); box-shadow: 4px 4px var(--ink); font-family: var(--display); overflow-wrap: anywhere; }
+.beef-vs strong:last-child { background: var(--pink); }
+.beef-vs b { font: 22px var(--display); }
+.beef-card meter,.beef-card .btns { width: 100%; }
+@media(prefers-reduced-motion:no-preference) { .beef-card meter { animation: stamp-drop 300ms ease-out; } }

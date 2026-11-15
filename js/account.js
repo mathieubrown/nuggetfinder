@@ -15,6 +15,7 @@
       if (!user) return signIn('Sign in to export your data.');
       const data = await rpc(client, 'export_my_data');
       Object.assign(data, await rpc(client, 'export_wave2_take_data'));
+      Object.assign(data, await rpc(client, 'export_beef_data'));
       download(data);
     }, root.querySelector('[role=status]'));
   };
