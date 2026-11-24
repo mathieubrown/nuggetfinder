@@ -322,9 +322,10 @@ function renderPanel() {
   var now = Date.now();
   var html = '';
   var sel = state.selected && state.places.filter(function (p) { return p.id === state.selected; })[0];
+  document.body.classList.toggle('map-home', !sel && !mapApp.hidden);
   if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps(); return; }
 
-  var menus = ['all', 'nuggets', 'tenders', 'sauce', 'sides'];
+  var menus = ['nuggets', 'tenders', 'sauce', 'sides'];
   html += '<div class="search"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#161514" stroke-width="2.5" stroke-linecap="square"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg>' +
     '<label class="visually-hidden" for="q">Search spots</label>' +
     '<input id="q" type="search" placeholder="Search spots or streets" autocomplete="off" value="' + esc(state.query) + '"></div>';
@@ -341,7 +342,7 @@ function renderPanel() {
   if (state.usingSeed) {
     html += '<div class="note">Showing saved OpenStreetMap locations. Reload to retry the live map search.</div>';
   }
-  html += '<div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR THE MAP CENTER') + '</span>' +
+  html += '<div class="sheet-handle" aria-hidden="true"></div><div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR YOU') + '</span>' +
     '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>';
   html += '<div class="small">' + list.length + (list.length === 1 ? ' spot' : ' spots') + ' · ' +
     (state.server ? 'reports fade after 2 hours' : 'reports saved on this device only') + '</div>';
@@ -597,7 +598,7 @@ panel.addEventListener('click', function (e) {
   var t = e.target.closest('button');
   if (!t) return;
   if (t.dataset.id) return select(t.dataset.id);
-  if (t.dataset.menu) { state.menu = t.dataset.menu; renderMarkers(); return renderPanel(); }
+  if (t.dataset.menu) { state.menu = state.menu === t.dataset.menu ? 'all' : t.dataset.menu; renderMarkers(); return renderPanel(); }
   if (t.dataset.report) return report(state.selected, t.dataset.report);
   var a = t.dataset.action;
   if (a === 'back') { NuggetfinderRouter.openHome(); return showSpot(null, false); }
@@ -654,6 +655,7 @@ function showRoute(route) {
   var community = NuggetfinderCommunity.pages[route.page];
   wavePage.hidden = !(catalog || profile || community);
   mapApp.hidden = catalog || profile || !!community;
+  document.body.classList.toggle('map-home', !mapApp.hidden && route.page === 'home');
   if (community) return community(wavePage, route, sb, state.user, esc, openAuth, state.places);
   if (profile) return showProfile();
   if (catalog) return NuggetfinderCatalog.show(wavePage, route, sb, esc, {
