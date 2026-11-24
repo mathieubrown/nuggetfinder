@@ -212,3 +212,30 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .showdown-vs b { font: 22px var(--display); }
 .showdown-card meter,.showdown-card .btns { width: 100%; }
 @media(prefers-reduced-motion:no-preference) { .showdown-card meter { animation: stamp-drop 300ms ease-out; } }
+
+/* Main screen follows the 390px reference overlay and bottom sheet. */
+.sheet-handle { display: none; }
+.map-home .panel .legend { order: 10; }
+.map-home .panel .note { order: 9; }
+.map-home .panel .tools { align-items: center; }
+.map-home .panel .tools .link-btn { border: 0; padding: 0; font-size: 11px; }
+@media (max-width: 899px) {
+  body.map-home { position: relative; }
+  .map-home .top { position: absolute; z-index: 500; top: 16px; left: 16px; right: 16px; height: 54px; padding: 8px 12px; border: 3px solid var(--ink); box-shadow: 4px 4px var(--ink); }
+  .map-home .top .right { display: none; }
+  .map-home .top .mark svg { width: 36px; height: 32px; }
+  .map-home #mapApp { position: absolute; inset: 0 0 64px; }
+  .map-home #map { position: absolute; inset: 0 0 auto; height: 64%; min-height: 0; border: 0; width: 100%; }
+  .map-home .panel { position: absolute; top: 55%; bottom: 0; width: 100%; border-top: 3px solid var(--ink); border-radius: 22px 22px 0 0; background: var(--paper); padding-top: 10px; gap: 6px; }
+  .map-home .panel .search { position: fixed; top: 82px; left: 16px; right: 16px; z-index: 500; height: 48px; }
+  .map-home .panel .chips { position: fixed; top: 140px; left: 16px; right: 16px; z-index: 500; margin: 0; padding: 0 0 5px; gap: 8px; }
+  .map-home .panel .chip { padding: 0 10px; }
+  .map-home .panel .chips [data-action="now"] { display: none; }
+  .map-home .sheet-handle { display: block; align-self: center; width: 44px; height: 5px; border-radius: 3px; background: var(--ink); margin-bottom: 2px; }
+  .map-home .panel .row { min-height: 60px; }
+  .map-home > .wave-nav { position: absolute; z-index: 600; bottom: 0; left: 0; right: 0; height: 64px; background: var(--paper); border-top: 3px solid var(--ink); border-bottom: 0; justify-content: space-around; gap: 0; padding: 0 8px; }
+  .map-home > .wave-nav a { font-size: 12px; min-height: 60px; }
+  .map-home > .wave-nav .osm-credit { display: none; }
+  .map-home .leaflet-control-zoom { margin-top: 200px; }
+  .map-home .leaflet-control-attribution { font-size: 10px; }
+}

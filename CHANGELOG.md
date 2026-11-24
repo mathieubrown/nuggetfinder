@@ -122,3 +122,10 @@
 - Researched Stripe billing for brand customers. The note lists official sources, open questions and what still needs verification.
 
 - Researched Static SEO and share previews. The note lists official sources, open questions and what still needs verification.
+
+## Main screen fidelity pass
+
+- Rebuilt the mobile map overlay and bottom sheet from Main.dc.html. The four category chips toggle independently back to the complete list. The lower sheet uses live counts and dates.
+- Navigation sits at the bottom on the mobile map. OpenStreetMap credit remains on the map. Desktop retains the map and list split.
+- The original HTML is rendered for the review comparison because design/reference is absent. Reference artwork contains illustrative status counts. The app uses actual records.
+- Playwright passed at 390px and 1280px with reduced motion enabled, category-toggle checks, no browser errors and no sideways scroll. The preview uses the real OSM snapshot with simulated map tiles and sign-in. Existing JavaScript tests also passed.
