@@ -43,6 +43,11 @@ window.NuggetfinderShare = (function () {
       await document.fonts.load('900 48px "Archivo Black"', details.product + details.place + details.label);
       await document.fonts.ready;
     }
+    if(details.stockRow){
+      details=Object.assign({},details);
+      details.status=NuggetfinderWave.stockStatus(details.stockRow);
+      details.label=details.stockUnavailable?'− STOCK UNAVAILABLE':NuggetfinderCatalog.statusLabel(details.status);
+    }
     var canvas = document.createElement('canvas');
     canvas.width = 1080;
     canvas.height = 1920;

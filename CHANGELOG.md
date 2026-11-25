@@ -233,3 +233,9 @@
 - Kept seven days, 20 voters and 60%, with no forced winner. Voting stops at the stored deadline; closed rounds await an explicit moderator recording before publishing a versioned ruling.
 - Added a private recorded ballot and append-only versions with reasons, notes, previous version and moderator identity. Corrections derive counts from reviewed exclusions; moderators cannot select an outcome or extend voting. Bans and deletions do not silently change a recorded ruling.
 - Added moderator recording/correction controls, public history and versioned community-opinion labels on share cards. These additions need design review. Local tests cover permissions, concurrent version conflicts, preserved counts and immutable history. New SQL remains unapplied.
+
+## Release corrections: stock and price evidence
+
+- Added unapplied, read-only stock snapshots that expire at the earliest contributing vote and no later than 60 seconds after checking. Product, price and map displays refresh and remove confirmation when snapshots expire or a refresh fails, including while a form has focus. Share images recheck after fonts load.
+- Source verification no longer outranks newer price evidence. Labels use elapsed seven-day and thirty-day boundaries: recently reported, dated and historical. Earlier records remain stored and visible when their author is eligible. Account removal clears attribution without deleting the private historical price observation or exposing previously hidden evidence.
+- Added local regressions for vote expiry, delayed font loading, all price-age boundaries and newer crowd evidence beside historical verified-source data. No existing applied migration changed, and production remains held.

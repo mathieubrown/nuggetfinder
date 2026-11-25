@@ -36,9 +36,9 @@
       '<div class="badge-explanation"><span class="allergen-badge suggested">ALLERGEN FREE?</span><p>Suggested, awaiting confirmation.</p></div>'+
       '<div class="badge-explanation"><span class="allergen-badge contains">⚠ CONTAINS</span><p>A caution reported by a shopper. Check the source and packaging.</p></div>'+
       '<p class="small">These are badge styles, not claims about any product.</p></section>'+
-      '<section class="badge-section"><h2>Price ledger</h2><div class="badge-explanation"><span class="ledger-state">CURRENT</span>'+
-      '<p>The current store entry, or the latest crowd entry when no verified store price is available.</p></div>'+
-      '<div class="badge-explanation"><span class="ledger-state superseded">SUPERSEDED</span><p>An older entry preserved in the price history.</p></div>'+
+      '<section class="badge-section"><h2>Price ledger</h2><div class="badge-explanation"><span class="ledger-state">LATEST REPORT</span>'+
+      '<p>The newest reported observation. Verified source identity does not override newer evidence.</p></div>'+
+      '<div class="badge-explanation"><span class="ledger-state superseded">EARLIER REPORT</span><p>An earlier observation preserved in the price history.</p></div>'+
       '<a class="wave-link" href="#/prices">Open prices</a></section>');
   };
 })(NuggetfinderCommunity);
