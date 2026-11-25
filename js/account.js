@@ -37,7 +37,7 @@
     block.textContent = 'Block author';
     card.append(report, block);
     action(report, async () => {
-      await rpc(client, 'report_content', {p_kind:kind,p_ref:String(ref),p_reason:'other'});
+      await rpc(client, ['court', 'court_location', 'trail'].includes(kind) ? 'report_discovery' : 'report_content', {p_kind:kind,p_ref:String(ref),p_reason:'other'});
       feedback.textContent = 'Report sent.';
     }, feedback);
     action(block, async () => {
