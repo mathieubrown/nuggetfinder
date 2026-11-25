@@ -9,7 +9,7 @@
       ['hot','recent','following'].map(name => '<a href="' + feedUrl(name,swipe) + '"' +
         (name === tab ? ' aria-current="page"' : '') + '>' + name + '</a>').join('') +
       '<a href="' + feedUrl(tab,!swipe) + '">' + (swipe ? 'Grid view' : 'Swipe view') + '</a>' +
-      '<a href="#/take">Drop a take</a></nav><p role="status">Loading takes…</p><div id="takesFeed" class="' +
+      '<a href="#/take">Drop a take</a><a href="#/taste">Find people</a></nav><p role="status">Loading takes…</p><div id="takesFeed" class="' +
       (swipe ? 'swipe-feed' : 'wave-grid') + '"></div>');
     const feedback = root.querySelector('[role=status]');
     const feed = root.querySelector('#takesFeed');
@@ -23,7 +23,8 @@
         const card = document.createElement('article');
         card.className = 'wave-card take-tile';
         card.innerHTML = '<span class="tag">' + esc(row.subject_kind) + '</span><p>' + esc(row.body) +
-          '</p><strong>@' + esc(row.handle) + '</strong><time>' + esc(new Date(row.created_at).toLocaleDateString()) + '</time>';
+          '</p><a class="wave-link" href="#/taste?user=' + encodeURIComponent(row.author_id) + '">@' +
+          esc(row.handle) + '</a><time>' + esc(new Date(row.created_at).toLocaleDateString()) + '</time>';
         feed.append(card);
         if (user && user.id !== row.author_id) {
           const follow = document.createElement('button');

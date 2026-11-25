@@ -261,3 +261,11 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .court-rules { border-bottom: 2px dashed var(--ink); margin-bottom: 16px; }
 .court-nomination { max-width: 760px; }
 .court-nomination input { margin: 0; }
+
+.taste-header { background: var(--gold); margin-right: 6px; }
+.taste-header h2 { font: clamp(24px,5vw,40px) var(--display); margin: 0; }
+.taste-header .tag { background: var(--paper); }
+.discovery-search { max-width: 760px; }
+.discovery-search input { min-width: 0; margin: 0; flex: 3; }
+.discovery-search .btns { margin: 8px 0 16px; }
+.discovery-search button { padding: 8px 14px; }
