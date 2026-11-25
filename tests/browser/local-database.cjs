@@ -147,6 +147,24 @@ window.supabase={createClient(){
  await member.keyboard.press('Tab');assert.equal(await member.evaluate(()=>document.activeElement.matches('[data-reset]')),true);
  await member.keyboard.press('Tab');assert.equal(await member.evaluate(()=>document.activeElement.id),'takeKind');
  await member.locator('#skipContent').focus();await member.keyboard.press('Enter');assert.equal(await member.evaluate(()=>document.activeElement.id),'wavePage');
+ await go(member,'#/take');await member.locator('#takeText').fill('Crunch is a personality.');await member.getByRole('button',{name:'Prepare a food photo',exact:true}).click();assert.equal(await member.locator('#takeText').inputValue(),'Crunch is a personality.');await member.locator('[data-take-photo] .photo-lab').waitFor();
+ // Shared photo editor is local-only while trusted upload/publication remains held.
+ await go(member,'#/photo?kind=product&ref=mcnuggets');
+ const file=await member.evaluate(()=>{const c=document.createElement('canvas');c.width=800;c.height=600;const x=c.getContext('2d');x.fillStyle='#f0e8da';x.fillRect(0,0,800,600);x.fillStyle='#ca8523';for(const [a,b] of [[260,220],[480,220],[370,410]]){x.beginPath();x.ellipse(a,b,110,80,0.3,0,Math.PI*2);x.fill();}x.fillStyle='#161514';x.font='24px sans-serif';x.fillText('LOCAL TEST IMAGE',250,560);return c.toDataURL('image/png').split(',')[1];});
+ await member.locator('[data-library]').setInputFiles({name:'local-food-fixture.png',mimeType:'image/png',buffer:Buffer.from(file,'base64')});
+ await member.locator('.photo-work:not([hidden])').waitFor();
+ await member.getByRole('button',{name:'Prepare private draft',exact:true}).click();await member.getByRole('status').filter({hasText:'Inspect the image'}).waitFor();
+ await member.locator('[data-attest]').check();await member.getByRole('button',{name:'Black out rectangle',exact:true}).click();assert.equal(await member.locator('[data-attest]').isChecked(),false);
+ assert.deepEqual(await member.locator('.photo-work canvas').evaluate(c=>Array.from(c.getContext('2d').getImageData(120,100,1,1).data)),[0,0,0,255]);
+ await member.getByRole('button',{name:'Center square',exact:true}).click();
+ await member.locator('[data-attest]').check();await member.getByRole('button',{name:'Prepare private draft',exact:true}).click();await member.getByRole('status').filter({hasText:'Private draft prepared.'}).waitFor();
+ assert.equal(await member.evaluate(()=>document.documentElement.scrollWidth),width);
+ for(const motion of ['reduce','no-preference']){await member.emulateMedia({reducedMotion:motion});assert.equal(await member.locator('.photo-work canvas').evaluate(c=>getComputedStyle(c).animationName),'none');}
+ const photoDir=path.join(root,captures,'photo');fs.mkdirSync(photoDir,{recursive:true});await member.evaluate(()=>document.querySelector('#wavePage').scrollTop=0);await member.screenshot({path:path.join(photoDir,width+'.png')});
+ const detailDir=path.join(root,captures,'photo-details');fs.mkdirSync(detailDir,{recursive:true});await member.locator('[data-attest]').scrollIntoViewIfNeeded();await member.screenshot({path:path.join(detailDir,width+'.png')});
+ const previewDir=path.join(root,captures,'photo-preview');fs.mkdirSync(previewDir,{recursive:true});await member.locator('.photo-work canvas').scrollIntoViewIfNeeded();await member.screenshot({path:path.join(previewDir,width+'.png')});
+ await member.getByRole('button',{name:'Discard photo',exact:true}).click();assert.equal(await member.locator('.photo-work').isHidden(),true);
+ await shot('participation','#/participation');await member.getByText('No participant profiles are provisioned.',{exact:false}).waitFor();
  await db.pool.query("update public.products set name=$1 where id='mcnuggets'",['Local test long name '+ 'X'.repeat(180)]);
  await member.setViewportSize({width:320,height:844});await go(member,'#/product/mcnuggets');await member.locator('[data-place]').first().waitFor();assert.equal(await member.evaluate(()=>document.documentElement.scrollWidth),320);
  assert.deepEqual(errors,[]);console.log(width+': real database browser flows passed, including lost responses, moderation, blocking, stock, votes and prices');

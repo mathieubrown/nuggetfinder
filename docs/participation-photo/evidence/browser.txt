@@ -1,0 +1,42 @@
+390: #/take
+390: #/feed
+390: #/mod
+390: #/take-view?id=1
+390: #/mod
+390: #/take-view?id=1
+390: #/take-view?id=1
+390: #/
+390: #/spot/node%2F1229920544
+390: #/product/mcnuggets
+390: #/product/mcnuggets
+390: #/prices?place=node%2F1229920544
+390: #/prices?place=node%2F1229920544
+390: #/showdown/cane-vs-cfa
+RPC error vote_matchup vote_cooldown
+390: #/showdown/cane-vs-cfa
+390: #/take
+390: #/badges
+390: #/product/mcnuggets
+390: #/prices?place=node%2F1229920544
+390: #/
+390: #/prices?place=node%2F1229920544
+390: #/beef/cane-vs-cfa?from=local_creator
+390: #/weekly
+390: #/mod
+390: #/court/1
+390: #/court/1
+390: #/mod
+390: #/court/1
+390: #/badges
+390: #/take
+PAGE Cannot set properties of null (setting 'hidden')
+locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-take-photo] .photo-lab') to be visible[22m
+
+    at /Users/TESSERACT/Documents/Codex/2026-11-13/ok/work/nuggetfinder/tests/browser/local-database.cjs:150:318 {
+  log: [
+    "  - waiting for locator('[data-take-photo] .photo-lab') to be visible"
+  ],
+  name: 'TimeoutError'
+}
