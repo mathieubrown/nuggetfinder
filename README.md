@@ -11,7 +11,7 @@ A crowdsourced map of where the nuggets, tenders and sauces are in San Francisco
 
 ## Run it locally
 
-Open `index.html` in a browser. Until the database is set up, reports save on your own device only.
+Open `index.html` in a browser. Reporting requires the shared database. Offline browsing never creates confirmed status.
 
 For sign-in to work, serve the page over http instead of opening the file directly:
 
@@ -21,18 +21,9 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000 and add that address to the redirect URLs in Supabase (Authentication, URL Configuration).
 
-## Set up the database
+## Database changes
 
-Option 1, in the browser:
-1. Supabase dashboard, SQL Editor, New query.
-2. Paste the contents of `supabase/migrations/20261112000000_reports_and_accounts.sql` and run it.
-
-Option 2, with the CLI:
-```
-supabase login
-supabase link --project-ref jytfarejfcqexxbtnlqu
-supabase db push
-```
+Live database changes are held for SQL review. Do not run an unrestricted `supabase db push` against the live project. The current ordered migration batch, local test commands, verification queries and deployment/recovery steps are in [docs/release-readiness.md](docs/release-readiness.md).
 
 ## Publish with GitHub Pages
 

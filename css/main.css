@@ -506,3 +506,17 @@ body[data-screen="take"] > .wave-nav { background: var(--paper); }
   .map-home #map { height: 56%; z-index: 0; }
   .map-home .leaflet-bottom { bottom: 12px; }
 }
+
+/* Keyboard navigation, large text and small screens share the same controls. */
+.skip-link { position: fixed; top: -100px; left: 12px; z-index: 3000; min-height: 44px; padding: 10px; background: var(--gold); color: var(--ink); border: 3px solid var(--ink); }
+.skip-link:focus { top: 12px; }
+:focus-visible { outline: 3px solid #a62800; outline-offset: 3px; }
+body[data-screen="take"] :focus-visible { outline-color: var(--gold); }
+.wave-link, .wave-nav a, .showdown-takes nav a, .take-author, .take-thumbnail > a { min-height: 44px; display: inline-flex; align-items: center; }
+button, select, input:not([type="checkbox"]), textarea { min-height: 44px; }
+.wave-page, .take-thread-content, .price-item, .wave-card { overflow-wrap: anywhere; }
+@media(prefers-reduced-motion:reduce) {
+ *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+.active-showdown a, .allergen-badge[href] { min-height: 44px; display: inline-flex; align-items: center; }
+.leaflet-control-zoom a { width: 44px; height: 44px; line-height: 44px; }
