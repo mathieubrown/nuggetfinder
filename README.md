@@ -21,6 +21,10 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000 and add that address to the redirect URLs in Supabase (Authentication, URL Configuration).
 
+## Correction candidate review
+
+See [docs/corrections/REVIEW.md](docs/corrections/REVIEW.md) for the corrected development candidate, evidence and remaining gates. All production migrations, merges, settings and deployment remain on hold.
+
 ## Database changes
 
 Live database changes are held for SQL review. Do not run an unrestricted `supabase db push` against the live project. The current ordered migration batch, local test commands, verification queries and deployment/recovery steps are in [docs/release-readiness.md](docs/release-readiness.md).

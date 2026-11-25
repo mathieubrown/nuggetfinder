@@ -246,3 +246,10 @@
 - Added fail-closed read-only permission/catalog verification and an unapplied cleanup of separate column grants on the known NuggetFinder tables. Existing age, ban, moderation and direct-write protections remain enforced.
 - Added an explicit, private, bounded hold for legacy Court voters whose individual past changes were not recorded. It expires when their latest legacy activity leaves the rolling window, without inventing vote history. This is an upgrade condition, not a recurring restriction for new voters.
 - Kept the report action reachable before the long map list and labeled upcoming media controls before tapping. All migration files remain unapplied in production.
+
+## Correction candidate evidence and remaining gates
+
+- Final integrated evidence: 54 automated checks passed with zero failures/skips using native PostgreSQL, real REST/JWT and PGlite. Browser flows passed at 390px/1280px, including all seven regression areas, failed-refresh expiry, both motion preferences and all price-age bands. Application JavaScript syntax checks passed.
+- A synthetic 39-table dump/restore passed row digests, table grants/RLS and sequence comparisons, including corrected feature data. The local fail-closed verifier passed for 38 public tables, 100 privileged functions and catalog counts 25/83/189.
+- Evidence, six unapplied migration explanations, captures and remaining gates are in docs/corrections/REVIEW.md. No production query, SQL application, merge, setting change, deployment, paid service or LLM call was performed.
+- Still unproven: live schema/history, managed sign-in/email, production backup restoration, real devices/screen readers, full catalog validity and operational abuse/retention processes. Account deletion and finalized legal/contact pages remain public-participation gates. Closed Court rounds require assigned moderator recording coverage.

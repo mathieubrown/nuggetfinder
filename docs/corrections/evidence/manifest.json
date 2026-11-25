@@ -1,0 +1,49 @@
+{
+  "review_date": "2026-11-25",
+  "tested_application_commit": "95368733bfc3b483e217dbf5e1e874fcee5a55d4",
+  "base_accepted_icon": "2e4de957a48284467099070cb84dfefda7a9cc1f",
+  "audited_candidate": "d0174bb8228d12001938fb0fbaf2c0e488856cd9",
+  "node": "v22.18.0",
+  "tests": {
+    "pass": 54,
+    "fail": 0,
+    "skipped": 0
+  },
+  "browser_widths": [
+    390,
+    1280
+  ],
+  "additional_width": 320,
+  "motion_modes": [
+    "reduce",
+    "no-preference"
+  ],
+  "application_javascript_syntax": "PASS",
+  "migrations": [
+    {
+      "file": "20261125000100_safety_and_report_targets.sql",
+      "sha256": "1093d9d1cbdd73f7b1bbec93d0b083fef2dadcafb953e0a384bf953350df06b5"
+    },
+    {
+      "file": "20261125000200_vote_actions.sql",
+      "sha256": "d22f43681b2da76224eb7cdcb1737349bcc560944bb87699deadab0133be38b9"
+    },
+    {
+      "file": "20261125000300_versioned_court_rulings.sql",
+      "sha256": "4bc3850775b191295fe36de67189d54ea500d4722518dde72dc3b8554149791c"
+    },
+    {
+      "file": "20261125000400_stock_snapshots.sql",
+      "sha256": "e27a7549c47e15784173fe1bed2f453bea6be00ea3e2a1283d10102f87f3966f"
+    },
+    {
+      "file": "20261125000500_price_freshness.sql",
+      "sha256": "2e73b3b35429acb1a358c20362bfa1db71354e9ccd57625be6771a7aa4c5849c"
+    },
+    {
+      "file": "20261125000600_column_privilege_hardening.sql",
+      "sha256": "40cc34ecba3457194c7565b0e1d1023cb69ebdb966f1b8b9c135378268613d96"
+    }
+  ],
+  "production_changed": false
+}
