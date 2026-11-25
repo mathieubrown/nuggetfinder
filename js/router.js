@@ -27,8 +27,13 @@ window.NuggetfinderRouter = (function () {
       if (/^[1-9][0-9]*$/.test(id)) return {page:'court', id};
       return {page:'court'};
     }
+    if (hash.startsWith('#/trail/')) {
+      const id = hash.slice(8);
+      if (/^[1-9][0-9]*$/.test(id)) return {page:'trails', id};
+      return {page:'trails'};
+    }
     var [page, query] = hash.slice(2).split("?", 2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners', 'lists', 'court', 'field-guide', 'nominate', 'taste'].indexOf(page) !== -1) {
+    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners', 'lists', 'court', 'field-guide', 'nominate', 'taste', 'trails', 'trail-builder'].indexOf(page) !== -1) {
       return { page: page, query: query };
     }
     return { page: 'home' };
@@ -39,6 +44,7 @@ window.NuggetfinderRouter = (function () {
   }
 
   return {
+    current: read,
     listen: function (render) {
       window.addEventListener('hashchange', function () { render(read()); });
       render(read());

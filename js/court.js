@@ -7,7 +7,7 @@
     return '<nav class="discovery-tabs" aria-label="Nugget Court">' +
       '<a class="wave-link" href="#/court"' + (!guide ? ' aria-current="page"' : '') + '>Nugget Court</a>' +
       '<a class="wave-link" href="#/field-guide"' + (guide ? ' aria-current="page"' : '') + '>Field Guide</a>' +
-      '<a class="wave-link" href="#/nominate">Nominate a food</a></nav>';
+      '<a class="wave-link" href="#/nominate">Nominate a food</a><a class="wave-link" href="#/trails">Discovery trails</a></nav>';
   }
 
   function date(value) {
@@ -46,7 +46,7 @@
     card.append(share);
     action(share, () => NuggetfinderShare.download({
       brand: 'NUGGET COURT', product: row.food_name, productId: 'court-' + row.id,
-      place: total + (total === 1 ? ' community vote' : ' community votes'), area: row.argument,
+      place: total + (total === 1 ? ' community vote' : ' community votes'), area: 'Is it a nugget?',
       status: colors[row.verdict] || 'none', label: labels[row.verdict],
       lastSeen: 'Round ' + (row.verdict === 'open' ? 'closes ' : 'closed ') + date(row.closes_at)
     }), feedback);

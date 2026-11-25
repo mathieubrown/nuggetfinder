@@ -3,7 +3,7 @@
   const {pages, rpc, shell} = community;
   const states = {want: '♡ Want to try', tried: '✓ Tried it'};
 
-  community.addSaveButtons = function (root, client, user, kind, ref, signIn) {
+  community.addSaveButtons = function (root, client, user, kind, ref, signIn, initialState) {
     const group = document.createElement('div');
     group.className = 'save-controls';
     group.setAttribute('role', 'group');
@@ -14,7 +14,7 @@
     root.append(group);
     const feedback = group.querySelector('[role=status]');
     const buttons = Array.from(group.querySelectorAll('button'));
-    let current = null;
+    let current = initialState || null;
     let busy = false;
 
     function display() {
@@ -53,6 +53,7 @@
         await rpc(client, 'save_discovery', {p_kind: kind, p_ref: ref, p_state: next});
         current = next;
         feedback.textContent = next ? 'Saved privately to your list.' : 'Removed from your list.';
+        group.dispatchEvent(new CustomEvent('discoverychange', {detail: {state: next}}));
       } catch (error) {
         feedback.textContent = error.message.includes('cooldown')
           ? 'Give it a moment before changing your list again.' : 'Could not save. Please try again.';
@@ -61,13 +62,17 @@
         display();
       }
     }));
-    load();
+    if (initialState === undefined) load();
+    else {
+      display();
+      if (current) feedback.textContent = 'Saved privately to your list.';
+    }
     return group;
   };
 
   pages.lists = async function (root, route, client, user, esc, signIn) {
     const tab = new URLSearchParams(route.query).get('tab') === 'tried' ? 'tried' : 'want';
-    shell(root, 'My discoveries', '<p>Keep a private list of what you want to try and what you’ve tried.</p>' +
+    shell(root, 'My discoveries', '<a class="wave-link" href="#/trails">Explore discovery trails</a><p>Keep a private list of what you want to try and what you’ve tried.</p>' +
       '<nav class="discovery-tabs" aria-label="Your lists">' + Object.entries(states).map(([key, label]) =>
         '<a class="wave-link" href="#/lists?tab=' + key + '"' +
         (key === tab ? ' aria-current="page"' : '') + '>' + label + '</a>').join('') +
@@ -99,7 +104,13 @@
             encodeURIComponent(item.subject_ref) + '">' + esc(subject.name) + '</a>' :
             '<p>This item is no longer available.</p>');
         grid.append(card);
-        community.addSaveButtons(card, client, user, item.subject_kind, item.subject_ref, signIn);
+        const controls = community.addSaveButtons(card, client, user, item.subject_kind, item.subject_ref, signIn, item.list_state);
+        controls.addEventListener('discoverychange', event => {
+          if (event.detail.state !== tab) {
+            card.remove();
+            if (!grid.children.length) grid.innerHTML = NuggetfinderSparkle.empty('Your list is clear. Explore your next discovery.');
+          }
+        });
       });
     } catch (error) {
       feedback.textContent = 'Could not load your list. Please try again.';

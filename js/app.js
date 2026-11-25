@@ -120,6 +120,8 @@ var CACHE_TTL = 24 * 60 * 60 * 1000;
 var SUPABASE_URL = 'https://jytfarejfcqexxbtnlqu.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_kGEH96ESdQ2xhebZFr5A5A_tQ9BWJqn';
 
+var catalogPlaceIds = new Set(NuggetfinderSeed.places.map(function (place) { return place.id; }));
+
 function withCatalogPlaces(mapPlaces) {
   var places = new Map(mapPlaces.map(function (place) { return [place.id, place]; }));
   NuggetfinderSeed.places.forEach(function (place) {
@@ -214,6 +216,7 @@ async function readCatalogMapPlaces() {
   try {
     var result = await sb.from('places').select('id,name,area,latitude,longitude');
     if (result.error) return [];
+    result.data.forEach(function (place) { catalogPlaceIds.add(place.id); });
     return result.data.flatMap(function (place) {
       var chain = matchChain(place.name);
       return chain ? [{id:place.id,name:place.name,chain:chain.id,lat:place.latitude,
@@ -324,7 +327,7 @@ function renderPanel() {
   var sel = state.selected && state.places.filter(function (p) { return p.id === state.selected; })[0];
   document.body.classList.toggle('map-home', !sel && !mapApp.hidden);
   if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps();
-    if (NuggetfinderSeed.places.some(function (place) { return place.id === sel.id; })) {
+    if (catalogPlaceIds.has(sel.id)) {
       NuggetfinderCommunity.addSaveButtons(panel, sb, state.user, 'place', sel.id, openAuth);
     }
     return; }
@@ -390,7 +393,7 @@ function detailHTML(p, now) {
   h += '<div class="soon"><span class="heading">' + NuggetfinderShowdown.active + '</span><span><a class="wave-link" href="#/showdown">' + NuggetfinderShowdown.pick + '</a></span></div>';
   h += '<div class="soon alt"><span class="heading">PRICES</span><span>Store listings and the price ledger are coming next.</span></div>';
   h += '<a class="maps-link" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.lat + ',' + p.lng) + '">Get directions</a>';
-  if (NuggetfinderSeed.places.some(function (place) { return place.id === p.id; })) {
+  if (catalogPlaceIds.has(p.id)) {
     h += '<a class="wave-link" href="#/take?kind=place&ref=' + encodeURIComponent(p.id) +
       '&label=' + encodeURIComponent(p.name) + '">Drop a take</a>';
   }
@@ -493,7 +496,7 @@ function closeAuth() {
 
 function setUser(u) {
   state.user = u;
-  var page = location.hash.slice(2).split(/[/?]/)[0];
+  var page = NuggetfinderRouter.current().page;
   if (NuggetfinderCommunity.pages[page] && !wavePage.hidden) {
     setTimeout(function () { window.dispatchEvent(new Event('hashchange')); }, 0);
   }

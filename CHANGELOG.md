@@ -151,3 +151,13 @@
 - Reused Following and the existing follow graph. Added handle search, a follows directory and links from take authors. Blocking removes both follow directions and hides the profile.
 - Added no popularity score, purchase inference or sentiment rewards. Needs design review. SQL remains for review and local testing.
 - Local PostgreSQL and browser checks passed for taste profiles at both sizes. Tests cover mutual blocks, removal of follows on block, literal handle-prefix search, private lists and public approved takes.
+
+## Discovery trails
+
+- Added reviewed collections of up to 20 real places, with an ordered stop picker, editable trails, public author links and private visit stamps. Marking a stop never creates a stock report.
+- Every new or edited trail waits for moderation. Review decisions are tied to the exact version so an older approval cannot publish a later edit. Reordering preserves progress for retained stops.
+- Own trails, their stops and private progress are included in account export. Trail reports and blocking use the moderation and safety flow.
+- Trails, the builder and progress stamps need design review. No trail, nomination or vote is seeded as a real user contribution.
+- Connected save and take buttons to every database catalog place, including groceries. Lists reuse their loaded rows so a long list does not fetch the entire collection once per card.
+- Local PostgreSQL tests cover review versions, private progress, retained stamps after reordering, reports, exports and grants. Playwright checked all new screens at 390px and 1280px with reduced motion, no console errors and no horizontal overflow. A 1080 × 1920 Court share-card download also passed.
+- Test fixtures are local. Live sign-in, production submissions and photo publishing remain untested. The existing deployment hold still applies to these changes.

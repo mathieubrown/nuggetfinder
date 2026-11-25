@@ -161,6 +161,84 @@ test('discovery database permissions and normal entry points', async t => {
       await assert.rejects(db.query('select public.my_taste_follows()'), /permission denied/);
       await assert.rejects(db.query('select public.set_follow($1,true)', [users[2]]), /permission denied/);
     });
+
+    await t.test('trails enforce real stops, review versions and private progress', async () => {
+      await actor(1);
+      await assert.rejects(db.query("select public.submit_discovery_trail('Bad trail','No real places',array['invented'])"), /invalid_trail/);
+      await assert.rejects(db.query("select public.submit_discovery_trail('Duplicate stops','A test',array['node/1229920544','node/1229920544'])"), /invalid_trail/);
+      const trailId = (await db.query("select public.submit_discovery_trail('Nugget expedition','Two real places to explore.',array['node/1229920544','node/358116917']) id")).rows[0].id;
+      assert.deepEqual((await db.query('select public.list_trails() trails')).rows[0].trails, []);
+      assert.equal((await db.query('select public.list_trails(null,true) trails')).rows[0].trails.length, 1);
+      await actor(2);
+      await assert.rejects(db.query("select public.submit_discovery_trail('Stolen trail','Not the author',array['node/1229920544'],$1)", [trailId]), /trail_unavailable/);
+      await actor(0);
+      let inbox = (await db.query('select public.moderation_inbox() inbox')).rows[0].inbox;
+      const firstReview = inbox.queue.find(row => row.kind === 'trail').id;
+      // Editing a pending nomination makes its earlier review obsolete.
+      await db.exec('reset role');
+      await db.query("update public.discovery_trails set updated_at=now()-interval '3 minutes'");
+      await actor(1);
+      await db.query("select public.submit_discovery_trail('Nugget expedition revised','Two real places.',array['node/1229920544','node/358116917'],$1)", [trailId]);
+      await actor(0);
+      await db.query("select public.review_content($1,'approve')", [firstReview]);
+      assert.deepEqual((await db.query('select public.list_trails() trails')).rows[0].trails, []);
+      inbox = (await db.query('select public.moderation_inbox() inbox')).rows[0].inbox;
+      await db.query("select public.review_content($1,'approve')", [inbox.queue.find(row => row.kind === 'trail').id]);
+      await actor(2);
+      let trail = (await db.query('select public.list_trails() trails')).rows[0].trails[0];
+      assert.equal(trail.stops.length, 2);
+      await db.query("select public.mark_trail_stop($1,'node/1229920544',true)", [trailId]);
+      await db.query("select public.mark_trail_stop($1,'node/1229920544',true)", [trailId]);
+      trail = (await db.query('select public.list_trails() trails')).rows[0].trails[0];
+      assert.equal(trail.visited, 1);
+      await assert.rejects(db.query("select public.mark_trail_stop($1,'invented',true)", [trailId]), /trail_unavailable/);
+      await actor(1);
+      trail = (await db.query('select public.list_trails() trails')).rows[0].trails[0];
+      assert.equal(trail.visited, 0);
+      await db.exec('reset role');
+      await db.query("update public.discovery_trails set updated_at=now()-interval '3 minutes'");
+      await actor(1);
+      await db.query("select public.submit_discovery_trail('Nugget expedition reordered','The other direction.',array['node/358116917','node/1229920544'],$1)", [trailId]);
+      await actor(0);
+      inbox = (await db.query('select public.moderation_inbox() inbox')).rows[0].inbox;
+      await db.query("select public.review_content($1,'approve')", [inbox.queue.find(row => row.kind === 'trail').id]);
+      await actor(2);
+      trail = (await db.query('select public.list_trails() trails')).rows[0].trails[0];
+      assert.equal(trail.stops[0].id, 'node/358116917');
+      assert.equal(trail.stops[1].tried, true);
+      assert.equal(trail.visited, 1);
+      await db.query("select public.save_discovery('trail',$1,'want')", [String(trailId)]);
+      const exported = (await db.query('select public.export_discovery_data() data')).rows[0].data;
+      assert.equal(exported.trail_progress.length, 1);
+      assert.deepEqual(exported.trails, []);
+      assert.deepEqual(exported.trail_stops, []);
+      await db.query("select public.report_discovery('trail',$1,'other')", [String(trailId)]);
+      await actor(0);
+      inbox = (await db.query('select public.moderation_inbox() inbox')).rows[0].inbox;
+      await db.query("select public.review_content($1,'hide')", [inbox.queue.find(row => row.kind === 'trail_report').id]);
+      await actor(2);
+      assert.deepEqual((await db.query('select public.list_trails() trails')).rows[0].trails, []);
+      await assert.rejects(db.query('select * from public.trail_progress'), /permission denied/);
+      await db.query("select public.mark_trail_stop($1,'node/1229920544',false)", [trailId]);
+    });
+
+    await t.test('all discovery tables and helper functions are private', async () => {
+      await db.exec('reset role');
+      for (const table of ['saved_items','court_cases','court_votes','court_locations','discovery_trails','trail_stops','trail_progress']) {
+        const row = (await db.query("select relrowsecurity as rls from pg_class where oid=$1::regclass", ['public.' + table])).rows[0];
+        assert.equal(row.rls, true);
+        for (const role of ['anon','authenticated']) {
+          const grants = (await db.query("select privilege from unnest(array['SELECT','INSERT','UPDATE','DELETE','TRUNCATE']) privilege where has_table_privilege($1,$2,privilege)", [role,'public.'+table])).rows;
+          assert.deepEqual(grants, []);
+        }
+      }
+      for (const name of ['discovery_subject(text,text)','discovery_author_visible(uuid)','court_visible(bigint)',
+        'trail_visible(bigint)','report_court_discovery(text,text,text)','export_court_data()']) {
+        for (const role of ['anon','authenticated']) {
+          assert.equal((await db.query("select has_function_privilege($1,$2,'EXECUTE') allowed", [role,'public.'+name])).rows[0].allowed, false);
+        }
+      }
+    });
   } finally {
     await db.close();
   }
