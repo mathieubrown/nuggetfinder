@@ -167,3 +167,10 @@
 - Added the six supplied PNG references to design/reference. Main now has the reference-style bottom navigation, create button, reporting call to action and word-plus-icon map pins. Product shopping stays available from the Near You sheet.
 - All screens share the same mobile and desktop app. The local fallback no longer turns a single-device observation into a confirmed status when the shared reporting service is unavailable.
 - Mobile reference comparisons retain the reference's illustrative data on the left. The built app on the right uses real catalog places and empty data where no reports exist.
+
+## Reference foundation: Spot
+
+- Built The Score, Active Showdown and Top Takes Here from the Spot reference. Scores stay hidden until three distinct people have rated the place. Empty places show their real zero counts.
+- Added one rating per person per place, a ten-minute editing cooldown and a 20-place rolling daily cap. Private ratings are included in exports.
+- The existing starter sauce matchup is linked only to the two real restaurant brands it compares. It shows no percentages until someone votes.
+- New ratings SQL is for local tests and review only.

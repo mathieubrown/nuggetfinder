@@ -329,6 +329,7 @@ function renderPanel() {
   document.body.classList.toggle('map-home', !sel && !mapApp.hidden);
   if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps();
     if (catalogPlaceIds.has(sel.id)) {
+      NuggetfinderSpot.mount(panel, sel, sb, state.user, esc, openAuth);
       NuggetfinderCommunity.addSaveButtons(panel, sb, state.user, 'place', sel.id, openAuth);
     }
     return; }
@@ -387,13 +388,7 @@ function detailHTML(p, now) {
   h += '<div><div class="dname">' + esc(p.name.toUpperCase()) + '</div><div class="small">' + esc(p.place || '') + (p.place ? ' · ' : '') + esc(metaText(p, s, now).split(' · ')[0]) + ' away</div></div>';
   h += '<div class="block ' + cls + '" data-stamp-key="' + esc(p.id) + '" data-stamp-status="' + s.state + '"><div class="word' + (WORDS[s.state].length > 8 ? ' long' : '') + '">' + ICONS[s.state].replace('width="18" height="18"', 'width="34" height="34"') + esc(WORDS[s.state]) + '</div><div>' + esc(sub) + '</div>' +
     '<div class="btns"><button class="big yes" data-report="yes">NUGGETS HERE</button><button class="big no" data-report="nope">NOPE</button></div></div>';
-  if (ch) {
-    h += '<div><div class="heading">TYPICAL MENU</div><div class="tags" style="margin-top:8px">';
-    ch.menu.forEach(function (m) { h += '<span class="tag">' + m.toUpperCase() + '</span>'; });
-    h += '</div><div class="small" style="margin-top:6px">' + MENU_NOTE + '</div></div>';
-  }
-  h += '<div class="soon"><span class="heading">' + NuggetfinderShowdown.active + '</span><span><a class="wave-link" href="#/showdown">' + NuggetfinderShowdown.pick + '</a></span></div>';
-  h += '<div class="soon alt"><span class="heading">PRICES</span><span>Store listings and the price ledger are coming next.</span></div>';
+  h += '<a class="wave-link" href="#/prices?place=' + encodeURIComponent(p.id) + '">Prices at this store</a>';
   h += '<a class="maps-link" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.lat + ',' + p.lng) + '">Get directions</a>';
   if (catalogPlaceIds.has(p.id)) {
     h += '<a class="wave-link" href="#/take?kind=place&ref=' + encodeURIComponent(p.id) +
@@ -409,6 +404,7 @@ function select(id, pan) {
 
 function showSpot(id, pan) {
   document.body.dataset.screen = id ? 'spot' : 'home';
+  document.body.classList.toggle('spot-view', !!id);
   state.selected = id;
   var p = state.places.filter(function (x) { return x.id === id; })[0];
   renderMarkers();
@@ -654,6 +650,7 @@ function showProfile() {
 
 function showRoute(route) {
   document.body.dataset.screen = route.page;
+  document.body.classList.toggle('spot-view', route.page === 'spot');
   document.querySelectorAll('.primary-nav a[data-page]').forEach(function (link) {
     if (link.dataset.page === route.page) link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
@@ -699,7 +696,7 @@ function start() {
   });
   setInterval(function () {
     var a = document.activeElement;
-    if (a && a.id === 'q') return;
+    if (a && (a.id === 'q' || a.closest('#panel form') || a.closest('#wavePage form'))) return;
     if (!wavePage.hidden && location.hash.startsWith('#/product/')) NuggetfinderCatalog.refresh();
     refreshStatuses().then(function () {
       renderMarkers();
