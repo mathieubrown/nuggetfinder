@@ -323,7 +323,11 @@ function renderPanel() {
   var html = '';
   var sel = state.selected && state.places.filter(function (p) { return p.id === state.selected; })[0];
   document.body.classList.toggle('map-home', !sel && !mapApp.hidden);
-  if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps(); return; }
+  if (sel) { panel.innerHTML = detailHTML(sel, now); updatePlaceStamps();
+    if (NuggetfinderSeed.places.some(function (place) { return place.id === sel.id; })) {
+      NuggetfinderCommunity.addSaveButtons(panel, sb, state.user, 'place', sel.id, openAuth);
+    }
+    return; }
 
   var menus = ['nuggets', 'tenders', 'sauce', 'sides'];
   html += '<div class="search"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#161514" stroke-width="2.5" stroke-linecap="square"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg>' +

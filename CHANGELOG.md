@@ -129,3 +129,9 @@
 - Navigation sits at the bottom on the mobile map. OpenStreetMap credit remains on the map. Desktop retains the map and list split.
 - The original HTML is rendered for the review comparison because design/reference is absent. Reference artwork contains illustrative status counts. The app uses actual records.
 - Playwright passed at 390px and 1280px with reduced motion enabled, category-toggle checks, no browser errors and no sideways scroll. The preview uses the real OSM snapshot with simulated map tiles and sign-in. Existing JavaScript tests also passed.
+
+## Private discovery lists
+
+- Added Want to Try and Tried It lists for products, catalog places and Showdowns. Tap a selected button again to remove the item. These lists belong to the signed-in account and do not affect stock or scores.
+- Added lists to account export. Database writes check sign-in, age, bans and posting restrictions. The migration is for local testing and SQL review.
+- Design review needed for the list screen and save buttons. They use the existing paper, ink, pink and hard-shadow components.

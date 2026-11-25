@@ -23,7 +23,7 @@ window.NuggetfinderRouter = (function () {
       catch (error) { return {page:'showdown'}; }
     }
     var [page, query] = hash.slice(2).split("?", 2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners'].indexOf(page) !== -1) {
+    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners', 'lists'].indexOf(page) !== -1) {
       return { page: page, query: query };
     }
     return { page: 'home' };

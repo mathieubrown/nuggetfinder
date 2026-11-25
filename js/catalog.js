@@ -180,6 +180,8 @@ window.NuggetfinderCatalog = (function () {
             '<button class="big ghost" type="button" data-stock="sold_out" disabled>Sold out</button></div><button class="big ghost" type="button" data-share>Download share card</button></article>';
         }).join('') + '</div>';
       if (!links.length) root.querySelector('.wave-grid').innerHTML = NuggetfinderSparkle.empty('No places listed yet.');
+      NuggetfinderCommunity.addSaveButtons(root.querySelector('.wave-hero'), client,
+        options.user(), 'product', product.id, options.signIn);
       refreshStock = showStock(root, product, links, client, options, id);
       return;
     }
