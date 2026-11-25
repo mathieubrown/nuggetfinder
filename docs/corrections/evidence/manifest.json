@@ -1,11 +1,11 @@
 {
   "review_date": "2026-11-25",
-  "tested_application_commit": "95368733bfc3b483e217dbf5e1e874fcee5a55d4",
+  "tested_application_commit": "511ff300221aa2e145c3922bf8f60b1e2728ca55",
   "base_accepted_icon": "2e4de957a48284467099070cb84dfefda7a9cc1f",
   "audited_candidate": "d0174bb8228d12001938fb0fbaf2c0e488856cd9",
   "node": "v22.18.0",
   "tests": {
-    "pass": 54,
+    "pass": 55,
     "fail": 0,
     "skipped": 0
   },
@@ -30,7 +30,7 @@
     },
     {
       "file": "20261125000300_versioned_court_rulings.sql",
-      "sha256": "4bc3850775b191295fe36de67189d54ea500d4722518dde72dc3b8554149791c"
+      "sha256": "7da93933cd016fb98e15daecf43ca1406ffbedc4a0a3639f52e35a1fe608604d"
     },
     {
       "file": "20261125000400_stock_snapshots.sql",

@@ -23,16 +23,17 @@
         "place_id": "node/1229920544",
         "seen_count": 1,
         "sold_out_count": 0,
-        "last_report_at": "2026-11-25T21:01:39.972Z",
-        "last_seen_at": "2026-11-25T21:01:39.972Z"
+        "last_report_at": "2026-11-25T21:10:22.965Z",
+        "last_seen_at": "2026-11-25T21:10:22.965Z"
       }
     ]
   },
   "restore": {
     "status": "PASS",
+    "readOnlyVerifierStatus": "PASS",
     "source": "synthetic local PostgreSQL fixture",
     "tablesCompared": 39,
-    "archiveBytes": 257738,
+    "archiveBytes": 257710,
     "rowCountsAndLogicalDigestsMatch": true,
     "tableGrantsAndRLSMatch": true,
     "sequenceValuesMatch": true,

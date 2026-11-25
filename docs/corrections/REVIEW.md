@@ -20,7 +20,7 @@ Court stays seven days from moderator approval, at least 20 eligible recorded vo
 
 Voting closes automatically at the stored deadline. A closed round shows **Awaiting recorded ruling** until a moderator records its first version. No public read writes an audit record and no scheduler or production setting was added. Assign moderator coverage for this recording step before enabling Court. The initial record captures the available closed ballot and eligibility at recording; later bans/deletions cannot silently change that published record. If automatic publication at the deadline is wanted, it needs a separately reviewed operational mechanism.
 
-Corrections use recorded ballot IDs and an expected version. They append a reason/note and a newly derived count. An outdated moderator form is rejected rather than overwriting another correction. Private ballots and individual eligibility are never returned by public history. Identity references can be erased after account deletion while immutable aggregate facts remain. This supports a future deletion design; it does **not** implement account deletion or settle retention policy.
+Corrections use recorded ballot IDs and an expected version. They append a reason/note and a newly derived count. An outdated moderator form is rejected rather than overwriting another correction. Private ballots and individual eligibility are never returned by public history. Identity references can be erased after account deletion while immutable aggregate facts remain. Removing a nominator keeps the case and audit record private; banned or blocked content is never republished by removal. This supports a future deletion design; it does **not** implement account deletion or settle retention policy.
 
 Price age uses elapsed time: up to and including seven days is **Recently reported**; after seven days through thirty days is **Dated** (the eighth through thirtieth day); over thirty days is **Historical**. Historical does not mean deleted. Latest/earlier labels describe ordering, not guaranteed availability. A Best recent unit price label only compares recent eligible observations in the selected comparable-unit view. Stock date and price date are separate.
 
@@ -35,7 +35,7 @@ Legacy upgrade: Showdown action history is carried forward. Old Court stored onl
 
 ## Tests and reproducibility
 
-**54 automated checks passed, zero failures and zero skips**, with native PostgreSQL, real PostgREST/JWT and PGlite enabled. Full TAP: [integrated-tests.tap](evidence/integrated-tests.tap).
+**55 automated checks passed, zero failures and zero skips**, with native PostgreSQL, real PostgREST/JWT and PGlite enabled. Full TAP: [integrated-tests.tap](evidence/integrated-tests.tap).
 
 The browser suite passed at 390px and 1280px with no console errors or horizontal page scroll. It exercises actual local SQL behind simulated browser Auth/transport; separate REST tests cover the real HTTP/JWT boundary. It checks lost responses after commit, safe retries, moderation, blocking, stock expiry while inputs have focus, legacy routes, all three price bands, versioned rulings and both motion preferences. It also retains the 320px long-name check. Full log: [browser.txt](evidence/browser.txt).
 
