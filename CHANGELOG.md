@@ -222,3 +222,8 @@
 - Preserved reporting/blocking during temporary posting restrictions without removing sign-in, age, ban, structured-target or safety rate checks.
 - Added an unapplied catalog-target guard for map reports. Live external map discovery cannot become a reporting target without catalog review. Existing valid store IDs remain shared with product stock.
 - Restored legacy Beef and weekly routes, including creator query parameters. Regression tests passed on native local PostgreSQL and the plain router functions. Production remains held.
+
+## Release corrections: vote actions
+
+- Added an unapplied private action ledger shared by Court and Showdowns. Initial votes and actual answer changes each consume one of 60 rolling 24-hour actions. The five-second cooldown remains enforced. No-op repeats do not consume an action.
+- Old Beef entry points use the same limit. Existing Showdown event history is carried forward; legacy Court rows cannot reconstruct past changes and are counted once each on upgrade. Local concurrency and boundary checks passed.
