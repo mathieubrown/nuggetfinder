@@ -260,7 +260,7 @@ function refPoint() { return state.userLoc || state.ref; }
 
 function statusOf(pid, now) {
   if (state.server) return statusFromCounts(state.serverCounts[pid], now, SERVER_QUORUM);
-  return statusFor(state.reports, pid, now, 1);
+  return {state:'none',y:0,n:0,latest:0,fadesInMs:0};
 }
 
 function visiblePlaces(now) {
@@ -293,9 +293,10 @@ function metaText(p, s, now) {
 function pinIcon(st, selected) {
   return L.divIcon({
     className: '',
-    html: '<div class="pin p-' + st + (selected ? ' sel' : '') + '">' + ICONS[st] + '</div>',
-    iconSize: [36, 36],
-    iconAnchor: [18, 18]
+    html: '<div class="map-pin"><div class="pin p-' + st + (selected ? ' sel' : '') + '">' + ICONS[st] +
+      '</div><span class="pin-label">' + WORDS[st] + '</span></div>',
+    iconSize: [70, 62],
+    iconAnchor: [35, 18]
   });
 }
 
@@ -350,7 +351,8 @@ function renderPanel() {
     html += '<div class="note">Showing saved OpenStreetMap locations. Reload to retry the live map search.</div>';
   }
   html += '<div class="sheet-handle" aria-hidden="true"></div><div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR YOU') + '</span>' +
-    '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>';
+    '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>' +
+    '<a class="product-finder-link" href="#/products">Find a product in stores →</a>';
   html += '<div class="small">' + list.length + (list.length === 1 ? ' spot' : ' spots') + ' · ' +
     (state.server ? 'reports fade after 2 hours' : 'reports saved on this device only') + '</div>';
   html += '<details class="legend"><summary>What the icons mean</summary><p>Check: nuggets. X: nope. Bars: mixed. Dots: unconfirmed, a second person has to agree. Clock: stale. Dash: no reports.</p></details>';
@@ -362,7 +364,7 @@ function renderPanel() {
   });
   if (!list.length) html += '<p class="small">Nothing matches. Try clearing a filter.</p>';
   if (list.length > 40) html += '<p class="small">Showing the nearest 40. Search or filter to narrow it down.</p>';
-  html += '</div>';
+  html += '</div><button class="found-report" data-action="choose-report">I FOUND NUGGETS / NOPE</button>';
   panel.innerHTML = html;
   updatePlaceStamps();
 }
@@ -406,6 +408,7 @@ function select(id, pan) {
 }
 
 function showSpot(id, pan) {
+  document.body.dataset.screen = id ? 'spot' : 'home';
   state.selected = id;
   var p = state.places.filter(function (x) { return x.id === id; })[0];
   renderMarkers();
@@ -416,21 +419,9 @@ function showSpot(id, pan) {
 
 function report(id, s) {
   if (state.server) return serverReport(id, s);
-  var now = Date.now();
-  var left = cooldownLeft(state.reports, id, now);
-  if (left > 0) {
-    toast('You already reported here. You can report again in ' + spanText(left) + '.');
-    return;
-  }
-  state.reports.push({ pid: id, s: s, t: now });
-  state.reports = pruneReports(state.reports, now);
-  saveJSON(REPORT_KEY, state.reports);
-  renderMarkers();
-  renderPanel();
-  toast(s === 'yes' ? 'Thanks. Marked as nuggets. This fades in 2 hours.' : 'Thanks. Marked as nope. This fades in 2 hours.');
+  toast('Shared reports are unavailable. Please try again shortly.');
 }
 
-// ---- Shared mode (Supabase) ----
 var sb = null;
 var authDlg = document.getElementById('auth');
 var authBtn = document.getElementById('authBtn');
@@ -611,6 +602,11 @@ panel.addEventListener('click', function (e) {
   if (a === 'back') { NuggetfinderRouter.openHome(); return showSpot(null, false); }
   if (a === 'now') { state.nowOnly = !state.nowOnly; renderMarkers(); return renderPanel(); }
   if (a === 'locate') return locate();
+  if (a === 'choose-report') {
+    toast('Choose the store you visited from the map or list.');
+    var first = panel.querySelector('.row');
+    if (first) { first.focus(); first.scrollIntoView({block:'nearest'}); }
+  }
 });
 
 panel.addEventListener('input', function (e) {
@@ -657,6 +653,11 @@ function showProfile() {
 }
 
 function showRoute(route) {
+  document.body.dataset.screen = route.page;
+  document.querySelectorAll('.primary-nav a[data-page]').forEach(function (link) {
+    if (link.dataset.page === route.page) link.setAttribute('aria-current','page');
+    else link.removeAttribute('aria-current');
+  });
   var catalog = route.page === 'products' || route.page === 'product';
   var profile = route.page === 'me';
   var community = NuggetfinderCommunity.pages[route.page];

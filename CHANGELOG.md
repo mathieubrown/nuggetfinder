@@ -161,3 +161,9 @@
 - Connected save and take buttons to every database catalog place, including groceries. Lists reuse their loaded rows so a long list does not fetch the entire collection once per card.
 - Local PostgreSQL tests cover review versions, private progress, retained stamps after reordering, reports, exports and grants. Playwright checked all new screens at 390px and 1280px with reduced motion, no console errors and no horizontal overflow. A 1080 × 1920 Court share-card download also passed.
 - Test fixtures are local. Live sign-in, production submissions and photo publishing remain untested. The existing deployment hold still applies to these changes.
+
+## Reference foundation: Main
+
+- Added the six supplied PNG references to design/reference. Main now has the reference-style bottom navigation, create button, reporting call to action and word-plus-icon map pins. Product shopping stays available from the Near You sheet.
+- All screens share the same mobile and desktop app. The local fallback no longer turns a single-device observation into a confirmed status when the shared reporting service is unavailable.
+- Mobile reference comparisons retain the reference's illustrative data on the left. The built app on the right uses real catalog places and empty data where no reports exist.
