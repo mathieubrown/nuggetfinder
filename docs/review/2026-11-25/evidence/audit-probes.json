@@ -1,0 +1,66 @@
+[
+  {
+    "id": "A01",
+    "name": "Posting lock also prevents safety reports and blocks",
+    "status": "CONFIRMED_FINDING",
+    "errors": [
+      "posting_locked",
+      "posting_locked"
+    ]
+  },
+  {
+    "id": "A02",
+    "name": "Closed Court result changes when a voter is banned",
+    "status": "CONFIRMED_FINDING",
+    "before": {
+      "verdict": "nugget",
+      "votes": 20
+    },
+    "after": {
+      "verdict": "insufficient",
+      "votes": 19
+    }
+  },
+  {
+    "id": "A03",
+    "name": "Cached stock counts have no client-side expiry",
+    "status": "CONFIRMED_FINDING",
+    "cachedThreeHourOldStatus": "yes",
+    "note": "Prices refreshes only on load/filter/write. SQL counts are correct when fetched; the cached display is not aged by stockStatus."
+  },
+  {
+    "id": "A04",
+    "name": "Map reporting accepts a made-up place ID",
+    "status": "CONFIRMED_FINDING",
+    "inserted": 1,
+    "note": "No stock report can do this because stock uses a catalog foreign key."
+  },
+  {
+    "id": "A05",
+    "name": "A very old verified price outranks a new crowd price",
+    "status": "CONFIRMED_FINDING",
+    "currentPrice": 10,
+    "currentVerified": true,
+    "currentDate": "2025-11-25T18:36:45.946178+00:00",
+    "newerCrowdSuperseded": true
+  },
+  {
+    "id": "A06",
+    "name": "Vote daily cap counts distinct matchups rather than vote changes",
+    "status": "CONFIRMED_FINDING",
+    "acceptedVoteActions": 65,
+    "distinctRows": 1,
+    "note": "Cooldown elapsed is simulated by backdating the prior timestamp. This demonstrates the counter definition, not a way to skip time from the public API."
+  },
+  {
+    "id": "A07",
+    "name": "Deployed creator and weekly URLs are not recognized by the new router",
+    "status": "CONFIRMED_FINDING",
+    "legacyChallenge": {
+      "page": "home"
+    },
+    "legacyWeekly": {
+      "page": "home"
+    }
+  }
+]

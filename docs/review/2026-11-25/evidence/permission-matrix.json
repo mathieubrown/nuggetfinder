@@ -1,0 +1,274 @@
+[
+  {
+    "tablename": "blocked_handle_terms",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "blocked_terms",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "business_verifications",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "content_reports",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "court_cases",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "court_locations",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "court_votes",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "discovery_trails",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "matchup_vote_history",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "matchup_votes",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "matchups",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "moderation_queue",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "moderation_strikes",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "place_matchups",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "place_products",
+    "rowsecurity": true,
+    "anon_select": true,
+    "member_select": true,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "place_ratings",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "places",
+    "rowsecurity": true,
+    "anon_select": true,
+    "member_select": true,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "price_entries",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "product_allergen_sources",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "products",
+    "rowsecurity": true,
+    "anon_select": true,
+    "member_select": true,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "profiles",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "reports",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "saved_items",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "stock_point_awards",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "stock_reports",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "strike_appeals",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "submission_receipts",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "take_reactions",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "take_replies",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "takes",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "trail_progress",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "trail_stops",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "user_blocks",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  },
+  {
+    "tablename": "user_follows",
+    "rowsecurity": true,
+    "anon_select": false,
+    "member_select": false,
+    "anon_write": false,
+    "member_write": false
+  }
+]

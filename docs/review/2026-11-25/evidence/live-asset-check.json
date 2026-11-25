@@ -1,0 +1,20 @@
+[
+  {
+    "file": "index.html",
+    "live_sha256": "52456e8acb94188cece8ab100c4485e7aec0c0ead697d6c58f003114afa7a659",
+    "baseline_sha256": "52456e8acb94188cece8ab100c4485e7aec0c0ead697d6c58f003114afa7a659",
+    "exact_match": true
+  },
+  {
+    "file": "js/router.js",
+    "live_sha256": "c851e706ff17752a96ad8dcccaf3755eaed7c13ee40af22bd3d25bac979c37a0",
+    "baseline_sha256": "c851e706ff17752a96ad8dcccaf3755eaed7c13ee40af22bd3d25bac979c37a0",
+    "exact_match": true
+  },
+  {
+    "file": "js/app.js",
+    "live_sha256": "9eeb8e21400a69f458eaf7a6ea2bcbb88ab083ac61c4b01cdcaeabcbae657fad",
+    "baseline_sha256": "9eeb8e21400a69f458eaf7a6ea2bcbb88ab083ac61c4b01cdcaeabcbae657fad",
+    "exact_match": true
+  }
+]

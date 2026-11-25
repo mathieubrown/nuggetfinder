@@ -1,0 +1,18 @@
+[
+  {
+    "width": 390,
+    "status": "PASS",
+    "imageModes": 3,
+    "courtSimulator": "PASS",
+    "consoleErrors": 0,
+    "horizontalPageScroll": false
+  },
+  {
+    "width": 1280,
+    "status": "PASS",
+    "imageModes": 3,
+    "courtSimulator": "PASS",
+    "consoleErrors": 0,
+    "horizontalPageScroll": false
+  }
+]

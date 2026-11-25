@@ -1,0 +1,507 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NuggetFinder release review · 25 November 2026</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f5f0e6;color:#161514;font:16px/1.6 system-ui,sans-serif}a{color:#075c48;text-underline-offset:3px}button,input{font:inherit;min-height:44px}button{border:3px solid #161514;background:#fff9ee;padding:8px 16px;font-weight:800;cursor:pointer}button[aria-pressed=true]{background:#ff4fa3;box-shadow:4px 4px #161514}:focus-visible{outline:4px solid #b32c00;outline-offset:4px}.hero{padding:38px max(20px,calc((100vw - 1240px)/2));background:#f4b223;border-bottom:4px solid #161514}.hero h1{font-size:clamp(32px,6vw,64px);font-weight:1000;line-height:1.05;letter-spacing:-2px;margin:16px 0}.hold{display:inline-block;background:#161514;color:#fff;padding:6px 14px;transform:rotate(-2deg);font-weight:900}.hero p{max-width:850px}.summary{display:flex;flex-wrap:wrap;gap:10px}.summary strong{padding:10px;background:#fff9ee;border:2px solid #161514}.nav{position:sticky;top:0;z-index:2;background:#161514;color:#fff;padding:8px 20px;display:flex;gap:18px;overflow:auto}.nav a{color:#fff;min-height:44px;display:flex;align-items:center;white-space:nowrap;font-weight:800}.wrap{max-width:1280px;padding:24px 20px;margin:auto}.intro{max-width:850px}.toolbar{display:flex;flex-wrap:wrap;gap:14px;margin:24px 0}.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.screen{min-width:0;border:3px solid #161514;box-shadow:5px 5px #161514;background:#fffaf0}.screen header{padding:14px;border-bottom:3px solid #161514;min-height:110px}.screen header span{display:block;font-size:24px;font-weight:1000}.screen img{display:block;width:100%;height:auto;max-height:844px;object-fit:contain;object-position:top;background:#e6ded0}.screen p,.screen>a:not(.image-link){margin:14px;display:block}.support{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:26px 0}.support figure{margin:0;border:3px solid #161514;background:#fffaf0;padding:16px}.support img{max-width:100%;width:260px;height:auto;display:block;margin:auto}.prose{background:#fffaf0;border-top:4px solid #161514;margin:42px 0;padding:24px;overflow-wrap:anywhere}.section-label{font-weight:900;text-transform:uppercase;color:#075c48}.prose h1{font-size:32px;line-height:1.2}.prose h2{font-size:24px;margin-top:36px}table{border-collapse:collapse;width:100%;font-size:14px;margin:20px 0;display:block;overflow:auto}th,td{border:1px solid #bfb6a7;padding:10px;vertical-align:top;text-align:left}th{background:#e9e0ce}code{font-size:13px;background:#ece5d8;padding:2px 4px}pre{overflow:auto;padding:14px;background:#ece5d8}.sandbox{background:#ffe2ee;border:3px solid #161514;padding:22px;margin:32px 0;box-shadow:5px 5px #161514}.inputs{display:flex;flex-wrap:wrap;gap:16px}.inputs label{font-weight:800}.inputs input[type=number]{display:block;width:110px;padding:8px;border:2px solid #161514}.sandbox output{display:block;font-size:24px;font-weight:1000;margin:16px 0}.notice{background:#fff1bf;border-left:8px solid #161514;padding:16px}.screen.desktop{grid-column:1/-1}.screen.desktop img{max-height:900px}.foot{padding:20px;background:#161514;color:#fff}.muted{color:#655e54;font-size:14px}@media(max-width:950px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.gallery,.support{grid-template-columns:1fr}.wrap{padding:16px}.hero{padding:24px 16px}.prose{padding:16px}.nav{gap:16px}.summary strong{flex:1 1 100%}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}@media print{.nav,.toolbar{display:none}.gallery{grid-template-columns:repeat(3,1fr)}.prose{break-before:page}.screen{box-shadow:none}.screen p{font-size:12px}body{font-size:12px}}
+</style><header class="hero"><span class="hold">RELEASE HOLD REMAINS</span><h1>NUGGETFINDER<br>THE RELEASE REVIEW</h1><p>25 November 2026 · Candidate <code>d0174bb</code> · PRs #21–33. Read this as a review packet, not a live preview or release approval.</p><div class="summary"><strong>34 checks pass · zero skips</strong><strong>7 new findings</strong><strong>No live changes</strong></div></header><nav class="nav" aria-label="Review sections"><a href="#screens">Six screens</a><a href="#visual">Visual findings</a><a href="#court">Court decisions</a><a href="#audit">Technical audit</a><a href="#readiness">Readiness & decisions</a></nav><main class="wrap"><section id="screens"><h2>Start with the phone</h2><p class="intro">Same six foundation screens, one place to review them. Tap a capture to open it full size. Local contributions pictured here are test fixtures, not real reports. Desktop captures are browser layouts, not a separate app.</p><div class="toolbar" role="group" aria-label="Capture type"><button data-mode="mobile" aria-pressed="true">Mobile · 390px</button><button data-mode="desktop" aria-pressed="false">Desktop · 1280px</button><button data-mode="reference" aria-pressed="false">Supplied references</button></div><p id="captureLabel" class="muted" role="status">Current candidate · simulated sessions, actual local SQL, transparent test tiles.</p><div class="gallery"><article class="screen"><header><span>Main</span><b>Keep the loud identity. Make reporting reachable.</b></header><a class="image-link" href="screens/main/390.png" target="_blank"><img loading="lazy" alt="Main, local release-candidate capture" src="screens/main/390.png" data-mobile="screens/main/390.png" data-desktop="screens/main/1280.png" data-reference="../../../design/reference/Main.png"></a><p>The latest test capture has transparent tiles. Use Map context to see the earlier tile-backed capture.</p><a href="../../screenshots/foundation-main/390.png" target="_blank">Earlier map context with real tiles</a></article><article class="screen"><header><span>Spot</span><b>A trading card, not an empty dashboard.</b></header><a class="image-link" href="screens/spot/390.png" target="_blank"><img loading="lazy" alt="Spot, local release-candidate capture" src="screens/spot/390.png" data-mobile="screens/spot/390.png" data-desktop="screens/spot/1280.png" data-reference="../../../design/reference/Spot.png"></a><p>Keep the big status. Explain place/menu status versus one product’s shelf stock.</p></article><article class="screen"><header><span>Showdown</span><b>Fun conflict needs honest sample size.</b></header><a class="image-link" href="screens/showdown/390.png" target="_blank"><img loading="lazy" alt="Showdown, local release-candidate capture" src="screens/showdown/390.png" data-mobile="screens/showdown/390.png" data-desktop="screens/showdown/1280.png" data-reference="../../../design/reference/Beef.png"></a><p>One vote can display 100%. Counts must remain prominent; keep this separate from Court rulings.</p></article><article class="screen"><header><span>Take composer</span><b>Make text feel intentional.</b></header><a class="image-link" href="screens/composer/390.png" target="_blank"><img loading="lazy" alt="Take composer, local release-candidate capture" src="screens/composer/390.png" data-mobile="screens/composer/390.png" data-desktop="screens/composer/1280.png" data-reference="../../../design/reference/Take.png"></a><p>Record / Upload / Photo are upcoming controls. Chosen stamps are opinion, not verification.</p></article><article class="screen"><header><span>Badges</span><b>Explain trust where it matters.</b></header><a class="image-link" href="screens/badges/390.png" target="_blank"><img loading="lazy" alt="Badges, local release-candidate capture" src="screens/badges/390.png" data-mobile="screens/badges/390.png" data-desktop="screens/badges/1280.png" data-reference="../../../design/reference/Badges.png"></a><p>Keep cobalt exclusively paid. The guide is secondary; specific allergen claims need sources.</p></article><article class="screen"><header><span>Prices</span><b>Help me shop, not read a spreadsheet.</b></header><a class="image-link" href="screens/prices/390.png" target="_blank"><img loading="lazy" alt="Prices, local release-candidate capture" src="screens/prices/390.png" data-mobile="screens/prices/390.png" data-desktop="screens/prices/1280.png" data-reference="../../../design/reference/Prices.png"></a><p>Separate price date, stock date and verification. CURRENT currently means source priority.</p></article></div><h2>Confidence and stamps deserve their own check</h2><div class="support"><figure><img src="screens/stock-confidence/390.png" alt="Product page after one local report, UNCONFIRMED"><figcaption><b>Stock confidence</b><br>One report is UNCONFIRMED. Two matching people can confirm. Cached freshness remains an audit finding.</figcaption></figure><figure><img src="screens/stamps/390.png" alt="Local approved take with its chosen stamp"><figcaption><b>Opinion stamp</b><br>This is the author's chosen style, not a verified food fact. Markup-like text is an escaping test fixture.</figcaption></figure></div></section><aside class="sandbox"><h2>Try the proposed Court math</h2><p>Local illustration only. Fixed proposal: seven days, 20 accounts, at least 60%. These controls do not change the app or database.</p><div class="inputs"><label>Nugget<input type="number" min="0" max="100000" value="12" id="nugget"></label><label>Adjacent<input type="number" min="0" max="100000" value="5" id="adjacent"></label><label>No<input type="number" min="0" max="100000" value="3" id="no"></label><label><input type="checkbox" id="closed" checked> Round has closed</label></div><output id="verdict" aria-live="polite"></output><p id="math"></p><button id="removeVoter">Illustrate one Nugget voter removed</button><button id="resetCourt">Reset example</button><p class="muted">The current backend recomputes a closed result after eligibility changes. Snapshot/versioning is a decision still needed.</p></aside><section class="prose" id="visual"><div class="section-label">Visual findings · <a href="visual-review.md">Source report</a></div><h1>Mobile-first visual review</h1>
+<p>Reviewed November 25, 2026 against PR #33, d0174bb. Open index.html in this folder for the consolidated visual board. All recommendations below are proposals. No application layout, copy or rules were changed.</p>
+<h2>Overall assessment</h2>
+<p><strong>Recognizably NuggetFinder, not yet ready to call visually finished.</strong> The paper/ink palette, Archivo Black headings, pink creation button, crooked stamps and mascot give the six screens a shared identity. The strongest screens are Showdown and the dark composer. The weak points are action placement, too many menu-like navigation links, empty-state density and ambiguity between playful stamps and real confidence.</p>
+<p>The review board starts with 390px mobile images, offers 1280px images and supplied references, and includes supporting one-report and stamped-take views. Fresh screenshots use the actual local database and simulated sessions. Their contributions are local test data. Map tiles are deliberately blank in the deterministic test capture; a separately labeled earlier map-context capture shows real tiles. Blank tiles are a test limitation, not an application design. These are browser images, not physical-phone evidence.</p>
+<table>
+<thead>
+<tr>
+<th>Screen</th>
+<th>Keep</th>
+<th>Flag</th>
+<th>Recommended next change</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Main / map</td>
+<td>Floating logo, category chips, outlined status pins, shopping link, bottom navigation</td>
+<td>CONFUSING: the pink “I found nuggets / nope” action is after the long list and missing from the first mobile viewport. Repeated NO REPORTS pins are noisy. Tiny place names/addresses compete.</td>
+<td>Keep report action reachable without scrolling through the store list. Use selected-pin emphasis and a calmer low-data map. Preserve visible OSM credit.</td>
+</tr>
+<tr>
+<td>Spot</td>
+<td>Big status stamp, rating threshold, real place identity</td>
+<td>GENERIC / OVERLY SERIOUS: empty gray score bars plus several empty sections look like an unfinished dashboard. “Nuggets here / Nope” is ambiguous at a grocery: product-specific availability is elsewhere.</td>
+<td>Give empty sections a mascot prompt and one useful next action. Explain place/menu status versus product stock. Do not invent ratings or active matchups to fill gaps.</td>
+</tr>
+<tr>
+<td>Showdown</td>
+<td>Red/gold opposing blocks, actual vote count, pink take action</td>
+<td>CONFUSING: 100% with one vote looks conclusive even though the small count is truthful. Kicker says SAUCE WAR for all comparisons. VS is heading text rather than the reference&#39;s more theatrical splash.</td>
+<td>Make small-sample status prominent, use matchup-specific copy, and add brief skippable VS personality. Keep reduced-motion static.</td>
+</tr>
+<tr>
+<td>Take composer</td>
+<td>Dark canvas, stamps, big Post control, “Roast the nugget, not the person”</td>
+<td>CONFUSING: Record / Upload / Add photo look usable but only explain coming soon after tapping. Stamp selection can read like official verification. Large faux camera area feels odd for 280-character text.</td>
+<td>Clearly label media as upcoming before a tap. Make text the main event. Label stamps as the author&#39;s chosen style; show an attached subject/parent clearly.</td>
+</tr>
+<tr>
+<td>Badges / provenance guide</td>
+<td>Cobalt reserved for paid units, source/identity distinction, explicit style-preview disclaimer</td>
+<td>OVERLY SERIOUS: a dense guide rather than a consumer destination. “ALLERGEN FREE” sounds broader than a linked source can prove. CERTIFIED TENDER overlaps semantically with actual verified identities.</td>
+<td>Keep guide secondary. Name the particular allergen and source/date in context. Explain author stamps versus store identity versus paid sponsorship separately.</td>
+</tr>
+<tr>
+<td>Prices</td>
+<td>Unit normalization, pack price, dated attribution, masked handle, preserved history</td>
+<td>GENERIC / CONFUSING: spreadsheet-like rows, clipped store selector, BEST DEAL across unlike products, CURRENT means source priority rather than freshness. Stock chip and price date can look like one observation.</td>
+<td>Surface product/pack identity and separate “price reported” from “stock last seen.” Say what Best Deal compares. Establish stale-price treatment before calling an old verified entry current.</td>
+</tr>
+</tbody></table>
+<h2>Cross-screen journey</h2>
+<ul>
+<li>Bottom navigation is consistent, but the plus means “take,” while Main&#39;s missing-above-fold pink action means “report.” Give these distinct intent labels. An in-store shopper should not accidentally open a social take.</li>
+<li>On mobile the upper navigation is hidden. Product shopping is discoverable from Main, but Court, trails, Field Guide and people are scattered under Showdown/profile links. Recommend a deliberate Discover entry or grouped hub instead of more links. This is an information-architecture decision, not a new feature request.</li>
+<li>Important sign-in controls disappear with the top header on some screens; action prompts can still open sign-in. Review signed-out navigation on a real phone so access does not depend on guessing which button to press.</li>
+<li>Long store names are still clipped inside native selectors. Overflow tests passing only means the page does not scroll sideways; it does not prove all labels are readable.</li>
+<li>The code has accessible focus work and reduced-motion handling, but a persistent focus outline may appear in captures after programmatic navigation. Keep keyboard focus visible; test touch behavior before changing it.</li>
+</ul>
+<h2>Stamps, status and confidence</h2>
+<p>Three concepts need different language: <strong>chosen take stamp</strong>, <strong>crowd observation confidence</strong>, and <strong>verified store identity</strong>. Sauce Heretic / Certified Tender / Nope are playful opinions. UNCONFIRMED / IN STOCK / SOLD OUT / MIXED / STALE describe report agreement and freshness. VERIFIED STORE identifies an account/source. Cobalt SPONSORED identifies payment. None should confer the meaning of another.</p>
+<p>The new local browser evidence shows one report as UNCONFIRMED and two matching people as IN STOCK. That is a pass. The independent audit also found that cached stock counts are not aged on the price page, so a once-valid IN STOCK label can remain displayed too long. This is a release correction, not a cosmetic suggestion. “Last seen” is an observation, never a guarantee that the next shopper will find it.</p>
+<h2>Priority</h2>
+<p>Before deploying the new release: fix stale confidence display; separate product stock from place status in copy; make the primary in-store reporting action reachable; do not imply media is implemented. Before public participation: clarify opinion/verification and source freshness. Later polish: richer VS splash, warmer empty states, stronger cards and a grouped Discover destination.</p>
+<h2>Decisions needed</h2>
+<p>Approve the direction of personality, not illustrative scores or seeded user stories. My recommendation is to keep the loud street-layer design and playful debate, while moving factual explanations into short calm labels. Choose whether the central plus stays “Drop a take” or opens a labeled Report / Take chooser. I recommend keeping its current single purpose and making Report separately prominent. Decide whether discovery gets a grouped destination rather than another bottom tab.</p>
+</section><section class="prose" id="court"><div class="section-label">Court decisions · <a href="court-decision.md">Source report</a></div><h1>Nugget Court decision brief</h1>
+<p><strong>Proposal for review, not a rule change.</strong> Reviewed November 25, 2026 against d0174bb. Court is a playful community classification, not a food-safety, ingredient, inventory, business-verification or legal determination.</p>
+<h2>Recommendation</h2>
+<p>Keep seven days, 20 eligible accounts and 60% for an invited pilot, subject to your explicit decision. Do not lower the quorum simply to produce more winners. Treat low turnout and a divided jury as legitimate endings. Before public voting, define what happens when fraud or account deletion changes a closed result.</p>
+<p>These numbers are product choices, not statistically validated measures of all shoppers&#39; views. Twenty accounts are not proof of twenty independent humans. A 60% share in a self-selected poll is not scientific certainty.</p>
+<h2>What the code actually does</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Current implementation</th>
+<th>Recommendation and tradeoff</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Start</td>
+<td>Seven days from first moderator approval, not nomination</td>
+<td>Keep this. Moderation delay should not consume voting time.</td>
+</tr>
+<tr>
+<td>End</td>
+<td>Voting closes at the stored timestamp. No early victory, even at 100 votes</td>
+<td>Keep fixed deadlines. Show a readable local closing time with timezone.</td>
+</tr>
+<tr>
+<td>Options</td>
+<td>Nugget / Nugget-adjacent / Absolutely not</td>
+<td>Keep all three. Adjacent is a distinct answer, not a half-vote.</td>
+</tr>
+<tr>
+<td>Quorum</td>
+<td>At least 20 eligible accounts across all three options</td>
+<td>Keep for pilot. Expect some cases not to reach a ruling.</td>
+</tr>
+<tr>
+<td>Ruling</td>
+<td>A unique option must receive at least 60% of all counted votes</td>
+<td>Keep the denominator explicit. 12 of 20 qualifies; 11 of 20 does not.</td>
+</tr>
+<tr>
+<td>Tie</td>
+<td>COURT DIVIDED when quorum is met; no winning option</td>
+<td>No moderator casting vote. A 10/10/0 split is divided.</td>
+</tr>
+<tr>
+<td>Low participation</td>
+<td>NOT ENOUGH VOTES after seven days if fewer than 20 count</td>
+<td>Close without a ruling. Do not quietly extend or promote a winner.</td>
+</tr>
+<tr>
+<td>Repeat voting</td>
+<td>One stored answer per account per case, changeable before close, five-second cooldown</td>
+<td>Keep changeable votes; UI should say “Change my vote,” not imply another vote.</td>
+</tr>
+<tr>
+<td>Daily limit</td>
+<td>Counts distinct recently updated case rows, not every change</td>
+<td>Decide whether “60 per day” means cases or actions. Current implementation cannot enforce 60 individual changes.</td>
+</tr>
+<tr>
+<td>Repeat nominations</td>
+<td>Normalized food name is globally unique</td>
+<td>No normal second round exists. Define a reviewed appeal/retrial process before promising rematches.</td>
+</tr>
+<tr>
+<td>Results after close</td>
+<td>Recomputed whenever requested; banned/deleted voters can change totals</td>
+<td>Must decide snapshot/versioning policy. A published ruling is currently not immutable.</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Only final Nugget and Adjacent outcomes enter the Field Guide</td>
+<td>Keep discovery separate from claims that a store has that food available now.</td>
+</tr>
+</tbody></table>
+<h2>Examples</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Nugget</th>
+<th align="right">Adjacent</th>
+<th align="right">No</th>
+<th align="right">Total</th>
+<th>After closing</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">19</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">19</td>
+<td>Not enough votes, despite unanimity</td>
+</tr>
+<tr>
+<td align="right">12</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">20</td>
+<td>Nugget, exactly 60%</td>
+</tr>
+<tr>
+<td align="right">11</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">20</td>
+<td>Court divided, 55% is insufficient</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">20</td>
+<td>Court divided, tied</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">5</td>
+<td align="right">20</td>
+<td>Court divided; plurality alone does not rule</td>
+</tr>
+<tr>
+<td align="right">13</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">21</td>
+<td>Nugget; the winning integer count must reach ceiling(0.60 × total)</td>
+</tr>
+</tbody></table>
+<p>Before the deadline all of these remain IN SESSION. There is no automatic extension, runoff or moderator override in the reviewed code.</p>
+<h2>Closed-result integrity needs a decision</h2>
+<p>The independent local probe created a closed 12/5/3 result: NUGGET with 20 votes. Banning one Nugget voter changed it to NOT ENOUGH VOTES with 19 votes. No new vote was cast. Deletion can have the same effect through cascading vote removal.</p>
+<p>Recommended future design: keep a versioned closing result, with a visible “Ruling under review” state if vote eligibility is challenged. A moderator can invalidate fraudulent votes and publish an explained new version; they cannot choose the winning side. Historical share cards should include a result date/version and should not silently contradict the current page. This is a proposed change requiring your decision, not implemented in this review.</p>
+<h2>Abuse resistance</h2>
+<p>Already present: sign-in, age-confirmed profile, bans/temporary locks, one row per account/case, server-side deadline checks, serialized account writes, cooldown, moderated nominations, blocked-term checks, report/block controls and duplicate-name prevention. Case authors may vote too; there is no author exclusion.</p>
+<p>Missing or unproven: protection against one person creating many accounts, coordinated creator brigades, signup/email abuse controls, vote-action accounting, account-age rules, historical result versioning and a documented moderator response process. Blocking affects who can see a nomination, so two viewers can have different visibility; it does not make blocked accounts&#39; votes disappear from aggregate counts merely because one viewer blocked them.</p>
+<p>Recommendation: no purchase, sentiment or points reward for voting. No device fingerprint or location history. For an invited pilot, monitor suspicious activity manually and use reversible, explained moderation. If we add account-age eligibility or automated detection later, document false positives and appeals first. Email verification alone is not proof of a unique person.</p>
+<h2>Voice and information boundaries</h2>
+<p>Keep “Is it a nugget?”, “Court divided” and “Absolutely not.” Add a calm line on results and shares: <strong>“Community opinion · [count] votes · closed [date].”</strong> Never use VERIFIED or CONFIRMED to mean the food has objectively become a nugget. A winning katsu nomination does not verify allergens, recipe, nutrition, stock, price or a suggested location. All those need their own sources and timestamps.</p>
+<h2>Decisions needed from Mat</h2>
+<ol>
+<li>Keep the proposed seven-day / 20-account / 60% pilot rules? Recommendation: yes, with no automatic extension or lower-quorum exception.</li>
+<li>Close low-turnout and tied/divided cases without a winner? Recommendation: yes; let the dialogue remain fun without manufacturing certainty.</li>
+<li>Use versioned results and a reviewed retrial process? Recommendation: yes. Decide who may request a retrial and what new reason is required; do not enable it silently.</li>
+<li>Does the daily limit cover 60 different cases or 60 vote changes? Recommendation: explicitly separate a case cap from an action cap, then test whichever rule you approve.</li>
+<li>Keep creator and author participation permitted? Recommendation: yes for opinion polls, with disclosed challenge links and no paid vote weighting.</li>
+</ol>
+<p>No Court SQL, thresholds, copy or behavior was changed during this review.</p>
+</section><section class="prose" id="audit"><div class="section-label">Integrated audit · <a href="integrated-audit.md">Source report</a></div><h1>Integrated technical release audit: PRs #21–33</h1>
+<p><strong>Verdict: HOLD.</strong> Review date November 25, 2026. This is a fresh adversarial review of the combined implementation by the same assistant, not an external penetration test or an independent human security signoff. No production changes, fixes, rules or migrations were made in this review.</p>
+<h2>Exact scope</h2>
+<p>Baseline: 5752a7524a601134540a139857ad981e4e2d7cdb. Release candidate: d0174bb8228d12001938fb0fbaf2c0e488856cd9. GitHub metadata for all thirteen PRs was checked. All are open and unmerged; every PR&#39;s base is the preceding PR&#39;s head. The candidate contains the whole stack. See evidence/pr-manifest.json for immutable SHAs and links.</p>
+<p>Read-only HTTP retrieval found deployed index.html, js/router.js and js/app.js byte-for-byte identical to the baseline. This verifies these assets, not every production asset or live database object. No live Supabase query was run.</p>
+<h2>Reproduction</h2>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Result</th>
+<th>What this proves / does not prove</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Existing full Node suite, native PostgreSQL, real PostgREST and PGlite enabled</td>
+<td><strong>34 pass, 0 fail, 0 skipped</strong></td>
+<td>The recorded tests reproduce. They are not complete coverage. Full TAP in evidence/baseline-tests.tap.</td>
+</tr>
+<tr>
+<td>Full browser flow, 390px and 1280px</td>
+<td><strong>Pass</strong></td>
+<td>Real local SQL behind simulated browser Auth/transport; separate real HTTP/JWT REST tests. No console errors, no sideways overflow, reduced motion, keyboard/touch-height and 320px long-name checks. evidence/browser.txt and screens/.</td>
+</tr>
+<tr>
+<td>Old deployed API calls against new local schema</td>
+<td><strong>Pass for exercised calls</strong></td>
+<td>Map report, stock report/read, old submit_take, feed, Beef vote/read, protected profile lookup and old exports. Not a complete old-frontend browser run.</td>
+</tr>
+<tr>
+<td>Local synthetic pg_dump / pg_restore</td>
+<td><strong>Pass: 35 tables, counts, logical row digests, table grants/RLS and sequence values match</strong></td>
+<td>Archive creation/restoration and synthetic data preservation on one local PostgreSQL cluster. Not a backup or restoration of production, managed Auth, storage or infrastructure configuration.</td>
+</tr>
+<tr>
+<td>New independent probes</td>
+<td><strong>7 confirmed findings</strong></td>
+<td>These are gaps outside the 34 existing checks, not seven new passing release requirements. See evidence/audit-probes.json and runnable source.</td>
+</tr>
+</tbody></table>
+<p>Application JavaScript syntax checking passed. Browser screenshots use local test contributions. Test JWTs/signing secret were local and temporary. Production credentials were not needed. The local fixture refuses non-loopback database hosts; it must still only be pointed at a dedicated disposable server, never a tunnel to production.</p>
+<h2>Release findings</h2>
+<p>P1 means fix or settle explicitly before deploying this candidate. P2 means important public-participation or correctness work. No claim is made that these are the only possible defects.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Priority</th>
+<th>Reproduced behavior</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A03</td>
+<td>P1, stock truth</td>
+<td>A cached row with two seen votes and a three-hour-old report still returns <code>yes</code> from stockStatus. Prices only refetches on load/filter/write; server counts are correct when freshly queried.</td>
+<td>Make displayed confidence expire safely and refresh, including error/offline behavior. Audit map/product/share caching too. Do not assert one row alone proves every screen fails; the confirmed price-page path is sufficient to block.</td>
+</tr>
+<tr>
+<td>A07</td>
+<td>P1, compatibility</td>
+<td>New router sends deployed <code>#/beef/&lt;id&gt;?from=&lt;handle&gt;</code> and <code>#/weekly</code> links to home.</td>
+<td>Preserve route aliases and query parameters. Database compatibility aliases do not preserve frontend URLs. Add regression tests for old shared links before deploying.</td>
+</tr>
+<tr>
+<td>A01</td>
+<td>P1 for participation</td>
+<td>A temporarily locked member receives <code>posting_locked</code> from both set_user_block and report_content.</td>
+<td>Separate safety actions from posting eligibility. Restrict unsafe posting while retaining report/block, own-data access and appeals. Decide banned-account safety behavior as well.</td>
+</tr>
+<tr>
+<td>A02</td>
+<td>P1 for Court release</td>
+<td>Closed 12/5/3 ruling changes from Nugget/20 to insufficient/19 after one voter is banned.</td>
+<td>Approve an explicit post-close correction/versioning policy. Do not silently freeze or change rules during review.</td>
+</tr>
+<tr>
+<td>A05</td>
+<td>P2, pricing meaning</td>
+<td>A one-year-old verified store price is CURRENT and a newer crowd price is SUPERSEDED.</td>
+<td>Decide expiry/recency treatment and clarify CURRENT as source precedence if retained. Separate identity verification from price freshness. Never silently invent an expiry rule.</td>
+</tr>
+<tr>
+<td>A04</td>
+<td>P2, input integrity</td>
+<td>submit_report accepts <code>audit-invented-place</code>. Product stock cannot do this because it has a catalog foreign key.</td>
+<td>Validate map report targets against trusted place data or a reviewed real-OSM admission path. Do not break real map-only locations by adding a naive catalog restriction.</td>
+</tr>
+<tr>
+<td>A06</td>
+<td>P2, abuse limits</td>
+<td>65 vote changes on one matchup can be accepted while the daily counter sees one row. Five-second spacing was simulated by backdating the previous row locally.</td>
+<td>Define distinct-case versus action limits; implement an action ledger if a per-action cap is intended. This is not a demonstrated public cooldown bypass. Court uses the same distinct-row counter pattern by inspection.</td>
+</tr>
+</tbody></table>
+<p>Additional gaps by inspection: receipts are in-memory on the browser side, so safe retry protection is scoped to the unchanged open draft, not a durable offline outbox across reloads; retaining receipts has no scheduled expiry policy. Moderator response coverage and queue saturation are not tested. No versioned CI workflow was found in the candidate; the reproduced zero-skip run is local evidence, not a required GitHub merge check. Sign-in failure and token renewal need full managed-Auth tests. The existing verifier prints permissions and counts but does not automatically exit nonzero when an expectation fails, so its output still needs explicit assertions or a reviewer.</p>
+<h2>Migration ordering and preservation</h2>
+<p>Ten pending files are ordered below. All ten have explicit begin/commit. The compared stack adds them without changing any migration at or before 20261115000900. Local execution from scratch passes. The separate upgrade fixture inserts an existing published take and Beef vote before pending migrations, then confirms they survive. The new local restore fixture adds reports, a take and vote and compares all 35 public/auth tables after restoration.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Order</th>
+<th>File</th>
+<th>Integrated dependency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">1</td>
+<td>20261115001000_handle_substrings.sql</td>
+<td>Existing username fields and normalization helpers</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td>20261115001100_showdown_names.sql</td>
+<td>Renames existing Beef tables; preserves old function names</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td>20261124000100_personal_lists.sql</td>
+<td>Requires renamed matchups and social-user checks</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td>20261124000200_nugget_court.sql</td>
+<td>Extends saved subjects, moderation and take subject kinds</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td>20261124000300_taste_profiles.sql</td>
+<td>Reuses Court author visibility, follows and blocks</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td>20261124000400_discovery_trails.sql</td>
+<td>Wraps Court moderation/exports and adds versioned trails</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td>20261124000500_place_scores.sql</td>
+<td>Adds ratings, place-to-matchup links and export wrapper</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td>20261124000600_take_stamps_and_rebuttals.sql</td>
+<td>Extends existing takes, replaces visibility/place-screen reads</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td>20261124000700_price_ledger.sql</td>
+<td>Adds source/price tables, relies on products.size and stock functions</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td>20261124000800_release_hardening.sql</td>
+<td>Removes inherited grants, adds receipts and locks, final export wrapper</td>
+</tr>
+</tbody></table>
+<p>No drops of user tables occur in this batch. Constraint and trigger changes, renamed functions, cascade behavior and query locks still require production-sized rehearsal. New fields on existing takes are nullable. A failed file rolls back that file; previously committed files remain applied. The batch is not one atomic transaction. Do not repeat non-idempotent migration files after an uncertain result; inspect actual schema/history read only first.</p>
+<p>An important intermediate-state risk remains: inherited-grant cleanup is last. Applying earlier files while leaving a live API open exposes intermediate permissions until the final file commits. If a failure occurs earlier, cleanup has not happened. Before approved execution, rehearse a safe order/maintenance strategy that prevents public writes and does not rely on an unapproved production setting change. This audit did not rearrange or apply SQL.</p>
+<h2>Permissions, row security and account privacy</h2>
+<p>The local fixture intentionally grants broad default table privileges before applying all migrations. Final permission-matrix.json shows row security on all 34 public tables, no direct writes for anon/authenticated, whole-table SELECT only on products/places/place_products, and restricted column access on profiles. The tests reject banned/private profile fields, TRUNCATE, direct private-table reads/writes, self-promotion and forged store verification.</p>
+<p>Private lists, trail progress, ratings, price submissions and receipts export only the caller&#39;s rows in the tested entry points. Public profiles intentionally expose handles/IDs and approved takes. Public prices mask handles but are not guaranteed anonymous: exact prices/timestamps and external posts can be correlated. No passive coordinate history is introduced by this stack; explicit user report/stamp records do link an account to a place/time and must be described accurately in privacy/retention policy.</p>
+<p>Privileged functions check server identity, moderation roles or visibility and use fixed search paths. Older helpers using public rely on public-schema CREATE being revoked. Local tests show the final revocations, not the real project&#39;s role memberships/default grants. Schema CREATE, inherited roles, per-column privileges, sequence grants and every callable security-definer function must be compared against the actual production schema before release. The existing printed verifier covers much of this but is not an automated deployment gate.</p>
+<p>No loaded production blocked-term list was inspected. Baseline local tests do not certify the quality or coverage of the private profanity/slur list. The list must remain out of git; a reviewed operational count/provenance check is still needed.</p>
+<h2>Moderation and safety</h2>
+<p>Passes: non-moderators cannot access the inbox or issue strikes; new first takes and replies wait for review; blocked text is hidden; hidden or blocked take ancestors hide threads; old approved content remains accessible; ordinary browser roles cannot write verification/source tables. Reviewed trail versions prevent an older approval from publishing a later edit. Business accounts have no deletion privilege over another person&#39;s takes.</p>
+<p>Not proven: human response times, queue volume, false positives, moderator compromise response, email/account creation abuse, coordinated multi-account voting, child-safety operations and every report surface. A01 means the current lock policy removes an important safety tool. Account deletion is still a placeholder and must not be treated as a completed launch gate.</p>
+<h2>Retry and rollback assessment</h2>
+<p>Atomic receipt functions passed concurrent same-ID replay, changed-payload rejection, private exports and a browser lost-response test after commit. Server row locks serialize rate checks. The frontend also blocks duplicate submit events and preserves edits during a slow request. Older write functions intentionally remain callable, so a client can still create separate legitimate submissions with new IDs up to the normal limits.</p>
+<p>Rollback should restore the previous frontend while retaining added schema/data. Old APIs exercised successfully against the candidate, but new hash routes will not work on an old frontend, and old hash routes currently fail on the new one (A07). These are distinct compatibility directions. Dropping new tables or undoing schema after users submit content is not a safe generic rollback. Restoring a backup can overwrite newer submissions and needs an explicit incident decision, recovery point and reconciliation plan.</p>
+<p>The local synthetic restore passed. A production backup archive, offsite/privacy handling, managed Auth/storage recovery, role restoration, restore duration, recovery-point/recovery-time goals and actual production-data restoration remain <strong>unproven</strong>. No “rollback ready” signoff is warranted yet.</p>
+<h2>Catalog and operational evidence</h2>
+<p>Local full-chain totals are 25 products, 83 places and 189 links. These are integrity counts, not current stock, verified store hours or SKU availability. IDs are sourced OSM node/way IDs; grocery leads and attribution files are present. Store-brand placement rules remain separate from national-brand “places to check.”</p>
+<p>Source spot-checks on November 25 confirmed the Tyson product page and Applegate product page; the Just Bare URL is a Costco retailer page, not a manufacturer page. Several bottled-sauce records link a general brand collection. The <code>official_product_url</code> label overstates the uniformity of those sources. Full SKU/pack-size review, exact current branch/address verification, all catalog source URLs and opening/closure changes were not verified. No branch inventory or allergen claims were checked. Current “Might be here. Not confirmed.” copy is appropriate for leads.</p>
+<h2>Next work recommended, not performed</h2>
+<p>Fix A03/A07/A01, decide A02/A05/A06, tighten map input validation without losing valid OSM places, add regression tests for all seven probes, and rerun the exact final candidate. Then complete account deletion and real-device/Auth checks, reconcile actual production schema/history read only, rehearse an approved production backup restore in isolation, and review the legal/operational gates. Only then request explicit migration, merge and deployment approval.</p>
+</section><section class="prose" id="readiness"><div class="section-label">Production readiness · <a href="production-readiness.md">Source report</a></div><h1>Production-readiness decision</h1>
+<p><strong>Current decision: HOLD deployment and public participation.</strong> No live SQL, merge, deployment or production setting change is authorized by this review. A test pass is evidence, not a release approval.</p>
+<h2>What blocks deploying this candidate</h2>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>State</th>
+<th>Required evidence / owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Confidence freshness</td>
+<td>BLOCKED</td>
+<td>Fix A03 so old cached data cannot retain current stock confidence. Developer, then timed/offline browser tests.</td>
+</tr>
+<tr>
+<td>Existing shared URLs</td>
+<td>BLOCKED</td>
+<td>Fix A07 aliases for old Beef/weekly links, preserve creator parameters, verify both directions of frontend/database compatibility. Developer.</td>
+</tr>
+<tr>
+<td>Safety access during locks</td>
+<td>BLOCKED for a participatory release</td>
+<td>Fix A01 so report/block remain usable under posting restrictions, with clear banned-account policy. Developer + Mat decision.</td>
+</tr>
+<tr>
+<td>Court results after close</td>
+<td>DECISION BLOCKED</td>
+<td>Agree versioned corrections/retrial semantics for A02, or explicitly omit Court from a reviewed release. Mat. No feature omission was made.</td>
+</tr>
+<tr>
+<td>Migration execution strategy</td>
+<td>UNPROVEN</td>
+<td>Review exact ten-file SQL, actual history/schema/grants and intermediate-state exposure; rehearse failure after each file. Developer/reviewer; live writes still need approval.</td>
+</tr>
+<tr>
+<td>Backup and recovery</td>
+<td>PARTLY PROVEN LOCALLY</td>
+<td>Synthetic 35-table archive/restore passed. Actual production backup, isolated restoration, Auth/storage/roles scope, timing and reconciliation remain unproven. Operator + explicit approval/access plan.</td>
+</tr>
+<tr>
+<td>Candidate test evidence</td>
+<td>BASELINE PASS, NEW FINDINGS OPEN</td>
+<td>34 checks, zero skips; browser flows at both widths. Add regression checks for seven audit findings, rerun final fixed SHA. Developer.</td>
+</tr>
+<tr>
+<td>Deployment authorization</td>
+<td>HELD</td>
+<td>Mat must explicitly approve migrations, merges and deployment. This report grants none.</td>
+</tr>
+</tbody></table>
+<p>A locked invitation pilot could reduce exposure but is not currently implemented as a separate gated mode. Do not assume hiding a button or disabling sign-up stops existing authenticated users from calling APIs. Any pilot gate must be enforced server-side, reviewed and separately approved before production changes.</p>
+<h2>What blocks public participation</h2>
+<ul>
+<li><strong>Delete my account is not implemented.</strong> The page says it is pending. Build a server-controlled deletion flow with reauthentication, immediate posting/access restriction, session-revocation strategy, dependent-row handling, receipt/storage cleanup and an auditable completion result. Never put a service-role/secret key in the browser. Decide what happens to public replies, Court rulings and price history when an account is removed. Supabase warns that deleting an Auth user does not by itself invalidate already-issued stateless access tokens; test the full design, not just a DELETE statement.</li>
+<li><strong>Legal/contact pages are draft.</strong> Named operator/contact, accurate data inventory, retention/deletion practice, complaint process, community rules and paid-content disclosures need counsel review. A “DRAFT” badge is not a substitute. This is a product launch gate and a request for counsel assessment, not a legal conclusion about which statutes apply.</li>
+<li><strong>Safety operations are incomplete.</strong> Fix A01, assign a moderator and backup, agree queue response targets, appeals, abuse escalation and incident handling. Confirm private blocked-term list provenance/count without committing the words. Test a backlog and suspicious-account scenarios.</li>
+<li><strong>Managed Auth has not been validated for this release.</strong> Test real email delivery, confirmation, sign-in redirects, expired links, refresh/logout, restrictions and deletion in an approved test environment. Do not change live Auth settings during this review.</li>
+<li><strong>Actual devices and accessibility remain untested.</strong> Run Safari on a physical iPhone and Chrome on a physical Android: keyboard open, safe areas, camera-disabled controls, back/deep links, long lists, offline/reconnect, share/download behavior and text zoom. Include VoiceOver/TalkBack or a human screen-reader review. Browser width emulation and touch-target height checks do not prove these. Normal-motion animation quality/skipping was not exercised in this reduced-motion review run.</li>
+<li><strong>Truth and catalog clarity need signoff.</strong> Fix confidence expiry, choose old-price treatment, distinguish opinion/identity/stock and review starter products, store IDs/addresses, pack sizes and source links. Do not imply shelf availability from retailer assortment or a Court ruling.</li>
+</ul>
+<h2>Legal review questions and primary sources</h2>
+<p>Sources accessed November 25, 2026. These describe source guidance and questions for counsel; they do not determine applicability or compliance for NuggetFinder.</p>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Question for counsel</th>
+<th>Primary source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Children and age screening</td>
+<td>Is this general-audience/teen experience&#39;s presentation and age-screening approach appropriate? What should happen on actual knowledge of an under-13 user? A checkbox alone is not a compliance determination.</td>
+<td><a href="https://www.ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions">FTC COPPA guidance</a>, which points to the amended rule</td>
+</tr>
+<tr>
+<td>Privacy and deletion</td>
+<td>Which California/privacy duties apply to this operator and its actual collection/retention? What notices and deletion response process are needed?</td>
+<td><a href="https://www.oag.ca.gov/privacy/ccpa?version=published">California DOJ CCPA overview</a> and <a href="https://cppa.ca.gov/pdf/general_notices.pdf">CPPA general notices</a></td>
+</tr>
+<tr>
+<td>Copyright complaints</td>
+<td>Should the operator register a designated agent to seek applicable safe-harbor protection, and what public contact/process should be published?</td>
+<td><a href="https://www.copyright.gov/dmca-directory/">U.S. Copyright Office designated-agent guidance</a></td>
+</tr>
+<tr>
+<td>Food claims and paid speech</td>
+<td>How should sourced allergen cautions and business verification be worded? What disclosures and complaint process are appropriate before enabling paid content?</td>
+<td>Existing docs/research/ FTC work needs final counsel review against the actual feature set; no paid feature launch is proposed here.</td>
+</tr>
+</tbody></table>
+<p>Technical sources: <a href="https://supabase.com/docs/guides/auth/managing-user-data">Supabase user management/deletion</a>, <a href="https://www.postgresql.org/docs/17/ddl-rowsecurity.html">PostgreSQL row-security limitations</a>, <a href="https://www.postgresql.org/docs/17/backup-dump.html">PostgreSQL dump/restore</a>, and <a href="https://operations.osmfoundation.org/policies/tiles/">OSM tile policy</a>. OSM credit must remain visible; tile supply is best-effort. None of this review authorizes new paid map hosting.</p>
+<h2>Catalog verification checklist</h2>
+<p>Proven locally: full-chain counts 25/83/189, relational integrity, native OSM identifiers, separate grocery lead links, visible attribution and no seeded stock/allergen claims. Reviewed files use a November 7 snapshot accessed November 14. This is dated location evidence, not current business/inventory verification.</p>
+<p>Still needed: human/official-source check of each SKU and package size, source type (manufacturer versus retailer/collection), original 15 product sources, all ten grocery import URLs, branch/address existence, duplicate/closure review and launch-area coverage. Costco is a valid retailer source but should not be uniformly labeled a brand&#39;s official product page. Do not fetch or store shopper location history or scrape restricted review sites. Real shelf reports must come from actual reports, not verification fixtures.</p>
+<h2>Optional for later, not reasons to invent a launch claim</h2>
+<p>Video/photo publishing, owner-claim onboarding, brand stock feeds, push alerts, paid placements, dashboards, native apps, richer VS motion, sound, more sticker packs, automatic retrials and advanced anti-brigade tooling can follow in reviewed phases. Dashboards still require the prior lawyer-review approval before being built. Photo evidence requires upload privacy, metadata stripping, moderation and deletion work before enabling it.</p>
+<p>Grouped discovery navigation, richer empty states and more prominent report entry are recommended near-term product polish. A full native app is not needed to test the responsive web experience; physical mobile testing still is.</p>
+<h2>Decisions requested from Mat</h2>
+<ol>
+<li>Keep the deployment hold and authorize a separate correction pass for confirmed defects? Recommendation: yes. That would not authorize live SQL/merges/deployment.</li>
+<li>Accept the Court pilot numbers, no forced winner for low turnout/ties, and versioned corrections after close? Recommendation: keep 7/20/60, with those explicit outcome rules.</li>
+<li>Should an old verified price expire or remain a labeled historical store assertion beside newer crowd evidence? Recommendation: show both and avoid calling it current indefinitely; approve a concrete age rule separately.</li>
+<li>Keep central plus as “Drop a take” with a separate prominent Report action, and group discovery links? Recommendation: yes.</li>
+<li>Who owns moderator coverage and lawyer/contact review, and which iPhone/Android devices can be used for acceptance? These are assignments, not requests for new tokens.</li>
+<li>Choose recovery objectives before deployment: maximum acceptable lost submissions and outage duration, plus who may authorize restoration. Recommendation: no destructive automatic rollback.</li>
+</ol>
+<h2>What this review did not do</h2>
+<p>No Supabase management or database operation against production. No application or migration edits. No merge or deployment. No production settings, tokens, accounts or paid services changed. No claim that a synthetic restore proves production recovery. GitHub metadata and selected deployed static assets were read only. GitHub access remains available as requested.</p>
+</section><p class="notice"><b>Next step:</b> decide the policy questions and authorize a correction pass if desired. Every migration, merge, deployment and production setting change stays on hold until explicitly approved.</p></main><footer class="foot">Review only. No network, database or account action is performed by this review page.</footer><script>
+const buttons=[...document.querySelectorAll('[data-mode]')];buttons.forEach(button=>button.onclick=()=>{const mode=button.dataset.mode;buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.querySelectorAll('.screen').forEach(card=>{const image=card.querySelector('img');image.src=image.dataset[mode];card.querySelector('.image-link').href=image.src;card.classList.toggle('desktop',mode==='desktop');});document.querySelector('#captureLabel').textContent=mode==='reference'?'Original supplied concepts. Illustrative counts and people are not seeded.':mode==='desktop'?'Current candidate · 1280px browser captures, local fixtures.':'Current candidate · simulated sessions, actual local SQL, transparent test tiles.';});
+const ids=['nugget','adjacent','no'];function court(){const values=ids.map(id=>Math.max(0,Math.min(100000,Math.floor(Number(document.getElementById(id).value)||0))));const total=values.reduce((a,b)=>a+b,0),maximum=Math.max(...values);let label='⋯ IN SESSION';if(document.getElementById('closed').checked){label=total<20?'◷ NOT ENOUGH VOTES':maximum/total<0.6?'= COURT DIVIDED':['✓ NUGGET','≈ NUGGET-ADJACENT','× ABSOLUTELY NOT'][values.indexOf(maximum)];}document.getElementById('verdict').textContent=label;document.getElementById('math').textContent=total+' accounts · winning share '+(total?(100*maximum/total).toFixed(1):'0')+'% · community opinion, not a verified fact.';}document.querySelectorAll('.sandbox input').forEach(input=>input.oninput=court);document.getElementById('removeVoter').onclick=()=>{const input=document.getElementById('nugget');input.value=Math.max(0,Number(input.value)-1);court();};document.getElementById('resetCourt').onclick=()=>{[12,5,3].forEach((value,i)=>document.getElementById(ids[i]).value=value);document.getElementById('closed').checked=true;court();};court();
+</script></html>
