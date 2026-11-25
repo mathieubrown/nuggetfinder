@@ -216,3 +216,42 @@
 
 - Replaced the geometric Showdowns navigation mark with an outlined VS badge after visual review flagged an unwanted resemblance.
 - Checked at 390px and 1280px with reduced motion, no console errors and no sideways scroll. No JavaScript, database rules or migrations changed. The release/deployment hold remains in place.
+
+## Release corrections, November 25, 2026: safety, targets and old links
+
+- Preserved reporting/blocking during temporary posting restrictions without removing sign-in, age, ban, structured-target or safety rate checks.
+- Added an unapplied catalog-target guard for map reports. Live external map discovery cannot become a reporting target without catalog review. Existing valid store IDs remain shared with product stock.
+- Restored legacy Beef and weekly routes, including creator query parameters. Regression tests passed on native local PostgreSQL and the plain router functions. Production remains held.
+
+## Release corrections: vote actions
+
+- Added an unapplied private action ledger shared by Court and Showdowns. Initial votes and actual answer changes each consume one of 60 rolling 24-hour actions. The five-second cooldown remains enforced. No-op repeats do not consume an action.
+- Old Beef entry points use the same limit. Existing Showdown event history is carried forward; legacy Court rows cannot reconstruct past changes and are counted once each on upgrade. Local concurrency and boundary checks passed.
+
+## Release corrections: versioned Court rulings
+
+- Kept seven days, 20 voters and 60%, with no forced winner. Voting stops at the stored deadline; closed rounds await an explicit moderator recording before publishing a versioned ruling.
+- Added a private recorded ballot and append-only versions with reasons, notes, previous version and moderator identity. Corrections derive counts from reviewed exclusions; moderators cannot select an outcome or extend voting. Bans and deletions do not silently change a recorded ruling.
+- Added moderator recording/correction controls, public history and versioned community-opinion labels on share cards. These additions need design review. Local tests cover permissions, concurrent version conflicts, preserved counts and immutable history. New SQL remains unapplied.
+
+## Release corrections: stock and price evidence
+
+- Added unapplied, read-only stock snapshots that expire at the earliest contributing vote and no later than 60 seconds after checking. Product, price and map displays refresh and remove confirmation when snapshots expire or a refresh fails, including while a form has focus. Share images recheck after fonts load.
+- Source verification no longer outranks newer price evidence. Labels use elapsed seven-day and thirty-day boundaries: recently reported, dated and historical. Earlier records remain stored and visible when their author is eligible. Account removal clears attribution without deleting the private historical price observation or exposing previously hidden evidence.
+- Added local regressions for vote expiry, delayed font loading, all price-age boundaries and newer crowd evidence beside historical verified-source data. No existing applied migration changed, and production remains held.
+
+## Release corrections: retry recovery and verification
+
+- Retained request IDs for same-account retries after a reload or draft switch. Session storage contains only payload hashes and request IDs, not draft text; account changes are checked before sending.
+- Added fail-closed read-only permission/catalog verification and an unapplied cleanup of separate column grants on the known NuggetFinder tables. Existing age, ban, moderation and direct-write protections remain enforced.
+- Added an explicit, private, bounded hold for legacy Court voters whose individual past changes were not recorded. It expires when their latest legacy activity leaves the rolling window, without inventing vote history. This is an upgrade condition, not a recurring restriction for new voters.
+- Kept the report action reachable before the long map list and labeled upcoming media controls before tapping. All migration files remain unapplied in production.
+
+## Correction candidate evidence and remaining gates
+
+- Final integrated evidence: 54 automated checks passed with zero failures/skips using native PostgreSQL, real REST/JWT and PGlite. Browser flows passed at 390px/1280px, including all seven regression areas, failed-refresh expiry, both motion preferences and all price-age bands. Application JavaScript syntax checks passed.
+- A synthetic 39-table dump/restore passed row digests, table grants/RLS and sequence comparisons, including corrected feature data. The local fail-closed verifier passed for 38 public tables, 100 privileged functions and catalog counts 25/83/189.
+- Evidence, six unapplied migration explanations, captures and remaining gates are in docs/corrections/REVIEW.md. No production query, SQL application, merge, setting change, deployment, paid service or LLM call was performed.
+- Still unproven: live schema/history, managed sign-in/email, production backup restoration, real devices/screen readers, full catalog validity and operational abuse/retention processes. Account deletion and finalized legal/contact pages remain public-participation gates. Closed Court rounds require assigned moderator recording coverage.
+- Final privacy regression: removing a banned/blocked Court nominator never republishes the case. Its recorded ruling survives privately. This closes the deletion visibility edge case without relaxing public visibility protections.
+- After the final deletion-visibility regression, the frozen candidate passed 55 automated checks with zero skips/failures and both full browser runs. The synthetic restored database also passed the fail-closed verifier. Updated evidence records this final source commit.

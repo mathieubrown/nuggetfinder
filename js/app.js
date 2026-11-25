@@ -67,7 +67,7 @@ function statusFor(reports, pid, now, quorum) {
 // Shared mode: c = {y, n, latest, lastAny} from the server (counts of different people, ms timestamps).
 function statusFromCounts(c, now, quorum) {
   if (!c) return { state: 'none', y: 0, n: 0, latest: 0, fadesInMs: 0 };
-  var state = classify(c.y, c.n, c.lastAny ? 1 : 0, quorum);
+  var state = now>=c.expiresAt?'stale':classify(c.y, c.n, c.lastAny ? 1 : 0, quorum);
   var latest = c.latest || c.lastAny || 0;
   var fadesInMs = c.latest ? Math.max(0, c.latest + WINDOW_MS - now) : 0;
   return { state: state, y: c.y, n: c.n, latest: latest, fadesInMs: fadesInMs };
@@ -260,7 +260,8 @@ function refPoint() { return state.userLoc || state.ref; }
 
 function statusOf(pid, now) {
   if (state.server) return statusFromCounts(state.serverCounts[pid], now, SERVER_QUORUM);
-  return {state:'none',y:0,n:0,latest:0,fadesInMs:0};
+  var old=state.serverCounts[pid];
+  return {state:old?'stale':'none',y:0,n:0,latest:old?old.lastAny:0,fadesInMs:0};
 }
 
 function visiblePlaces(now) {
@@ -354,9 +355,10 @@ function renderPanel() {
   }
   html += '<div class="sheet-handle" aria-hidden="true"></div><div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR YOU') + '</span>' +
     '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>' +
+    '<button class="found-report" data-action="choose-report">I FOUND NUGGETS / NOPE</button>'+
     '<a class="product-finder-link" href="#/products">Find a product in stores →</a>';
   html += '<div class="small">' + list.length + (list.length === 1 ? ' spot' : ' spots') + ' · ' +
-    (state.server ? 'reports fade after 2 hours' : 'reports saved on this device only') + '</div>';
+    (state.server ? 'reports fade after 2 hours' : 'shared reports unavailable; browsing saved locations') + '</div>';
   html += '<details class="legend"><summary>What the icons mean</summary><p>Check: nuggets. X: nope. Bars: mixed. Dots: unconfirmed, a second person has to agree. Clock: stale. Dash: no reports.</p></details>';
 
   html += '<div class="list">';
@@ -366,7 +368,7 @@ function renderPanel() {
   });
   if (!list.length) html += '<p class="small">Nothing matches. Try clearing a filter.</p>';
   if (list.length > 40) html += '<p class="small">Showing the nearest 40. Search or filter to narrow it down.</p>';
-  html += '</div><button class="found-report" data-action="choose-report">I FOUND NUGGETS / NOPE</button>';
+  html += '</div>';
   panel.innerHTML = html;
   updatePlaceStamps();
 }
@@ -376,7 +378,7 @@ function detailHTML(p, now) {
   var ch = chainById(p.chain);
   var sub;
   if (s.state === 'yes' || s.state === 'nope' || s.state === 'mixed') {
-    sub = (s.y + s.n) + (s.y + s.n === 1 ? ' report' : ' reports') + '. Last one ' + agoText(now - s.latest) + '. Fades in ' + spanText(s.fadesInMs) + '.';
+    sub = (s.y + s.n) + (s.y + s.n === 1 ? ' report' : ' reports') + '. Last one ' + agoText(now - s.latest) + '. Each report counts for two hours.';
   } else if (s.state === 'pending') {
     sub = (s.y + s.n === 1) ? 'One person has reported. A second person has to agree before this flips.' : 'Reports are split. More people have to agree before this flips.';
   } else if (s.state === 'stale') {
@@ -443,11 +445,13 @@ function nearPlace(id) {
 
 function refreshStatuses() {
   if (!sb) return Promise.resolve(false);
-  return sb.rpc('place_statuses').then(function (res) {
+  var started=Date.now();
+  return sb.rpc('place_status_snapshot').then(function (res) {
     if (res.error) { state.server = false; return false; }
     var m = {};
     (res.data || []).forEach(function (r) {
       m[r.place_id] = {
+        expiresAt:NuggetfinderWave.normalizeSnapshot(r,started).local_expires_at,
         y: r.yes_count || 0,
         n: r.nope_count || 0,
         latest: r.latest_at ? Date.parse(r.latest_at) : 0,
@@ -461,6 +465,7 @@ function refreshStatuses() {
 }
 
 function serverReport(id, s) {
+  if(!catalogPlaceIds.has(id)){toast('This place needs catalog review before reporting.');return;}
   if (!state.user) { openAuth('Sign in to report. Browsing stays open to everyone.'); return; }
   sb.rpc('submit_report', { p_place: id, p_status: s, p_near: nearPlace(id) }).then(function (res) {
     if (res.error) { toast(errorText(res.error.message)); return; }
@@ -674,6 +679,7 @@ function renderRouteContent(route) {
   var id = route.spotId;
   var found = id && state.places.some(function (place) { return place.id === id; });
   showSpot(found ? id : null, !!found);
+  if(state.places.length)refreshStatuses().then(function(){if(!mapApp.hidden){renderMarkers();redrawMapConfidence();}});
 }
 
 var routeVersion=0;
@@ -702,6 +708,25 @@ document.getElementById('skipContent').onclick=function () {
   content.setAttribute('tabindex','-1');content.focus();
 };
 
+function redrawMapConfidence(){
+  if(mapApp.hidden)return;
+  var changed=false;
+  panel.querySelectorAll('[data-stamp-key]').forEach(function(element){
+    var confidence=statusOf(element.dataset.stampKey,Date.now());
+    var next=confidence.state;
+    if(next===element.dataset.stampStatus)return;
+    changed=true;
+    if(element.classList.contains('block')){
+      element.className='block s-'+next;element.dataset.stampStatus=next;
+      element.querySelector('.word').innerHTML=ICONS[next]+esc(WORDS[next]);
+      element.children[1].textContent=next==='stale'||next==='none'?'Confirmation needs fresh reports. Availability can change.':next==='pending'?'A second person must agree before this confirms.':(confidence.y+confidence.n)+' reports. Each report counts for two hours.';
+    }else{
+      var wrapper=document.createElement('div');wrapper.innerHTML=statHTML(next,element.dataset.stampKey);element.replaceWith(wrapper.firstChild);
+    }
+  });
+  if(changed){renderMarkers();updatePlaceStamps();}
+}
+
 function start() {
   state.reports = pruneReports(loadJSON(REPORT_KEY, []), Date.now());
   initMap();
@@ -717,20 +742,24 @@ function start() {
     var places = new Map(res.places.map(function (place) { return [place.id, place]; }));
     results[1].forEach(function (place) { places.set(place.id, place); });
     state.places = Array.from(places.values());
+    // Live discovery cannot turn an unreviewed external pin into a reporting target.
+    if(results[1].length)state.places=state.places.filter(function(place){return catalogPlaceIds.has(place.id);});
     state.usingSeed = res.seed;
     return refreshStatuses();
   }).then(function () {
     if (!mapApp.hidden) showRoute(currentRoute);
   });
+  setInterval(redrawMapConfidence,1000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState!=='hidden' && !mapApp.hidden){redrawMapConfidence();refreshStatuses().then(redrawMapConfidence);}});
   setInterval(function () {
+    if(mapApp.hidden)return;
     var a = document.activeElement;
-    if (a && (a.id === 'q' || a.closest('#panel form') || a.closest('#wavePage form'))) return;
-    if (!wavePage.hidden && location.hash.startsWith('#/product/')) NuggetfinderCatalog.refresh();
+    var editing=a && (a.id === 'q' || a.closest('#panel form') || a.closest('#wavePage form'));
     refreshStatuses().then(function () {
       renderMarkers();
-      renderPanel();
+      if(!editing)renderPanel();else redrawMapConfidence();
     });
-  }, 60000);
+  }, 30000);
 }
 
 start();

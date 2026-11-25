@@ -18,3 +18,12 @@ test('deep links resolve to the same pages used when sign-in restores', () => {
   assert.equal(current().page, 'trails');
   assert.equal(current().id, undefined);
 });
+
+test('deployed Beef and weekly URLs retain identity, creator and sort parameters',()=>{
+ const window={location:{hash:'#/beef/cane-vs-cfa?from=creator&sort=new'},history:{},addEventListener(){}};
+ runInNewContext(fs.readFileSync(__dirname+'/../js/router.js','utf8'),{window});
+ let route=window.NuggetfinderRouter.current();assert.equal(route.page,'showdown');assert.equal(route.id,'cane-vs-cfa');assert.equal(route.query,'from=creator&sort=new');
+ window.location.hash='#/beef?from=creator';route=window.NuggetfinderRouter.current();assert.equal(route.page,'showdown');assert.equal(route.query,'from=creator');
+ window.location.hash='#/weekly?from=creator';route=window.NuggetfinderRouter.current();assert.equal(route.page,'weekly-winners');assert.equal(route.query,'from=creator');
+ window.location.hash='#/beef/%ZZ';assert.equal(window.NuggetfinderRouter.current().page,'showdown');
+});

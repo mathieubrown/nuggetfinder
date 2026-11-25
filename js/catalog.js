@@ -61,15 +61,7 @@ window.NuggetfinderCatalog = (function () {
       }
     }
 
-    var stockRequest = 0;
-    async function refresh() {
-      var request = ++stockRequest;
-      try {
-        if (!client) throw new Error('Offline');
-        var response = await client.rpc('product_stock', { p_product: product.id });
-        if (response.error) throw response.error;
-        if (request !== stockRequest || id !== renderId || !root.contains(feedback)) return;
-        stockRows = new Map(response.data.map(function (row) { return [row.place_id, row]; }));
+    function drawConfidence(){
         cards.forEach(function (card) {
           var row = stockRows.get(card.dataset.place);
           var status = NuggetfinderWave.stockStatus(row);
@@ -85,13 +77,30 @@ window.NuggetfinderCatalog = (function () {
             ? 'Latest report: ' + dateLabel(row.last_report_at) : '';
         });
         stampHistory = NuggetfinderStamp.update(root.querySelectorAll('[data-stamp-key]'), stampHistory);
+    }
+    var stockRequest = 0;
+    var refreshing=false;
+    async function refresh() {
+      if(refreshing)return;
+      refreshing=true;
+      var started=Date.now();
+      var request = ++stockRequest;
+      try {
+        if (!client) throw new Error('Offline');
+        var response = await client.rpc('product_stock_snapshot', { p_product: product.id });
+        if (response.error) throw response.error;
+        if (request !== stockRequest || id !== renderId || !root.contains(feedback)) return;
+        stockRows = new Map(response.data.map(function (row) { return [row.place_id, NuggetfinderWave.normalizeSnapshot(row,started)]; }));
+        drawConfidence();
         available = true;
         checkFirstConfirmation();
       } catch (error) {
         if (request !== stockRequest || id !== renderId || !root.contains(feedback)) return;
         available = false;
         feedback.textContent = 'Live stock reports are unavailable right now.';
+        stockRows.forEach(function(row){row.local_expires_at=0;});drawConfidence();
       }
+      refreshing=false;
       enableButtons();
     }
 
@@ -108,6 +117,7 @@ window.NuggetfinderCatalog = (function () {
             brand: product.brand, product: product.name, productId: product.id,
             place: place.name, area: place.area, status: status, label: available ? statusLabel(status) : '− STOCK UNAVAILABLE',
             username: options.username(),
+            stockRow: row, stockUnavailable: !available,
             lastSeen: row && row.last_seen_at ? 'Last seen: ' + dateLabel(row.last_seen_at) : ''
           });
         } catch (error) {
@@ -139,6 +149,7 @@ window.NuggetfinderCatalog = (function () {
       });
     });
     refresh();
+    NuggetfinderWave.watchConfidence(cards[0],drawConfidence,refresh);
     return refresh;
   }
 

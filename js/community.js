@@ -3,17 +3,33 @@ window.NuggetfinderCommunity = (function () {
   const pages = {};
   async function rpc(client, name, parameters) {
     const result = await client.rpc(name, parameters);
-    if (result.error) throw result.error;
+    if (result.error) {
+      if(result.error.message==='vote_history_hold')throw new Error('Voting is paused until previous activity is outside the 24-hour window.');
+      throw result.error;
+    }
     return result.data;
   }
   // Keep a request ID after an uncertain response, so retrying cannot duplicate a write.
-  function submission(client, name) {
-    let draft, request;
-    return async function (payload) {
-      const fingerprint=JSON.stringify(payload);
-      if(fingerprint!==draft){draft=fingerprint;request=crypto.randomUUID();}
+  function submission(client, name, owner) {
+    const requests=new Map();
+    return async function(payload){
+      if(owner && client.auth?.getSession){const session=await client.auth.getSession();if(session.error || session.data?.session?.user?.id!==owner)throw new Error('account_changed');}
+      const serialized=JSON.stringify(payload);
+      let fingerprint=serialized;
+      if(crypto.subtle){
+        const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(serialized));
+        fingerprint=Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,'0')).join('');
+      }
+      const key='nuggetfinder_request_v1:'+name+':'+(owner || 'local')+':'+fingerprint;
+      let request=requests.get(key);
+      // Session storage contains only hashed payloads and random request IDs,
+      // never draft text. Separate accounts and entry points have separate keys.
+      if(!request && crypto.subtle){try{request=sessionStorage.getItem(key);}catch(error){/* Storage may be disabled. */}}
+      if(!request){request=crypto.randomUUID();requests.set(key,request);}
+      if(crypto.subtle){try{sessionStorage.setItem(key,request);}catch(error){/* Open-draft retries still work in memory. */}}
       const result=await rpc(client,name,{...payload,p_request:request});
-      draft=null;request=null;
+      requests.delete(key);
+      if(crypto.subtle){try{sessionStorage.removeItem(key);}catch(error){/* No draft content was stored. */}}
       return result;
     };
   }
@@ -52,6 +68,7 @@ window.NuggetfinderCommunity = (function () {
         if (strike) await rpc(client, 'issue_strike', { p_user: strike });
         await pages.mod(root, route, client, user, esc);
       }, root.querySelector('[role=status]')));
+      if(window.NuggetfinderCommunity.mountCourtReview)await window.NuggetfinderCommunity.mountCourtReview(root,client,esc);
     } catch (error) {
       if (location.hash === '#/mod') shell(root, 'Moderator desk', '<p>Moderator access required.</p>');
     }

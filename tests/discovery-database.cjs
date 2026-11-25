@@ -328,8 +328,9 @@ test('discovery database permissions and normal entry points', async t => {
       await actor(2);
       await db.query("select public.submit_price($1,'mcnuggets',8,20,'piece')",[place]);
       entries=(await db.query("select public.price_ledger($1,'piece') entries",[place])).rows[0].entries;
-      assert.equal(entries[0].price,10);
-      assert.equal(entries[0].verified_store,true);
+      assert.equal(entries[0].price,8);
+      assert.equal(entries[0].verified_store,false);
+      assert.ok(entries.some(row=>row.price===10 && row.verified_store && row.superseded));
       assert.equal(entries.filter(row=>!row.superseded).length,1);
       assert.deepEqual((await db.query("select public.price_ledger($1,'g') entries",[place])).rows[0].entries,[]);
       const data=(await db.query('select public.export_discovery_data() data')).rows[0].data;

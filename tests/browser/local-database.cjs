@@ -4,6 +4,7 @@ const {fixture}=require('../support/local-postgres.cjs');
 const {chromium}=require(process.env.NUGGETFINDER_PLAYWRIGHT || 'playwright');
 const root=path.resolve(__dirname,'../..');
 const assets=process.env.NUGGETFINDER_BROWSER_ASSETS;
+const captures=process.env.NUGGETFINDER_CAPTURE_DIR || 'docs/screenshots/corrections';
 if(!assets)throw Error('Set NUGGETFINDER_BROWSER_ASSETS to local Leaflet asset directory');
 const escId=s=>'"'+s.replaceAll('"','""')+'"';
 const shim=String.raw`
@@ -17,7 +18,7 @@ window.supabase={createClient(){
 }};`;
 (async()=>{
  for(const width of [390,1280]){
- const db=await fixture();let browser;const errors=[];let loseNextTake=true;let loseNextPrice=true;
+ const db=await fixture();let browser;const errors=[];let loseNextTake=true;let loseNextPrice=true;const failedRpcs=new Set();
  try{
  for(let i=0;i<3;i++)await db.actor(i,'select public.set_handle($1)',['local_member_'+i]);
  browser=await chromium.launch({args:['--single-process','--disable-gpu','--disable-crash-reporter']});
@@ -32,7 +33,7 @@ window.supabase={createClient(){
     const input=route.request().postDataJSON();let data;
     try{
      if(url.pathname.endsWith('/rpc')){
-      const {name,params={}}=input;if(!/^[a-z_]+$/.test(name))throw Error('Invalid RPC');
+      const {name,params={}}=input;if(failedRpcs.has(name))return route.fulfill({json:{error:{message:'Local test: unavailable'}}});if(!/^[a-z_]+$/.test(name))throw Error('Invalid RPC');
       const fn=(await db.pool.query("select proretset from pg_proc where pronamespace='public'::regnamespace and proname=$1",[name])).rows[0];if(!fn)throw Error('Unknown RPC '+name);
       const keys=Object.keys(params);if(keys.some(k=>!/^p_[a-z_]+$/.test(k)))throw Error('Invalid parameter');
       const result=await db.actor(actor,'select * from public.'+escId(name)+'('+keys.map((key,i)=>escId(key)+'=> $'+(i+1)).join(',')+')',Object.values(params));
@@ -67,8 +68,9 @@ window.supabase={createClient(){
  }
  const member=await pageFor(1),other=await pageFor(2),moderator=await pageFor(0);
  async function go(page,hash){console.log(width+': '+hash);const destination='https://nugget.test/'+hash;if(page.url()===destination)await page.reload();else await page.goto(destination);await page.waitForFunction(()=>document.getElementById('who').textContent.length>0);await page.evaluate(()=>document.fonts.ready);}
- async function shot(name,hash){await go(member,hash);await member.waitForTimeout(250);assert.equal(await member.evaluate(()=>document.documentElement.scrollWidth),width);const short=await member.locator('button,select,input:not([type=checkbox]),textarea').evaluateAll(nodes=>nodes.filter(n=>n.getClientRects().length && getComputedStyle(n).visibility!=='hidden' && n.getBoundingClientRect().height<43).map(n=>n.outerHTML.slice(0,120)));assert.deepEqual(short,[],name+' touch targets');const dir=path.join(root,'docs/screenshots/hardening/'+name);fs.mkdirSync(dir,{recursive:true});await member.screenshot({path:path.join(dir,width+'.png')});}
+ async function shot(name,hash){await go(member,hash);await member.waitForTimeout(250);assert.equal(await member.evaluate(()=>document.documentElement.scrollWidth),width);const short=await member.locator('button,select,input:not([type=checkbox]),textarea').evaluateAll(nodes=>nodes.filter(n=>n.getClientRects().length && getComputedStyle(n).visibility!=='hidden' && n.getBoundingClientRect().height<43).map(n=>n.outerHTML.slice(0,120)));assert.deepEqual(short,[],name+' touch targets');const dir=path.join(root,captures,name);fs.mkdirSync(dir,{recursive:true});await member.screenshot({path:path.join(dir,width+'.png')});}
  await go(member,'#/take');await member.locator('#takeTarget option[value=mcnuggets]').waitFor({state:'attached'});
+ await member.getByRole('button',{name:'Record · soon',exact:true}).click();await member.getByRole('status').filter({hasText:'Video is coming soon.'}).waitFor();
  await member.locator('#takeTarget').selectOption('mcnuggets');await member.locator('#takeText').fill('Local test: <img src=x onerror=alert(1)> crunchy nuggets.');
  await member.getByRole('button',{name:'Post',exact:true}).click();await member.locator('.composer form').evaluate(form=>form.requestSubmit());await member.getByRole('status').filter({hasText:'Could not confirm'}).waitFor();
  await member.getByRole('button',{name:'Post',exact:true}).click();await member.getByRole('status').filter({hasText:'sent for review'}).waitFor();
@@ -88,12 +90,59 @@ window.supabase={createClient(){
  await shot('main','#/');await shot('spot','#/spot/node%2F1229920544');
  await go(member,'#/product/mcnuggets');const stock=member.locator('[data-place="node/1229920544"]');await stock.getByRole('button',{name:'Seen it',exact:true}).click();await stock.getByText('⋯ UNCONFIRMED',{exact:true}).waitFor();
  await go(other,'#/product/mcnuggets');await other.locator('[data-place="node/1229920544"]').getByRole('button',{name:'Seen it',exact:true}).click();await other.locator('[data-place="node/1229920544"]').getByText('✓ IN STOCK',{exact:true}).waitFor();
+ await db.pool.query("insert into public.business_verifications(user_id,place_id,source_url) values($1,'node/1229920544','https://example.test/local-store-proof')",[db.users[1]]);
  await go(member,'#/prices?place=node%2F1229920544');await member.getByText('Add a price',{exact:true}).click();await member.locator('#priceProduct').selectOption('mcnuggets');await member.locator('#priceAmount').fill('9.99');await member.locator('#priceQuantity').fill('20');
  await member.getByRole('button',{name:'Add price entry',exact:true}).click();await member.getByRole('status').filter({hasText:'Could not confirm'}).waitFor();await member.getByRole('button',{name:'Add price entry',exact:true}).click();await member.locator('#priceQuantity').fill('21');await member.getByRole('status').filter({hasText:'Price entry saved.'}).waitFor();assert.equal(await member.locator('#priceQuantity').inputValue(),'21');
  assert.equal((await db.pool.query('select count(*)::int n from public.price_entries')).rows[0].n,1);
  await shot('prices','#/prices?place=node%2F1229920544');
  await go(member,'#/showdown/cane-vs-cfa');await member.locator('[data-side=left]').click();await member.locator('[data-side=left][aria-pressed=true]').waitFor();await member.locator('[data-side=right]').click();await member.getByRole('status').filter({hasText:'vote_cooldown'}).waitFor();assert.equal((await db.pool.query('select count(*)::int n from public.matchup_votes')).rows[0].n,1);
  await shot('showdown','#/showdown/cane-vs-cfa');await shot('composer','#/take');await shot('badges','#/badges');
+
+ // Expiry is exercised while forms are focused and the transport is unavailable.
+ await go(member,'#/product/mcnuggets');await member.locator('[data-place="node/1229920544"]').getByText('✓ IN STOCK',{exact:true}).waitFor();
+ await member.clock.install();failedRpcs.add('product_stock_snapshot');await member.clock.fastForward(61000);
+ await member.locator('[data-place="node/1229920544"]').getByText('◷ STALE',{exact:true}).waitFor();failedRpcs.delete('product_stock_snapshot');await member.clock.resume();
+ await go(member,'#/prices?place=node%2F1229920544');await member.locator('.price-stock').getByText('✓ IN STOCK',{exact:true}).waitFor();
+ await member.getByText('Add a price',{exact:true}).click();await member.locator('#priceAmount').focus();failedRpcs.add('price_ledger');await member.clock.fastForward(61000);
+ await member.locator('.price-stock').getByText('◷ STALE',{exact:true}).waitFor();failedRpcs.delete('price_ledger');await member.clock.resume();
+
+ const mapPlace=(await db.pool.query("select id from public.places where id<>'node/1229920544' order by (latitude-37.7599)^2+(longitude+122.435)^2 limit 1")).rows[0].id;
+ await db.actor(1,"select public.submit_report($1,'yes',false)",[mapPlace]);await db.actor(2,"select public.submit_report($1,'yes',false)",[mapPlace]);
+ await go(member,'#/');const mapRow=member.locator('#panel .row[data-id="'+mapPlace+'"]');await mapRow.locator('[data-stamp-status=yes]').waitFor();
+ failedRpcs.add('place_status_snapshot');await member.clock.fastForward(61000);await mapRow.locator('[data-stamp-status=stale]').waitFor();failedRpcs.delete('place_status_snapshot');await member.clock.resume();
+ // All age bands stay visible, and new crowd evidence outranks an old verified source.
+ await db.pool.query("update public.price_entries set created_at=now()-interval '31 days' where user_id=$1",[db.users[1]]);
+ await db.actor(3,"select public.submit_price('node/1229920544','mcnuggets',12,20,'piece')");
+ await db.pool.query("update public.price_entries set created_at=now()-interval '10 days' where user_id=$1",[db.users[3]]);
+ await db.actor(2,"select public.submit_price('node/1229920544','mcnuggets',8.99,20,'piece')");
+ await shot('price-history','#/prices?place=node%2F1229920544');await member.getByText('Historical · over 30 days',{exact:true}).waitFor();await member.getByText('Dated · 8–30 days',{exact:true}).waitFor();
+ await member.emulateMedia({reducedMotion:'no-preference'});const animation=await member.locator('.price-stock').first().evaluate(element=>{element.classList.add('stamp-drop');return getComputedStyle(element).animationDuration;});assert.ok(parseFloat(animation)>0);
+ await member.emulateMedia({reducedMotion:'reduce'});const reduced=await member.locator('.price-stock').first().evaluate(element=>getComputedStyle(element).animationDuration);assert.ok(parseFloat(reduced)<=0.001);
+ // Full legacy URL and creator parameters, not just the isolated parser.
+ await go(member,'#/beef/cane-vs-cfa?from=local_creator');await member.getByText('Challenge from @local_creator').waitFor();
+ await go(member,'#/weekly');await member.getByRole('heading',{name:'Weekly Winners'}).waitFor();
+ // Moderator records a closed ballot, then appends a reviewed correction.
+ const caseId=(await db.pool.query("insert into public.court_cases(author_id,food_name,argument,status,opened_at,closes_at) values($1,'Local review katsu','A flat nugget?','published',now()-interval '8 days',now()-interval '1 day') returning id",[db.users[0]])).rows[0].id;
+ for(let i=1;i<=20;i++){
+  const id='40000000-0000-0000-0000-'+String(i).padStart(12,'0');
+  await db.pool.query(`insert into auth.users values($1,'{"age_confirmed":true}','local-voter@example.test')`,[id]);
+  await db.pool.query("insert into public.court_votes(case_id,user_id,verdict,updated_at) values($1,$2,$3,now()-interval '2 days')",[caseId,id,i<=12?'nugget':i<=17?'adjacent':'no']);
+ }
+ await go(moderator,'#/mod');await moderator.getByRole('button',{name:'Local review katsu · not recorded',exact:true}).click();
+ await moderator.getByRole('button',{name:'Record closed ruling',exact:true}).click();await moderator.getByRole('status').filter({hasText:'Recorded ruling v1'}).waitFor();
+ await go(member,'#/court/'+caseId);await member.getByText('Community opinion · ruling v1 · 20 votes',{exact:true}).waitFor();
+ await db.pool.query("update public.profiles set banned=true where id='40000000-0000-0000-0000-000000000001'");
+ await go(member,'#/court/'+caseId);await member.getByText('Community opinion · ruling v1 · 20 votes',{exact:true}).waitFor();
+ await go(moderator,'#/mod');await moderator.getByRole('button',{name:'Local review katsu · v1',exact:true}).click();
+ await moderator.locator('[name=ballot]').first().check();await moderator.locator('#courtCorrectionNote').fill('Local review: excluded one reviewed abusive vote.');
+ await moderator.getByRole('button',{name:'Record corrected version',exact:true}).click();await moderator.getByRole('status').filter({hasText:'Recorded ruling v2'}).waitFor();
+ await shot('court-correction','#/court/'+caseId);await member.getByText('Ruling history · v2',{exact:true}).click();await member.getByText('Ruling v1 · ✓ NUGGET',{exact:true}).waitFor();await member.getByText('Ruling v2 · ◷ NOT ENOUGH VOTES',{exact:true}).waitFor();
+ await member.screenshot({path:path.join(root,captures,'court-correction',width+'.png')});
+ await db.pool.query("update public.profiles set posting_locked_until=now()+interval '1 day' where id=$1",[db.users[1]]);
+ await member.getByRole('button',{name:'Report',exact:true}).first().click();await member.getByRole('status').filter({hasText:'Report sent.'}).waitFor();
+ await member.getByRole('button',{name:'Block author',exact:true}).first().click();await member.getByRole('status').filter({hasText:'Author blocked'}).waitFor();
+ await db.pool.query('update public.profiles set posting_locked_until=null where id=$1',[db.users[1]]);
+ await go(member,'#/badges');
  await member.locator('.primary-nav a[data-page=take]').click();await member.waitForFunction(()=>document.activeElement?.tagName==='H1');
  await member.keyboard.press('Tab');assert.equal(await member.evaluate(()=>document.activeElement.matches('[data-reset]')),true);
  await member.keyboard.press('Tab');assert.equal(await member.evaluate(()=>document.activeElement.id),'takeKind');

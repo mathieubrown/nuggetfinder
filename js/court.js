@@ -22,7 +22,7 @@
     card.innerHTML = '<span class="tag">IS IT A NUGGET?</span><h2>' + esc(row.food_name) + '</h2>' +
       '<p class="court-argument">' + esc(row.argument) + '</p><span class="stat s-' +
       (colors[row.verdict] || 'none') + '">' + labels[row.verdict] + '</span>' +
-      '<p class="small">Community classification · ' + total + (total === 1 ? ' vote' : ' votes') + '</p>' +
+      '<p class="small">Community opinion'+(row.ruling_version?' · ruling v'+Number(row.ruling_version):'')+' · ' + total + (total === 1 ? ' vote' : ' votes') + '</p>' +
       '<p class="small">' + (row.verdict === 'open' ? 'Round closes ' : 'Round closed ') + date(row.closes_at) + '</p>' +
       '<div class="court-ballot" role="group" aria-label="Is ' + esc(row.food_name) + ' a nugget?">' +
       Object.entries(choices).map(([key, text]) => '<button class="big ghost" type="button" data-verdict="' +
@@ -46,10 +46,20 @@
     card.append(share);
     action(share, () => NuggetfinderShare.download({
       brand: 'NUGGET COURT', product: row.food_name, productId: 'court-' + row.id,
-      place: total + (total === 1 ? ' community vote' : ' community votes'), area: 'Is it a nugget?',
+      place: total + (total === 1 ? ' community vote' : ' community votes'), area: 'Community opinion'+(row.ruling_version?' · ruling v'+row.ruling_version:''),
       status: colors[row.verdict] || 'none', label: labels[row.verdict],
       lastSeen: 'Round ' + (row.verdict === 'open' ? 'closes ' : 'closed ') + date(row.closes_at)
     }), feedback);
+    if(row.ruling_version) {
+      const versions=await rpc(client,'court_ruling_history',{p_case:row.id});
+      if(!card.isConnected)return;
+      const history=document.createElement('details');history.className='court-ruling-history';
+      history.innerHTML='<summary class="wave-link">Ruling history · v'+Number(row.ruling_version)+'</summary>'+versions.map(version=>
+        '<article class="wave-card"><strong>Ruling v'+Number(version.version)+' · '+labels[version.verdict]+'</strong><p>'+esc(version.note)+
+        '</p><p class="small">'+esc(version.reason.replaceAll('_',' '))+' · '+date(version.recorded_at)+' · '+
+        (Number(version.nugget)+Number(version.adjacent)+Number(version.no))+' community votes</p></article>').join('');
+      card.append(history);
+    }
     if (user && user.id !== row.author_id) {
       community.addSafetyButtons(card, client, {kind: 'court', ref: row.id, author: row.author_id}, feedback);
     }

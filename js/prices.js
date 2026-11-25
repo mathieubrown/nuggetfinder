@@ -11,7 +11,7 @@
     let unit=['piece','g','ml'].includes(query.get('unit'))?query.get('unit'):'piece';
     let brand='';
     let allergenFilter=false;
-    shell(root,'Prices','<p class="price-subtitle">Shelf prices in USD, sorted by cost per unit</p>'+
+    shell(root,'Prices','<p class="price-subtitle">Reported prices in USD. Source verification does not make a price fresh.</p>'+
       '<div class="price-store"><label for="priceStore">Choose a store</label><select id="priceStore"><option value="">Loading stores…</option></select><p data-store-area></p></div>'+
       '<div data-sponsored></div><div class="price-filters"><label>Compare<select id="priceUnit">'+
       Object.entries(units).map(([key,label])=>'<option value="'+key+'">Per '+label+'</option>').join('')+'</select></label>'+
@@ -52,38 +52,56 @@
       address.textContent=current?.area || '';
       address.hidden=!current?.area;
     }
-    async function refresh() {
+    function drawConfidence(){
+      ledger.querySelectorAll('[data-price-stock]').forEach(element=>{
+        const status=NuggetfinderWave.stockStatus(element.stockRow);
+        element.className='price-stock stat s-'+status;element.textContent=NuggetfinderCatalog.statusLabel(status);
+      });
+      ledger.querySelectorAll('[data-observation-age]').forEach(element=>{
+        const age=NuggetfinderWave.priceFreshness(element.observedAt);
+        element.className='observation-age age-'+age;
+        if(age!=='recent'){const row=element.closest('.price-row');row.classList.remove('best-deal-row');row.querySelector('.unit-price b')?.remove();}
+        element.textContent={recent:'Recently reported · 0–7 days',dated:'Dated · 8–30 days',historical:'Historical · over 30 days',unavailable:'Observation date unavailable'}[age];
+      });
+    }
+    async function refresh(quiet) {
       const id=++request;
-      feedback.textContent='Loading price history…';
+      const started=Date.now();
+      if(!quiet)feedback.textContent='Loading price history…';
       try {
         const rows=await rpc(client,'price_ledger',{p_place:place || null,p_unit:unit,p_product:product || null});
         if(!ledger.isConnected || id!==request)return;
-        feedback.textContent='';
+        if(!quiet)feedback.textContent='';
         root.querySelector('[data-filter-info]').textContent=allergenFilter?'Showing entries with sourced allergen information. Check the packaging.':'';
         const filtered=rows.filter(row=>(!brand || row.brand===brand) && (!allergenFilter || row.allergens.length));
         const current=filtered.filter(row=>!row.superseded);
-        const cheapest=current.length?Math.min(...current.map(row=>Number(row.unit_cost))):null;
+        const recent=current.filter(row=>NuggetfinderWave.priceFreshness(row.created_at)==='recent');
+        const cheapest=recent.length?Math.min(...recent.map(row=>Number(row.unit_cost))):null;
         ledger.innerHTML='<div class="price-table-heading"><span>Item</span><span>Pack</span><span>Price</span><span>Per '+units[unit]+'</span></div>';
         if(!filtered.length){ledger.innerHTML+=NuggetfinderSparkle.empty('No price entries for this selection yet.');return;}
         filtered.forEach(row=>{
           const entry=document.createElement('article');
           entry.className='price-row'+(row.superseded?' price-superseded':'')+
-            (!row.superseded && Number(row.unit_cost)===cheapest?' best-deal-row':'');
+            (!row.superseded && NuggetfinderWave.priceFreshness(row.created_at)==='recent' && Number(row.unit_cost)===cheapest?' best-deal-row':'');
           const per=Number(row.unit_cost)<1?(100*Number(row.unit_cost)).toFixed(1)+'¢':money(row.unit_cost);
           entry.innerHTML='<div class="price-item"><strong>'+esc(row.product_name)+'</strong><span class="small">'+esc(row.brand)+'</span>'+
-            '<span class="price-stock stat s-'+NuggetfinderWave.stockStatus(row.stock)+'">'+
+            '<span data-price-stock class="price-stock stat s-'+NuggetfinderWave.stockStatus(row.stock)+'">'+
             NuggetfinderCatalog.statusLabel(NuggetfinderWave.stockStatus(row.stock))+'</span>'+
             '<div>'+community.badges.verified('store',row.verified_store)+(row.verified_store?'':community.badges.crowd())+'</div>'+
             '<div class="allergen-chips">'+row.allergens.map(community.badges.allergen).join('')+'</div>'+
             (!row.allergens.length?'<span class="small">No allergen information reported.</span>':'')+'</div>'+
             '<span>'+Number(row.quantity)+' '+esc(row.unit==='piece'?'ct':row.unit)+'</span>'+
             '<span'+(row.superseded?' class="old-price"':'')+'>'+money(row.price)+'</span>'+
-            '<span class="unit-price">'+per+(!row.superseded && Number(row.unit_cost)===cheapest?'<b>Best Deal</b>':'')+'</span>'+
-            '<div class="price-attribution"><span>'+esc(row.masked_handle)+' · '+esc(new Date(row.created_at).toLocaleString())+'</span>'+
-            '<span class="ledger-state'+(row.superseded?' superseded':'')+'">'+(row.superseded?'SUPERSEDED':'CURRENT')+'</span></div>';
+            '<span class="unit-price">'+per+(!row.superseded && NuggetfinderWave.priceFreshness(row.created_at)==='recent' && Number(row.unit_cost)===cheapest?'<b>Best recent unit price</b>':'')+'</span>'+
+            '<div class="price-attribution"><span>'+esc(row.masked_handle)+' · Price reported '+esc(new Date(row.created_at).toLocaleString())+'</span><span data-observation-age></span>'+
+            '<span>Stock last seen: '+esc(row.stock?.last_seen_at?new Date(row.stock.last_seen_at).toLocaleString():'no recent sightings')+'</span>'+
+            '<span class="ledger-state'+(row.superseded?' superseded':'')+'">'+(row.superseded?'EARLIER REPORT':'LATEST REPORT')+'</span></div>';
+          entry.querySelector('[data-price-stock]').stockRow=NuggetfinderWave.normalizeSnapshot(row.stock,started);
+          entry.querySelector('[data-observation-age]').observedAt=row.created_at;
           ledger.append(entry);
         });
-      } catch(error) {if(ledger.isConnected && id===request)feedback.textContent='Could not load prices. Please try again.';}
+        drawConfidence();
+      } catch(error) {if(ledger.isConnected && id===request){feedback.textContent='Could not refresh prices or stock. Earlier observations remain shown.';ledger.querySelectorAll('[data-price-stock]').forEach(element=>{if(element.stockRow)element.stockRow.local_expires_at=0;});drawConfidence();}}
     }
     try {
       targets=await rpc(client,'price_targets');
@@ -98,6 +116,7 @@
       root.querySelector('[data-quantity-unit]').textContent=unit==='piece'?'Count the pieces in this pack.':'Enter the pack size in '+units[unit]+'s.';
       renderProducts();
       await refresh();
+      NuggetfinderWave.watchConfidence(ledger,drawConfidence,()=>refresh(true));
     }catch(error){feedback.textContent='Store and product choices are unavailable.';return;}
 
     store.onchange=()=>{place=store.value;product='';renderProducts();refresh();};
@@ -114,7 +133,7 @@
       event.currentTarget.setAttribute('aria-pressed',String(allergenFilter));refresh();
     };
     let posting=false;
-    const post=community.submission(client,'submit_price_request');
+    const post=community.submission(client,'submit_price_request',user?.id);
     form.addEventListener('submit',async event=>{
       event.preventDefault();
       if(posting)return;

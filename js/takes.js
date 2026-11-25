@@ -17,7 +17,7 @@
       '<div class="composer-preview"><span class="composer-stamp">SAUCE HERETIC</span>'+
       '<label class="visually-hidden" for="takeText">Your take</label><textarea id="takeText" maxlength="280" required rows="7" placeholder="Roast the nugget. Make your case."></textarea>'+
       '<span class="composer-character-count">0 / 280</span></div>'+
-      '<div class="composer-media"><button type="button" data-soon="Video">Record</button><button type="button" data-soon="Photo">Add photo</button>'+
+      '<div class="composer-media"><button type="button" data-soon="Video">Record · soon</button><button type="button" data-soon="Photo">Photo · soon</button>'+
       '<span>Text take</span></div>'+
       '<div class="composer-tag-options"><details><summary>@ Tag a friend</summary><label for="friendSearch">Find a handle</label>'+
       '<input id="friendSearch" minlength="2" maxlength="20" placeholder="At least two letters"><button type="button" data-find>Find</button>'+
@@ -26,9 +26,9 @@
       '<select id="attachPlace"><option value="">No extra spot</option></select></details></div>'+
       '<fieldset class="composer-stamps"><legend class="visually-hidden">Choose a stamp</legend>'+
       Object.entries(community.stamps).map(([key,label])=>'<button type="button" data-stamp="'+key+'" aria-pressed="'+(key===selectedStamp)+'">'+label+'</button>').join('')+
-      '</fieldset><div class="composer-actions"><button type="button" data-soon="Video">Upload</button>'+
+      '</fieldset><div class="composer-actions"><button type="button" data-soon="Video">Upload · soon</button>'+
       '<button type="submit" class="post-take" disabled>Post</button><button type="button" data-tips>Tips</button></div>'+
-      '<p role="status"></p><p class="composer-guidance">Roast the nugget, not the person. Reports from other users can pull a take down.</p></form></div>';
+      '<p role="status"></p><p class="composer-guidance">Stamps express opinions. Roast the nugget, not the person. Reports can pull a take down.</p></form></div>';
     const form=root.querySelector('form');
     const feedback=form.querySelector('[role=status]');
     const submit=form.querySelector('[type=submit]');
@@ -120,7 +120,7 @@
     }
 
     let posting=false;
-    const post=community.submission(client,'submit_take_request');
+    const post=community.submission(client,'submit_take_request',user?.id);
     form.addEventListener('submit',async event=>{
       event.preventDefault();
       if(posting)return;

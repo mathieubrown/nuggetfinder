@@ -1,5 +1,7 @@
 # Hardening review and deployment plan
 
+Current correction candidate: [corrections/REVIEW.md](corrections/REVIEW.md). That report supersedes the earlier Court, voting and price-priority behavior below. This document remains the baseline review record; it is not deployment approval.
+
 Everything here is for review. No SQL was applied to live Supabase and no frontend was merged or deployed during this pass. The main branch checked at the start was 5752a75.
 
 ## Findings fixed

@@ -311,7 +311,7 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
   body[data-screen="badges"] > .top { display: none; }
   .map-home .leaflet-bottom { bottom: 5px; }
   .map-home .panel { z-index: 450; overflow-x: hidden; }
-  .map-home .found-report { order: 8; }
+  .map-home .found-report { order: 0; }
 }
 @media (min-width: 900px) {
   .primary-nav { justify-content: center; gap: 64px; }
@@ -523,3 +523,11 @@ button, select, input:not([type="checkbox"]), textarea { min-height: 44px; }
 
 /* Plain VS lettering makes the matchup destination unambiguous. */
 .primary-nav a > .showdown-nav-icon { width: 28px; height: 24px; border: 2px solid currentColor; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; align-self: center; font: 900 13px/1 var(--body); letter-spacing: -1px; }
+.observation-age { display: block; font-weight: 700; }
+.age-historical { border: 1px dashed currentColor; padding: 4px; }
+.age-dated { background: #eee0bb; padding: 4px; }
+.court-moderation [data-rounds] { display: flex; flex-wrap: wrap; gap: 10px; }
+.court-moderation fieldset { max-height: 340px; overflow: auto; }
+.court-moderation .check { min-height: 44px; }
+.price-attribution { flex-wrap: wrap; }
+.price-attribution > span { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
