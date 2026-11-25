@@ -352,3 +352,49 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 @media (min-width:900px) {
   .spot-view .panel { width: 520px; max-width: 50%; }
 }
+
+body[data-screen="showdown"] .wave-hero { border: 0; box-shadow: none; background: transparent; padding: 0; margin: 0 0 16px; }
+body[data-screen="showdown"] .wave-hero h1 { font-size: clamp(26px,4vw,44px); line-height: 1.05; text-transform: uppercase; }
+.showdown-kicker { font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+.showdown-links { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+.showdown-links a { min-height: 44px; color: var(--ink); display: inline-flex; align-items: center; font-size: 13px; font-weight: 700; }
+.percent-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-right: 5px; }
+.percent-side { border: 3px solid var(--ink); box-shadow: 5px 5px var(--ink); padding: 12px; display: flex; flex-direction: column; min-width: 0; min-height: 172px; }
+.percent-side h2 { font: 18px var(--display); line-height: 1.05; text-transform: uppercase; margin: 0 0 auto; overflow-wrap: anywhere; }
+.percent-side > strong { font: clamp(40px,9vw,64px) var(--display); line-height: 1; margin: 16px 0 5px; }
+.percent-side > span { font-size: 13px; }
+.side-left { background: var(--red); color: white; }
+.side-right { background: var(--gold); }
+.showdown-meter { height: 24px; background: var(--gold); border: 3px solid var(--ink); margin-top: 18px; }
+.showdown-meter > span { display: block; height: 100%; background: var(--red); }
+.showdown-vote-meta { font-size: 13px; color: var(--muted); margin: 8px 0 14px; }
+.showdown-vote-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.showdown-vote-buttons button { font-size: 12px; text-transform: uppercase; padding: 8px; }
+.showdown-vote-buttons button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.showdown-takes { margin: 28px 0; }
+.showdown-takes .section-heading nav { display: flex; gap: 8px; }
+.showdown-takes .section-heading nav a { border: 2px solid var(--ink); min-width: 44px; min-height: 44px; display: grid; place-items: center; padding: 0 12px; color: var(--ink); text-transform: uppercase; font-size: 12px; font-weight: 700; text-decoration: none; }
+.showdown-takes nav a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+.drop-take-bar { display: flex; align-items: center; justify-content: center; min-height: 52px; border: 3px solid var(--ink); box-shadow: 4px 4px var(--ink); background: var(--pink); color: var(--ink); text-transform: uppercase; font: 18px var(--display); text-decoration: none; margin: 22px 5px 20px 0; }
+.showdown-extras { display: flex; gap: 12px; flex-wrap: wrap; }
+.showdown-extras > button { padding: 10px; }
+.take-thread { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.take-thread > .take-thumbnail { width: 88px; min-width: 0; align-self: start; }
+.take-thread-content { min-width: 0; overflow-wrap: anywhere; }
+.take-author { color: var(--ink); font-weight: 700; min-height: 44px; display: inline-flex; align-items: center; }
+.take-thread-content > .take-stamp { display: inline-block; margin-left: 6px; }
+.take-thread-content > p { margin: 6px 0; }
+.take-response-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.rebut-button { border: 2px solid var(--ink); min-height: 44px; display: inline-flex; align-items: center; padding: 0 12px; color: var(--ink); text-transform: uppercase; text-decoration: none; font-weight: 700; }
+.reaction-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.reaction-button { min-height: 44px; padding: 6px; border: 2px solid var(--ink); background: var(--paper); font-size: 12px; }
+.reaction-button[aria-pressed="true"] { background: var(--gold); }
+.team-badge { padding: 3px 5px; background: var(--red); color: white; font-size: 10px; font-weight: 700; }
+.stamp-certified_tender > .take-stamp,.take-stamp.stamp-certified_tender { background: var(--gold); }
+.stamp-nope > .take-stamp,.take-stamp.stamp-nope { background: var(--red); color: white; }
+.rebuttal-thread .take-thread { grid-template-columns: minmax(0,1fr); border-left: 3px solid var(--ink); padding-left: 10px; }
+.rebuttal-thread .take-thumbnail { display: none; }
+.take-thread-content > .big { min-height: 44px; padding: 6px; font-size: 11px; margin: 4px 4px 0 0; }
+@media (prefers-reduced-motion:no-preference) {
+  .showdown-meter > span { animation: stamp-drop 300ms ease-out; }
+}

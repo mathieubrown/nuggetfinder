@@ -263,6 +263,41 @@ test('discovery database permissions and normal entry points', async t => {
       await db.exec('reset role');
       await db.query('update public.profiles set banned=false where id=$1',[users[1]]);
     });
+
+    await t.test('stamps, team votes, rebuttals and hidden ancestors use real content', async () => {
+      await actor(1);
+      const root=(await db.query("select public.submit_context_take('matchup','cane-vs-cfa','Sauce on the side.','sauce_heretic',null,null,'node/358116917') data")).rows[0].data;
+      await actor(0);
+      if(root.status!=='published') {
+        const review=(await db.query('select public.moderation_inbox() inbox')).rows[0].inbox.queue.find(row=>row.kind==='take' && row.content_ref===String(root.id));
+        await db.query("select public.review_content($1,'approve')",[review.id]);
+      }
+      await actor(1);
+      await db.query("select public.vote_matchup('cane-vs-cfa','left')");
+      await actor(2);
+      const child=(await db.query("select public.submit_context_take('matchup','cane-vs-cfa','I disagree.','nope',$1,$2,null) data",[root.id,users[1]])).rows[0].data;
+      if(child.status!=='published') {
+        await actor(0);
+        const review=(await db.query('select public.moderation_inbox() inbox')).rows[0].inbox.queue.find(row=>row.kind==='take' && row.content_ref===String(child.id));
+        await db.query("select public.review_content($1,'approve')",[review.id]);
+      }
+      await actor(2);
+      await db.query("select public.respond_take($1,'against')",[root.id]);
+      const card=(await db.query('select public.take_cards(p_take=>$1) cards',[root.id])).rows[0].cards[0];
+      assert.equal(card.stamp,'sauce_heretic');
+      assert.equal(card.team,'left');
+      assert.equal(card.clowned,1);
+      assert.equal(card.rebuttals,1);
+      const children=(await db.query('select public.take_cards(p_parent=>$1) cards',[root.id])).rows[0].cards;
+      assert.equal(children[0].parent_take_id,root.id);
+      await assert.rejects(db.query("select public.submit_context_take('product','mcnuggets','Wrong subject',null,$1)",[root.id]),/rebuttal_unavailable/);
+      await db.query("select public.report_content('take',$1,'other')",[String(root.id)]);
+      await actor(0);
+      const report=(await db.query('select public.moderation_inbox() inbox')).rows[0].inbox.queue.find(row=>row.kind==='take' && row.content_ref===String(root.id));
+      await db.query("select public.review_content($1,'hide')",[report.id]);
+      await actor(null,'anon');
+      assert.deepEqual((await db.query('select public.take_cards(p_take=>$1) cards',[child.id])).rows[0].cards,[]);
+    });
   } finally {
     await db.close();
   }

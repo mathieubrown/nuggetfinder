@@ -174,3 +174,10 @@
 - Added one rating per person per place, a ten-minute editing cooldown and a 20-place rolling daily cap. Private ratings are included in exports.
 - The existing starter sauce matchup is linked only to the two real restaurant brands it compares. It shows no percentages until someone votes.
 - New ratings SQL is for local tests and review only.
+
+## Reference foundation: Showdown and take context
+
+- Rebuilt the two percentage blocks, vote meter, Hot/New tabs, stamped text thumbnails, team badges, Rebut links and pink composer bar.
+- Takes now support a chosen stamp, a tagged account, a real attached place and a parent take. Rebuttals remain moderated and are limited to four levels. Hiding or blocking an ancestor hides the thread.
+- “Clowned” counts real against reactions. Rebuttal counts include visible child takes. Team labels come from the author's current matchup vote.
+- Existing takes, replies and the deployed posting function remain supported. Own-data exports include the added take columns.
