@@ -239,6 +239,30 @@ test('discovery database permissions and normal entry points', async t => {
         }
       }
     });
+
+    await t.test('place scores require three people and ratings stay private', async () => {
+      for (const [index,score] of [[0,2],[1,3],[2,4]]) {
+        await actor(index);
+        await db.query('select public.rate_place($1,$2,$2,$2,$2)', ['node/1229920544',score]);
+        const ratings=(await db.query("select public.place_screen('node/1229920544') data")).rows[0].data.ratings;
+        assert.equal(ratings.count,index+1);
+        assert.equal(ratings.crunch,index<2?null:3);
+      }
+      await assert.rejects(db.query("select public.rate_place('node/1229920544',1,1,1,1)"), /rating_cooldown/);
+      await assert.rejects(db.query("select public.rate_place('node/358116917',0,1,1,1)"), /invalid_rating/);
+      await assert.rejects(db.query('select * from public.place_ratings'), /permission denied/);
+      const own=(await db.query('select public.export_discovery_data() data')).rows[0].data;
+      assert.equal(own.place_ratings.length,1);
+      await db.exec('reset role');
+      await db.query('update public.profiles set banned=true where id=$1',[users[1]]);
+      await actor(null,'anon');
+      const ratings=(await db.query("select public.place_screen('node/1229920544') data")).rows[0].data.ratings;
+      assert.equal(ratings.count,2);
+      assert.equal(ratings.crunch,null);
+      await assert.rejects(db.query("select public.rate_place('node/1229920544',1,1,1,1)"), /permission denied/);
+      await db.exec('reset role');
+      await db.query('update public.profiles set banned=false where id=$1',[users[1]]);
+    });
   } finally {
     await db.close();
   }
