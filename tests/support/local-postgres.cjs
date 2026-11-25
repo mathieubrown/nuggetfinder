@@ -22,6 +22,7 @@ async function fixture(options={}) {
  grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
  const dir=path.join(__dirname,'../../supabase/migrations');
  for(const file of fs.readdirSync(dir).filter(f=>f.endsWith('.sql')).sort()){
+  if(options.beforeMigration)await options.beforeMigration(file,pool);
   await pool.query(fs.readFileSync(path.join(dir,file),'utf8'));
   if(file==='20261115000900_profile_read_grants.sql' && options.seedLegacy)await options.seedLegacy(pool);
  }
@@ -32,7 +33,7 @@ async function fixture(options={}) {
   const client=await pool.connect();
   try {
    await client.query('begin');
-   await client.query("select set_config('request.jwt.claim.sub',$1,true)",[index===null?'':users[index]]);
+   await client.query("select set_config('request.jwt.claim.sub',$1,true)",[index===null?'':typeof index==='string'?index:users[index]]);
    await client.query('set local role '+(index===null?'anon':'authenticated'));
    const result=await client.query(sql,params);await client.query('commit');return result;
   }catch(error){await client.query('rollback');throw error;}finally{client.release();}

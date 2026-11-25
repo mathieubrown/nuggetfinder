@@ -239,3 +239,10 @@
 - Added unapplied, read-only stock snapshots that expire at the earliest contributing vote and no later than 60 seconds after checking. Product, price and map displays refresh and remove confirmation when snapshots expire or a refresh fails, including while a form has focus. Share images recheck after fonts load.
 - Source verification no longer outranks newer price evidence. Labels use elapsed seven-day and thirty-day boundaries: recently reported, dated and historical. Earlier records remain stored and visible when their author is eligible. Account removal clears attribution without deleting the private historical price observation or exposing previously hidden evidence.
 - Added local regressions for vote expiry, delayed font loading, all price-age boundaries and newer crowd evidence beside historical verified-source data. No existing applied migration changed, and production remains held.
+
+## Release corrections: retry recovery and verification
+
+- Retained request IDs for same-account retries after a reload or draft switch. Session storage contains only payload hashes and request IDs, not draft text; account changes are checked before sending.
+- Added fail-closed read-only permission/catalog verification and an unapplied cleanup of separate column grants on the known NuggetFinder tables. Existing age, ban, moderation and direct-write protections remain enforced.
+- Added an explicit, private, bounded hold for legacy Court voters whose individual past changes were not recorded. It expires when their latest legacy activity leaves the rolling window, without inventing vote history. This is an upgrade condition, not a recurring restriction for new voters.
+- Kept the report action reachable before the long map list and labeled upcoming media controls before tapping. All migration files remain unapplied in production.

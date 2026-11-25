@@ -18,7 +18,8 @@ test('real PostgREST checks JWT roles, profile columns, receipts and private tab
   const header=Buffer.from(JSON.stringify({alg:'HS256',typ:'JWT'})).toString('base64url');
   const body=Buffer.from(JSON.stringify({role:'authenticated',sub:db.users[1],exp:Math.floor(Date.now()/1000)+300})).toString('base64url');
   const token=header+'.'+body+'.'+createHmac('sha256',secret).update(header+'.'+body).digest('base64url');
-  async function request(path,payload,authenticated=true){return fetch(base+path,{method:payload?'POST':'GET',headers:{...(authenticated?{Authorization:'Bearer '+token}:{}),'Content-Type':'application/json'},body:payload?JSON.stringify(payload):undefined});}
+  function tokenFor(index){const claims=Buffer.from(JSON.stringify({role:'authenticated',sub:db.users[index],exp:Math.floor(Date.now()/1000)+300})).toString('base64url');return header+'.'+claims+'.'+createHmac('sha256',secret).update(header+'.'+claims).digest('base64url');}
+  async function request(path,payload,authenticated=true,index=1){return fetch(base+path,{method:payload?'POST':'GET',headers:{...(authenticated?{Authorization:'Bearer '+(index===1?token:tokenFor(index))}:{}),'Content-Type':'application/json'},body:payload?JSON.stringify(payload):undefined});}
   assert.equal((await request('/profiles?select=id,handle',null,false)).status,200);
   assert.equal((await request('/profiles?select=banned',null,false)).status,401);
   assert.equal((await request('/profiles?select=banned')).status,403);
@@ -30,6 +31,14 @@ test('real PostgREST checks JWT roles, profile columns, receipts and private tab
   const feed=await request('/rpc/take_cards',{},false);assert.deepEqual(await feed.json(),[]);
   assert.equal((await request('/rpc/submit_take_request',payload,false)).status,401);
   const mismatched=await request('/rpc/submit_take_request',{...payload,p_body:'Changed'});assert.equal(mismatched.status,400);
+  assert.equal((await request('/court_rulings?select=*')).status,403);
+  const snapshot=await request('/rpc/product_stock_snapshot',{p_product:'mcnuggets'},false);assert.equal(snapshot.status,200);assert.ok(Array.isArray(await snapshot.json()));
+  const caseId=(await db.pool.query("insert into public.court_cases(author_id,food_name,argument,status,opened_at,closes_at) values($1,'Local REST Court','No forced winner','published',now()-interval '8 days',now()-interval '1 day') returning id",[db.users[0]])).rows[0].id;
+  const ruling={p_case:caseId,p_expected_version:0,p_excluded:[],p_reason:'round_closed',p_note:'Local REST closed round.'};
+  assert.equal((await request('/rpc/record_court_ruling',ruling)).status,400);
+  const recorded=await request('/rpc/record_court_ruling',ruling,true,0);assert.equal(recorded.status,200);assert.equal(await recorded.json(),1);
+  const correction=await request('/rpc/record_court_ruling',{...ruling,p_expected_version:1,p_reason:'clerical_correction',p_note:'Local REST audit explanation.'},true,0);assert.equal(correction.status,200);assert.equal(await correction.json(),2);
+  const history=await request('/rpc/court_ruling_history',{p_case:caseId},false);const versions=await history.json();assert.equal(versions.length,2);assert.equal(versions[0].verdict,'insufficient');assert.equal('excluded_ballots' in versions[0],false);
   const foreign=await request('/rpc/export_discovery_data',{p_user:db.users[2]});assert.equal(foreign.status,404);
  }finally{if(started)await exec('docker',['stop',name]);await db.close();}
 });

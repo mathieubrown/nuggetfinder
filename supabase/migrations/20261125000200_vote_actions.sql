@@ -21,11 +21,26 @@ insert into public.vote_actions(user_id,kind,content_ref,vote,created_at)
 select user_id,'court',case_id::text,verdict,updated_at from public.court_votes
 where updated_at>clock_timestamp()-interval '24 hours';
 
+-- Unknown historical Court actions cannot be reconstructed. A one-time hold
+-- lasts until that voter's latest legacy activity is outside the rolling window.
+-- This records uncertainty explicitly; it never invents vote actions.
+create table public.vote_history_holds (
+ user_id uuid primary key references public.profiles on delete cascade,
+ expires_at timestamptz not null,
+ reason text not null default 'legacy_court_history_unavailable' check(reason='legacy_court_history_unavailable')
+);
+alter table public.vote_history_holds enable row level security;
+revoke all on public.vote_history_holds from public,anon,authenticated;
+insert into public.vote_history_holds(user_id,expires_at)
+select user_id,max(updated_at)+interval '24 hours' from public.court_votes
+where updated_at>clock_timestamp()-interval '24 hours' group by user_id;
+
 -- LOGIC-START
 create function public.record_vote_action(p_kind text,p_ref text,p_previous text,p_vote text)
 returns void language plpgsql security definer set search_path='' as $$
 declare actor uuid:=public.require_social_user();
 begin
+ if exists(select 1 from public.vote_history_holds where user_id=actor and expires_at>clock_timestamp()) then raise exception 'vote_history_hold'; end if;
  if (select count(*) from public.vote_actions where user_id=actor
   and created_at>clock_timestamp()-interval '24 hours')>=60 then raise exception 'vote_limit'; end if;
  insert into public.vote_actions(user_id,kind,content_ref,previous_vote,vote)
@@ -72,7 +87,7 @@ create function public.export_discovery_data()
 returns jsonb language plpgsql stable security definer set search_path='' as $$
 begin
  if auth.uid() is null then raise exception 'sign_in_required'; end if;
- return public.export_before_vote_actions() || jsonb_build_object('vote_actions',coalesce(
+ return public.export_before_vote_actions() || jsonb_build_object('vote_history_holds',coalesce((select jsonb_agg(h) from public.vote_history_holds h where user_id=auth.uid()),'[]'::jsonb),'vote_actions',coalesce(
  (select jsonb_agg(v) from public.vote_actions v where user_id=auth.uid()),'[]'::jsonb));
 end $$;
 revoke execute on function public.export_before_vote_actions() from public,anon,authenticated;

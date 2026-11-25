@@ -3,13 +3,17 @@ window.NuggetfinderCommunity = (function () {
   const pages = {};
   async function rpc(client, name, parameters) {
     const result = await client.rpc(name, parameters);
-    if (result.error) throw result.error;
+    if (result.error) {
+      if(result.error.message==='vote_history_hold')throw new Error('Voting is paused until previous activity is outside the 24-hour window.');
+      throw result.error;
+    }
     return result.data;
   }
   // Keep a request ID after an uncertain response, so retrying cannot duplicate a write.
   function submission(client, name, owner) {
     const requests=new Map();
     return async function(payload){
+      if(owner && client.auth?.getSession){const session=await client.auth.getSession();if(session.error || session.data?.session?.user?.id!==owner)throw new Error('account_changed');}
       const serialized=JSON.stringify(payload);
       let fingerprint=serialized;
       if(crypto.subtle){
