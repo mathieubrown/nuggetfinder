@@ -1,5 +1,7 @@
 # Nuggetfinder addendum: what we decided after the brief
 
+**2026-11-25 scope revision:** [FOUNDER_DIRECTIVE.md](FOUNDER_DIRECTIVE.md) supersedes earlier age exclusion and deferred photography. All-age capability-based participation and food/product photos are Day Zero launch requirements. Video stays deferred. See [implementation, privacy and release gates](participation-photo/PLAN.md). All live changes remain held.
+
 Read README.md and docs/CODEX_BRIEF.md first. Where this file disagrees with the brief, this file wins. Same ground rules apply: no build step, new timestamped migrations only, show SQL before applying it, no secrets in the repo, RLS on every table, no em dashes.
 
 ## Part A. Build order (replaces the brief's order)
@@ -35,7 +37,7 @@ Do one step at a time. After each: screenshots at 390px and 1280px, no console e
     - Aggregate by neighborhood only, with a minimum group size of 10 reports. Hide any number built on fewer.
     - Never export per-user data. Never sell or share user-level data.
     - Metrics: stock by area, price over time, matchup results, out-of-stock heatmap.
-13. Account basics and legal pages: delete my account in-app, export my data, neutral 13+ age gate, report and block everywhere, terms, privacy policy naming AI moderation providers, DMCA contact, copyright and trademark complaint form.
+13. Account basics and legal pages: delete my account in-app, export my data, age-appropriate, server-enforced participation and applicable verified parental consent, report and block everywhere, terms, privacy policy naming AI moderation providers, DMCA contact, copyright and trademark complaint form.
 14. Later: video takes (hosting, speech-to-text captions, LLM triage, human review, cost caps), Nugget Card punchcards, push notifications, retention loop (weekly Showdown results), native iOS app.
 
 ## Part B. Research and infill for Mat (human work, in this order)

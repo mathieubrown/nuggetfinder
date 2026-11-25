@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "catalog": {
+    "products": 25,
+    "places": 83,
+    "links": 189
+  },
+  "publicTables": 47,
+  "functionsChecked": 109,
+  "readOnly": true,
+  "newReadiness": {
+    "total": 33,
+    "enabled": 0
+  }
+}

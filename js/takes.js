@@ -17,8 +17,8 @@
       '<div class="composer-preview"><span class="composer-stamp">SAUCE HERETIC</span>'+
       '<label class="visually-hidden" for="takeText">Your take</label><textarea id="takeText" maxlength="280" required rows="7" placeholder="Roast the nugget. Make your case."></textarea>'+
       '<span class="composer-character-count">0 / 280</span></div>'+
-      '<div class="composer-media"><button type="button" data-soon="Video">Record · soon</button><button type="button" data-soon="Photo">Photo · soon</button>'+
-      '<span>Text take</span></div>'+
+      '<div class="composer-media"><button type="button" data-soon="Video">Record · soon</button><button type="button" data-photo>Prepare a food photo</button>'+
+      '<span>Text take</span></div><div data-take-photo hidden></div>'+
       '<div class="composer-tag-options"><details><summary>@ Tag a friend</summary><label for="friendSearch">Find a handle</label>'+
       '<input id="friendSearch" minlength="2" maxlength="20" placeholder="At least two letters"><button type="button" data-find>Find</button>'+
       '<select id="tagFriend" aria-label="Tag an account"><option value="">No tag</option></select></details>'+
@@ -31,6 +31,14 @@
       '<p role="status"></p><p class="composer-guidance">Stamps express opinions. Roast the nugget, not the person. Reports can pull a take down.</p></form></div>';
     const form=root.querySelector('form');
     const feedback=form.querySelector('[role=status]');
+    let photoEditor;
+    form.querySelector('[data-photo]').onclick=()=>{
+      const panel=form.querySelector('[data-take-photo]');panel.hidden=false;
+      if(!photoEditor)photoEditor=community.mountPhotoEvidence(panel);
+      feedback.textContent='Photo preparation stays private. Photos cannot be attached to published takes until upload and moderation safeguards are connected. Your text draft stays here.';
+    };
+    const photoCleanup=new MutationObserver(()=>{if(!form.isConnected){photoEditor?.dispose();photoCleanup.disconnect();}});
+    photoCleanup.observe(root,{childList:true});
     const submit=form.querySelector('[type=submit]');
     const target=form.querySelector('#takeTarget');
     const kindInput=form.querySelector('#takeKind');

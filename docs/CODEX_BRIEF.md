@@ -1,5 +1,7 @@
 # Nuggetfinder build brief (for Codex)
 
+**2026-11-25 scope revision:** [FOUNDER_DIRECTIVE.md](FOUNDER_DIRECTIVE.md) supersedes earlier age exclusion and deferred photography. All-age capability-based participation and food/product photos are Day Zero launch requirements. Video stays deferred. See [implementation, privacy and release gates](participation-photo/PLAN.md). All live changes remain held.
+
 Read README.md first. Product: a crowdsourced map of where nuggets, tenders, sauces and sides are in San Francisco, South San Francisco and Daly City. Anyone can browse. Signing in unlocks reporting and the fun stuff.
 
 ## Ground rules
@@ -22,7 +24,7 @@ The mockups are in design/*.dc.html. They are plain HTML with inline styles, so 
 3. Moderation queue and tools: moderation_queue table (id, created_at, reporter_id, kind, content_ref, transcript, ai_label, ai_confidence, flagged_at, status, reviewed_by, reviewed_at), profiles.is_moderator, strike ladder (warning, 24h video lock, 7d lock, ban), a moderator page that only moderators can open, and a rename or reset username action.
 4. Price ledger: append-only entries with time and masked handle, Verified badge for stores and brands, older entries marked SUPERSEDED. A verified store entry replaces what users see as current.
 5. Showdown (text only first): pick a side, vote, short comments. Rate limits, report and block buttons on everything.
-6. Account basics: delete my account in the app, export my data, a neutral 13+ age gate, report and block, privacy page that names the AI providers used for moderation.
+6. Account basics: delete my account in the app, export my data, a age-appropriate, server-enforced participation and applicable verified parental consent, report and block, privacy page that names the AI providers used for moderation.
 7. Later, not yet: video takes (storage, speech-to-text, LLM triage, human review), Nugget Card punchcards, push notifications, native iOS app.
 
 ## Trust rules already in force
