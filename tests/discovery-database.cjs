@@ -224,7 +224,7 @@ test('discovery database permissions and normal entry points', async t => {
 
     await t.test('all discovery tables and helper functions are private', async () => {
       await db.exec('reset role');
-      for (const table of ['saved_items','court_cases','court_votes','court_locations','discovery_trails','trail_stops','trail_progress']) {
+      for (const table of ['saved_items','court_cases','court_votes','court_locations','discovery_trails','trail_stops','trail_progress','place_ratings','place_matchups','business_verifications','product_allergen_sources','price_entries']) {
         const row = (await db.query("select relrowsecurity as rls from pg_class where oid=$1::regclass", ['public.' + table])).rows[0];
         assert.equal(row.rls, true);
         for (const role of ['anon','authenticated']) {
@@ -297,6 +297,55 @@ test('discovery database permissions and normal entry points', async t => {
       await db.query("select public.review_content($1,'hide')",[report.id]);
       await actor(null,'anon');
       assert.deepEqual((await db.query('select public.take_cards(p_take=>$1) cards',[child.id])).rows[0].cards,[]);
+    });
+
+    await t.test('price history is append-only, unit-comparable and verification is server-controlled', async () => {
+      const place='node/1229920544';
+      await actor(1);
+      await db.query("select public.submit_price($1,'mcnuggets',10,20,'piece')",[place]);
+      await db.query("select public.submit_stock_report('mcnuggets',$1,'seen')",[place]);
+      await assert.rejects(db.query("select public.submit_price($1,'mcnuggets',9,20,'piece')",[place]),/price_cooldown/);
+      await assert.rejects(db.query("select public.submit_price($1,'mcd-bbq',9,0.5,'piece')",[place]),/invalid_price/);
+      await assert.rejects(db.query("select public.submit_price($1,'mcd-bbq',9.999,20,'piece')",[place]),/invalid_price/);
+      await assert.rejects(db.query('update public.price_entries set price=1'),/permission denied/);
+      await actor(2);
+      await db.query("select public.submit_price($1,'mcnuggets',9,20,'piece')",[place]);
+      let entries=(await db.query("select public.price_ledger($1,'piece') entries",[place])).rows[0].entries;
+      assert.equal(entries.length,2);
+      assert.equal(entries[0].price,9);
+      assert.equal(entries[0].unit_cost,0.45);
+      assert.equal(entries[0].verified_store,false);
+      assert.equal(entries[0].stock.seen_count,1);
+      assert.equal(entries[0].stock.sold_out_count,0);
+      assert.equal(entries[1].superseded,true);
+      assert.match(entries[0].masked_handle,/^.{1}\*{4}.{1}$/);
+      assert.equal('user_id' in entries[0],false);
+      await db.exec('reset role');
+      await db.query("insert into public.business_verifications(user_id,place_id,source_url) values($1,$2,'https://example.test/local-proof')",[users[1],place]);
+      await db.query("update public.price_entries set created_at=now()-interval '11 minutes'");
+      await actor(1);
+      await db.query("select public.submit_price($1,'mcnuggets',10,20,'piece')",[place]);
+      await actor(2);
+      await db.query("select public.submit_price($1,'mcnuggets',8,20,'piece')",[place]);
+      entries=(await db.query("select public.price_ledger($1,'piece') entries",[place])).rows[0].entries;
+      assert.equal(entries[0].price,10);
+      assert.equal(entries[0].verified_store,true);
+      assert.equal(entries.filter(row=>!row.superseded).length,1);
+      assert.deepEqual((await db.query("select public.price_ledger($1,'g') entries",[place])).rows[0].entries,[]);
+      const data=(await db.query('select public.export_discovery_data() data')).rows[0].data;
+      assert.equal(data.price_entries.length,2);
+      await db.exec('reset role');
+      await db.query('update public.business_verifications set revoked_at=now()');
+      entries=(await db.query("select public.price_ledger($1,'piece') entries",[place])).rows[0].entries;
+      assert.equal(entries[0].price,8);
+      assert.equal(entries[0].verified_store,false);
+      await assert.rejects(db.query("insert into public.product_allergen_sources(product_id,allergen,state,source_kind) values('mcnuggets','gluten','confirmed_free','package')"),/check constraint/);
+      await db.query("insert into public.product_allergen_sources(product_id,allergen,state,source_kind,source_url) values('mcnuggets','gluten','confirmed_free','package','https://example.test/local-label')");
+      await db.query("insert into public.product_allergen_sources(product_id,allergen,state,source_kind) values('mcnuggets','gluten','contains','crowd')");
+      await actor(null,'anon');
+      const evidence=(await db.query("select public.product_allergen_evidence('mcnuggets') evidence")).rows[0].evidence;
+      assert.equal(evidence[0].state,'contains');
+      await assert.rejects(db.query("select public.submit_price($1,'mcnuggets',9,20,'piece')",[place]),/permission denied/);
     });
   } finally {
     await db.close();

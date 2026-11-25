@@ -24,7 +24,7 @@
       (row.stamp?'<span class="take-stamp stamp-'+row.stamp+'">'+stamps[row.stamp]+'</span>':'')+
       (row.parent_handle?'<p class="small">Rebuttal to @'+esc(row.parent_handle)+'</p>':'')+
       '<p>'+esc(row.body)+'</p>'+
-      (row.tagged_handle?'<a class="wave-link" href="#/taste">Tagged @'+esc(row.tagged_handle)+'</a>':'')+
+      (row.tagged_handle?'<a class="wave-link" href="#/taste?user='+encodeURIComponent(row.tagged_user_id)+'">Tagged @'+esc(row.tagged_handle)+'</a>':'')+
       (row.place_name?'<a class="wave-link" href="#/spot/'+encodeURIComponent(row.attached_place_id)+'">'+esc(row.place_name)+'</a>':'')+
       '<div class="take-response-line"><a class="rebut-button" href="#/take?kind='+encodeURIComponent(row.subject_kind)+
       '&ref='+encodeURIComponent(row.subject_ref)+'&parent='+row.id+'">Rebut</a><span data-counts>'+

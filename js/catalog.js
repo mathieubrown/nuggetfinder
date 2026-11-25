@@ -180,6 +180,21 @@ window.NuggetfinderCatalog = (function () {
             '<button class="big ghost" type="button" data-stock="sold_out" disabled>Sold out</button></div><button class="big ghost" type="button" data-share>Download share card</button></article>';
         }).join('') + '</div>';
       if (!links.length) root.querySelector('.wave-grid').innerHTML = NuggetfinderSparkle.empty('No places listed yet.');
+      const evidenceNode = document.createElement('div');
+      evidenceNode.className = 'allergen-chips';
+      root.querySelector('.wave-hero').append(evidenceNode);
+      if (client) client.rpc('product_allergen_evidence', {p_product:product.id}).then(function (result) {
+        if (!result.error && evidenceNode.isConnected) {
+          evidenceNode.innerHTML = result.data.map(NuggetfinderCommunity.badges.allergen).join('');
+        }
+      }).catch(function () {});
+      root.querySelectorAll('[data-place]').forEach(function (card) {
+        const link = document.createElement('a');
+        link.className = 'wave-link';
+        link.href = '#/prices?place=' + encodeURIComponent(card.dataset.place) + '&product=' + encodeURIComponent(product.id);
+        link.textContent = 'See price history';
+        card.append(link);
+      });
       NuggetfinderCommunity.addSaveButtons(root.querySelector('.wave-hero'), client,
         options.user(), 'product', product.id, options.signIn);
       refreshStock = showStock(root, product, links, client, options, id);
