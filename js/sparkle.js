@@ -7,11 +7,12 @@ window.NuggetfinderSparkle = (function () {
       '<path d="M33 52h6m21 0h6m-25 13q8 8 16 0" stroke="#161514" stroke-width="5" stroke-linecap="round" fill="none"/></svg><p>' + message + '</p></div>';
   }
 
-  function celebrate(root) {
+  function celebrate(root, message) {
     root.querySelector('.nugget-party')?.remove();
     var party = document.createElement('div');
     party.className = 'nugget-party';
-    party.innerHTML = '<strong>★ First confirmed report!</strong><button type="button" class="link-btn">Dismiss</button>';
+    party.innerHTML = '<strong></strong><button type="button" class="link-btn">Dismiss</button>';
+    party.querySelector('strong').textContent = message || '★ First confirmed report!';
     for (var index = 0; index < 12; index++) {
       var piece = document.createElement('i');
       piece.style.setProperty('--angle', index * 30 + 'deg');
