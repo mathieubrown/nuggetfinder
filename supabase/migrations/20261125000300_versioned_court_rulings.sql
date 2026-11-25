@@ -1,5 +1,6 @@
 begin;
--- Preserve a published case and its ruling record when its nominator deletes an account.
+-- Preserve the case and audit record privately when its nominator is removed;
+-- removing identity must never resurrect banned or blocked public content.
 alter table public.court_cases alter column author_id drop not null;
 alter table public.court_cases drop constraint court_cases_author_id_fkey;
 alter table public.court_cases add foreign key(author_id) references public.profiles on delete set null;
@@ -56,7 +57,7 @@ for each row execute function public.guard_court_audit();
 create or replace function public.court_visible(p_case bigint)
 returns boolean language sql stable security definer set search_path='' as $$
  select exists(select 1 from public.court_cases where id=p_case and status='published'
- and (author_id is null or public.discovery_author_visible(author_id)))
+ and public.discovery_author_visible(author_id))
 $$;
 
 -- LOGIC-START

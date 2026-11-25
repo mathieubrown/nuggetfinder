@@ -120,8 +120,8 @@ test('release correction regressions on native PostgreSQL',{skip:!enabled},async
   await assert.rejects(pool.query("update public.court_rulings set verdict='nugget' where case_id=$1",[id]),/court_audit_immutable/);
   await assert.rejects(pool.query('delete from public.court_rulings where case_id=$1',[id]),/court_audit_immutable/);
   await pool.query('delete from auth.users where id=$1',[owner]);
-  const row=(await actor(null,'select public.court_cases($1) data',[id])).rows[0].data[0];
-  assert.equal(row.author_id,null);assert.equal(row.verdict,'insufficient');assert.equal(row.ruling_version,1);
+  const rows=(await actor(null,'select public.court_cases($1) data',[id])).rows[0].data;assert.deepEqual(rows,[]);
+  const audit=(await pool.query('select verdict,version from public.court_rulings where case_id=$1',[id])).rows[0];assert.equal(audit.verdict,'insufficient');assert.equal(audit.version,1);
  });
  await t.test('removing a price author preserves the private observation without resurrecting public evidence',async()=>{
   const author='70000000-0000-0000-0000-000000000001';await pool.query(`insert into auth.users values($1,'{"age_confirmed":true}','local-price@example.test')`,[author]);
@@ -129,6 +129,17 @@ test('release correction regressions on native PostgreSQL',{skip:!enabled},async
   await pool.query('delete from auth.users where id=$1',[author]);
   const record=(await pool.query('select user_id from public.price_entries where price=7.77')).rows[0];assert.equal(record.user_id,null);
   const publicRows=(await actor(null,"select public.price_ledger('node/1229920544','piece') data")).rows[0].data;assert.ok(!publicRows.some(row=>row.price===7.77));
+ });
+ await t.test('deleted authors never resurrect banned or blocked Court content',async()=>{
+  const author='80000000-0000-0000-0000-000000000001';await pool.query(`insert into auth.users values($1,'{"age_confirmed":true}','local-hidden@example.test')`,[author]);
+  const id=(await pool.query("insert into public.court_cases(author_id,food_name,argument,status,opened_at,closes_at) values($1,'Local hidden author','Privacy fixture','published',now()-interval '8 days',now()-interval '1 day') returning id",[author])).rows[0].id;
+  await actor(0,'select public.record_court_ruling($1)',[id]);await actor(1,'select public.set_user_block($1,true)',[author]);
+  assert.deepEqual((await actor(1,'select public.court_cases($1) data',[id])).rows[0].data,[]);
+  await pool.query('update public.profiles set banned=true where id=$1',[author]);
+  await pool.query('delete from auth.users where id=$1',[author]);
+  assert.deepEqual((await actor(1,'select public.court_cases($1) data',[id])).rows[0].data,[]);
+  assert.deepEqual((await actor(null,'select public.court_ruling_history($1) data',[id])).rows[0].data,[]);
+  assert.equal((await pool.query('select count(*)::int n from public.court_rulings where case_id=$1',[id])).rows[0].n,1);
  });
  }finally{await db.close();}
 });
