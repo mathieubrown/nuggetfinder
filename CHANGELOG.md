@@ -181,3 +181,9 @@
 - Takes now support a chosen stamp, a tagged account, a real attached place and a parent take. Rebuttals remain moderated and are limited to four levels. Hiding or blocking an ancestor hides the thread.
 - “Clowned” counts real against reactions. Rebuttal counts include visible child takes. Team labels come from the author's current matchup vote.
 - Existing takes, replies and the deployed posting function remain supported. Own-data exports include the added take columns.
+
+## Reference foundation: Take composer
+
+- Replaced the plain form with the dark reference layout, stamped writing surface, subject picker, friend lookup, real place picker and a clear posting control.
+- Rebuttal links load the actual parent and keep its subject. Stamps, tags and places save through the moderated posting function. Feed cards now use the same stamped and threaded take components.
+- Record and Upload explain that video is coming soon. Add photo explains the pending photo workflow. No camera or media permission is requested for these text controls.
