@@ -83,6 +83,7 @@ returns jsonb language sql stable security definer set search_path='' as $$
     select t.id,t.author_id,p.handle,t.body,t.created_at,t.subject_kind,t.subject_ref,t.stamp,t.parent_take_id,
       case when public.discovery_author_visible(t.tagged_user_id)
         then (select handle from public.profiles where id=t.tagged_user_id) end as tagged_handle,
+      case when public.discovery_author_visible(t.tagged_user_id) then t.tagged_user_id end as tagged_user_id,
       case when t.parent_take_id is not null then
         (select p.handle from public.takes parent join public.profiles p on p.id=parent.author_id where parent.id=t.parent_take_id)
       end as parent_handle,

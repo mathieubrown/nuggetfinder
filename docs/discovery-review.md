@@ -23,4 +23,4 @@ Browser screenshots are under docs/screenshots/discovery-lists, court-home, nugg
 
 ## Pending dependencies
 
-Photo nominations and shelf-photo evidence need the private upload, metadata stripping and moderation workflow before publication. Store-owner claims, brand inventory tools and live stock integrations are separate pending work. The six original screen fidelity passes, ratings, rebuttal schema, price ledger and account deletion also remain part of the wider build.
+Photo nominations and shelf-photo evidence need the private upload, metadata stripping and moderation workflow before publication. Store-owner claims, brand inventory tools and live stock integrations are separate pending work. The six original screen fidelity passes, ratings, rebuttal schema and price ledger are implemented in PRs #27 through #32, with SQL still unapplied. Account deletion remains part of the wider build.

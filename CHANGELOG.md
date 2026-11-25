@@ -187,3 +187,18 @@
 - Replaced the plain form with the dark reference layout, stamped writing surface, subject picker, friend lookup, real place picker and a clear posting control.
 - Rebuttal links load the actual parent and keep its subject. Stamps, tags and places save through the moderated posting function. Feed cards now use the same stamped and threaded take components.
 - Record and Upload explain that video is coming soon. Add photo explains the pending photo workflow. No camera or media permission is requested for these text controls.
+
+## Reference foundation: Prices and provenance
+
+- Added the store price ledger with numeric pack price and quantity, comparable-unit sorting, Best Deal tags, masked handles and computed SUPERSEDED entries. Product and Spot links open their real ledger.
+- Verified store entries take priority over crowd entries. Verification is derived server-side from a reviewed source record, not a browser parameter. Revoking verification removes that priority.
+- Added empty, private source tables for store/brand verification and allergen evidence. Confirmed-free evidence requires a package/store/brand source URL. Contains takes priority when evidence conflicts. No allergen or advertising data is seeded.
+- Price entries are append-only from the browser, rate-limited and included in account exports. New SQL remains unapplied for review.
+
+## Reference foundation: Badges and final checks
+
+- Added reusable verified-store, verified-brand, crowd, sourced-allergen and cobalt sponsored components. The badge guide labels its examples as styles. No advertiser or food claims are seeded.
+- Refined Main's initial map area, the compact Spot heading and reference SVG navigation icons. Refreshed all six screenshot sets after fonts loaded; comparisons include the supplied original PNGs.
+- The price ledger reuses stock status rules. Its local database test confirms one sighting remains a single, unconfirmed report. Rebuttal composition also supports an older subject outside the first page of choices.
+- Final validation: 18 automated tests passed, every JavaScript file passed syntax checking, and all six screens passed Playwright at 390px and 1280px with reduced motion, no console errors and no sideways scrolling. Browser writes used simulated responses; database writes used local PostgreSQL through PGlite.
+- Could not test live sign-in, email delivery, production submissions or hosted Supabase execution for the new SQL. All new migrations remain unapplied. Photo/video publication and owner claims remain pending and are clearly described in the UI and review notes.

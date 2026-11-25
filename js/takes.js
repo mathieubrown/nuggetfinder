@@ -101,6 +101,9 @@
         if(!row)throw new Error('rebuttal_unavailable');
         if(!form.isConnected)return;
         parentRow=row;kind=row.subject_kind;ref=String(row.subject_ref);
+        if(targets[kind] && !targets[kind].some(item=>String(item.id)===ref)) {
+          targets[kind].push({id:ref,name:row.subject?.title || row.subject?.name || "Original subject"});
+        }
         root.querySelector('h1').textContent='Rebuttal to @'+row.handle;
         kindInput.disabled=true;target.disabled=true;
       }

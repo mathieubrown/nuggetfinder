@@ -384,8 +384,9 @@ function detailHTML(p, now) {
     sub = 'Nobody has reported here yet. Be the first.';
   }
   var cls = 's-' + s.state;
-  var h = '<button class="back" data-action="back"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M11 3L5 9l6 6"/></svg>ALL SPOTS</button>';
-  h += '<div><div class="dname">' + esc(p.name.toUpperCase()) + '</div><div class="small">' + esc(p.place || '') + (p.place ? ' · ' : '') + esc(metaText(p, s, now).split(' · ')[0]) + ' away</div></div>';
+  var h = '<header class="spot-header"><button class="back" data-action="back" aria-label="All spots"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3"><path d="M11 3L5 9l6 6"/></svg></button>' +
+    '<div><div class="dname">' + esc(p.name.toUpperCase()) + '</div><div class="small">' +
+    esc(p.place || '') + (p.place ? ' · ' : '') + esc(metaText(p, s, now).split(' · ')[0]) + ' away</div></div></header>';
   h += '<div class="block ' + cls + '" data-stamp-key="' + esc(p.id) + '" data-stamp-status="' + s.state + '"><div class="word' + (WORDS[s.state].length > 8 ? ' long' : '') + '">' + ICONS[s.state].replace('width="18" height="18"', 'width="34" height="34"') + esc(WORDS[s.state]) + '</div><div>' + esc(sub) + '</div>' +
     '<div class="btns"><button class="big yes" data-report="yes">NUGGETS HERE</button><button class="big no" data-report="nope">NOPE</button></div></div>';
   h += '<a class="wave-link" href="#/prices?place=' + encodeURIComponent(p.id) + '">Prices at this store</a>';
@@ -621,7 +622,7 @@ function initMap() {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-  map.fitBounds([[37.62, -122.53], [37.812, -122.35]]);
+  map.setView([37.7599, -122.435], 13);
   markers = (L.markerClusterGroup ? L.markerClusterGroup({
     showCoverageOnHover: false,
     maxClusterRadius: 44,
@@ -652,7 +653,7 @@ function showRoute(route) {
   document.body.dataset.screen = route.page;
   document.body.classList.toggle('spot-view', route.page === 'spot');
   document.querySelectorAll('.primary-nav a[data-page]').forEach(function (link) {
-    if (link.dataset.page === route.page) link.setAttribute('aria-current','page');
+    if (link.dataset.page === (route.page === 'spot' ? 'home' : route.page)) link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
   });
   var catalog = route.page === 'products' || route.page === 'product';
@@ -668,7 +669,7 @@ function showRoute(route) {
       return state.user && !whoEl.hidden ? whoEl.textContent : '';
     }, signIn: openAuth, reportError: errorText
   });
-  map.invalidateSize();
+  requestAnimationFrame(function () { map.invalidateSize(); });
   var id = route.spotId;
   var found = id && state.places.some(function (place) { return place.id === id; });
   showSpot(found ? id : null, !!found);
