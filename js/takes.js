@@ -119,12 +119,18 @@
       return;
     }
 
+    let posting=false;
+    const post=community.submission(client,'submit_take_request');
     form.addEventListener('submit',async event=>{
       event.preventDefault();
+      if(posting)return;
       if(!user)return signIn('Sign in to post a take.');
+      posting=true;
+      const submittedBody=body.value;
+      form.setAttribute('aria-busy','true');
       submit.disabled=true;
       try {
-        const result=await rpc(client,'submit_context_take',{p_kind:kind,p_ref:target.value,p_body:body.value,
+        const result=await post({p_kind:kind,p_ref:target.value,p_body:body.value,
           p_stamp:selectedStamp,p_parent:parentRow?parentRow.id:null,p_tagged:tagged,
           p_place:kind==='place'?target.value:place});
         feedback.textContent=result.status==='published'?'Take posted.':'Take sent for review.';
@@ -132,9 +138,9 @@
           const link=document.createElement('a');link.className='wave-link';link.href='#/take-view?id='+result.id;link.textContent='Read your take';
           feedback.append(' ',link);
         }
-        body.value='';counter.textContent='0 / 280';
-      }catch(error){feedback.textContent='Could not post. Check your take and try again.';}
-      finally{submit.disabled=false;}
+        if(body.value===submittedBody){body.value='';counter.textContent='0 / 280';}
+      }catch(error){feedback.textContent='Could not confirm your post. Retry this draft safely without creating a duplicate.';}
+      finally{posting=false;submit.disabled=false;form.removeAttribute('aria-busy');}
     });
   };
 })(NuggetfinderCommunity);

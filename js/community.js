@@ -6,6 +6,17 @@ window.NuggetfinderCommunity = (function () {
     if (result.error) throw result.error;
     return result.data;
   }
+  // Keep a request ID after an uncertain response, so retrying cannot duplicate a write.
+  function submission(client, name) {
+    let draft, request;
+    return async function (payload) {
+      const fingerprint=JSON.stringify(payload);
+      if(fingerprint!==draft){draft=fingerprint;request=crypto.randomUUID();}
+      const result=await rpc(client,name,{...payload,p_request:request});
+      draft=null;request=null;
+      return result;
+    };
+  }
   function shell(root, title, body) {
     root.innerHTML = '<header class="wave-hero"><h1>' + title + '</h1></header>' + body;
   }
@@ -69,5 +80,5 @@ window.NuggetfinderCommunity = (function () {
       });
     } catch (error) { feedback.textContent = error.message; }
   };
-  return { pages, rpc, shell, action };
+  return { pages, rpc, shell, action, submission };
 })();

@@ -202,3 +202,12 @@
 - The price ledger reuses stock status rules. Its local database test confirms one sighting remains a single, unconfirmed report. Rebuttal composition also supports an older subject outside the first page of choices.
 - Final validation: 18 automated tests passed, every JavaScript file passed syntax checking, and all six screens passed Playwright at 390px and 1280px with reduced motion, no console errors and no sideways scrolling. Browser writes used simulated responses; database writes used local PostgreSQL through PGlite.
 - Could not test live sign-in, email delivery, production submissions or hosted Supabase execution for the new SQL. All new migrations remain unapplied. Photo/video publication and owner claims remain pending and are clearly described in the UI and review notes.
+
+## Release hardening and readiness
+
+- Added an unapplied migration that removes inherited table privileges, makes reporting honor temporary moderation locks, serializes username changes and saves private request receipts for safe take/price retries. No applied migration was changed.
+- Simultaneous submissions now have explicit native PostgreSQL tests. Older accounts/content and votes are also tested through an upgrade from the Wave 2 schema. Real PostgREST checks cover JWT roles and protected columns.
+- Added keyboard route focus, useful page titles, a skip-to-content control, visible focus, 44px controls, readable marker labels and long-name wrapping. Forms preserve edits made during an in-progress request.
+- Passed 34 automated checks with native PostgreSQL, real PostgREST and PGlite enabled. Browser flows passed at 390px and 1280px, plus a long-name check at 320px, with reduced motion, no console errors and no horizontal overflow. The browser uses simulated Auth/transport with real SQL; separate tests use the real REST service. All application JavaScript passed syntax checks.
+- Added review screenshots under docs/screenshots/hardening, a read-only verification script and an ordered deployment/recovery checklist. Local screenshot contributions are test data only. No live SQL, main merge, deployment, paid service or LLM call was performed.
+- Could not test production sign-in/email, hosted Supabase, existing live data, real phones, a screen reader or a live backup restore. Account deletion and reviewed legal/contact pages remain launch gates. Photo/video uploads and business claims remain pending.

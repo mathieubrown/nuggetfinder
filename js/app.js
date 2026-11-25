@@ -308,7 +308,8 @@ function renderMarkers() {
     var st = statusOf(p.id, now).state;
     var m = L.marker([p.lat, p.lng], {
       icon: pinIcon(st, state.selected === p.id),
-      title: placeLabel(p),
+      title: placeLabel(p)+' · '+WORDS[st],
+      alt: placeLabel(p)+' · '+WORDS[st],
       keyboard: true
     });
     m.on('click', function () { select(p.id, false); });
@@ -646,10 +647,10 @@ var wavePage = document.getElementById('wavePage');
 var mapApp = document.getElementById('mapApp');
 
 function showProfile() {
-  NuggetfinderProfile.show(wavePage, sb, state.user, esc, openAuth, openName);
+  return NuggetfinderProfile.show(wavePage, sb, state.user, esc, openAuth, openName);
 }
 
-function showRoute(route) {
+function renderRouteContent(route) {
   document.body.dataset.screen = route.page;
   document.body.classList.toggle('spot-view', route.page === 'spot');
   document.querySelectorAll('.primary-nav a[data-page]').forEach(function (link) {
@@ -674,6 +675,32 @@ function showRoute(route) {
   var found = id && state.places.some(function (place) { return place.id === id; });
   showSpot(found ? id : null, !!found);
 }
+
+var routeVersion=0;
+var lastRouteKey;
+function showRoute(route) {
+  var version=++routeVersion;
+  var key=location.hash;
+  var changed=lastRouteKey!==undefined && lastRouteKey!==key;
+  lastRouteKey=key;
+  Promise.resolve(renderRouteContent(route)).then(function () {
+    if(version!==routeVersion)return;
+    var content=wavePage.hidden?panel:wavePage;
+    var heading=content.querySelector('h1,.dname');
+    var title=heading?heading.textContent.trim():'Map';
+    document.title=title+' | Nuggetfinder';
+    if(!wavePage.hidden)wavePage.setAttribute('aria-label',title);
+    if(changed && !document.querySelector('dialog[open]')) {
+      var destination=heading || content;
+      destination.setAttribute('tabindex','-1');
+      destination.focus({preventScroll:true});
+    }
+  }).catch(function () { toast('This page could not load. Please try again.'); });
+}
+document.getElementById('skipContent').onclick=function () {
+  var content=wavePage.hidden?panel:wavePage;
+  content.setAttribute('tabindex','-1');content.focus();
+};
 
 function start() {
   state.reports = pruneReports(loadJSON(REPORT_KEY, []), Date.now());

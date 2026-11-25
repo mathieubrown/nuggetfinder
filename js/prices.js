@@ -113,20 +113,28 @@
       allergenFilter=!allergenFilter;
       event.currentTarget.setAttribute('aria-pressed',String(allergenFilter));refresh();
     };
+    let posting=false;
+    const post=community.submission(client,'submit_price_request');
     form.addEventListener('submit',async event=>{
       event.preventDefault();
+      if(posting)return;
       if(!user)return signIn('Sign in to add a price.');
+      posting=true;
+      const amount=form.querySelector('#priceAmount').value;
+      const quantity=form.querySelector('#priceQuantity').value;
+      form.setAttribute('aria-busy','true');
       const button=form.querySelector('button');
       button.disabled=true;
       try {
-        await rpc(client,'submit_price',{p_place:place,p_product:products.value,
+        await post({p_place:place,p_product:products.value,
           p_price:Number(form.querySelector('#priceAmount').value),
           p_quantity:Number(form.querySelector('#priceQuantity').value),p_unit:unit});
         await refresh();
         feedback.textContent='Price entry saved.';
-        form.querySelector('#priceAmount').value='';form.querySelector('#priceQuantity').value='';
-      }catch(error){feedback.textContent=error.message.includes('cooldown')?'Wait 10 minutes before adding another price for this product here.':'Could not save the price. Please check the numbers.';}
-      finally{button.disabled=false;}
+        if(form.querySelector('#priceAmount').value===amount)form.querySelector('#priceAmount').value='';
+        if(form.querySelector('#priceQuantity').value===quantity)form.querySelector('#priceQuantity').value='';
+      }catch(error){feedback.textContent=error.message.includes('cooldown')?'Wait 10 minutes before adding another price for this product here.':'Could not confirm the price. Check the numbers and retry safely.';}
+      finally{posting=false;button.disabled=false;form.removeAttribute('aria-busy');}
     });
   };
 })(NuggetfinderCommunity);
