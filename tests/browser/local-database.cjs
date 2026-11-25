@@ -110,7 +110,7 @@ window.supabase={createClient(){
  await db.actor(1,"select public.submit_report($1,'yes',false)",[mapPlace]);await db.actor(2,"select public.submit_report($1,'yes',false)",[mapPlace]);
  await go(member,'#/');const mapRow=member.locator('#panel .row[data-id="'+mapPlace+'"]');await mapRow.locator('[data-stamp-status=yes]').waitFor();
  failedRpcs.add('place_status_snapshot');await member.clock.fastForward(61000);await mapRow.locator('[data-stamp-status=stale]').waitFor();failedRpcs.delete('place_status_snapshot');await member.clock.resume();
- // All age bands stay visible, and new crowd evidence outranks an old verified source.
+ // All price-observation age bands stay visible, and new crowd evidence outranks an old verified source.
  await db.pool.query("update public.price_entries set created_at=now()-interval '31 days' where user_id=$1",[db.users[1]]);
  await db.actor(3,"select public.submit_price('node/1229920544','mcnuggets',12,20,'piece')");
  await db.pool.query("update public.price_entries set created_at=now()-interval '10 days' where user_id=$1",[db.users[3]]);

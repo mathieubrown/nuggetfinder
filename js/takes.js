@@ -18,7 +18,7 @@
       '<label class="visually-hidden" for="takeText">Your take</label><textarea id="takeText" maxlength="280" required rows="7" placeholder="Roast the nugget. Make your case."></textarea>'+
       '<span class="composer-character-count">0 / 280</span></div>'+
       '<div class="composer-media"><button type="button" data-soon="Video">Record · soon</button><button type="button" data-photo>Prepare a food photo</button>'+
-      '<span>Text take</span></div>'+
+      '<span>Text take</span></div><div data-take-photo hidden></div>'+
       '<div class="composer-tag-options"><details><summary>@ Tag a friend</summary><label for="friendSearch">Find a handle</label>'+
       '<input id="friendSearch" minlength="2" maxlength="20" placeholder="At least two letters"><button type="button" data-find>Find</button>'+
       '<select id="tagFriend" aria-label="Tag an account"><option value="">No tag</option></select></details>'+

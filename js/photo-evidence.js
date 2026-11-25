@@ -65,6 +65,7 @@
  }
  community.mountPhotoEvidence=mount;
  community.pages.photo=(root,route,client,user,esc)=>{
+  root.scrollTop=0;
   const query=new URLSearchParams(route.query), kind=query.get('kind'), ref=query.get('ref');
   community.shell(root,'Nugget evidence','<p class="photo-hold">DEVELOPMENT PREVIEW · Publication is on hold.</p>'+
    (kind&&ref?'<p>Prepared for '+esc(kind)+': '+esc(ref)+'</p>':'')+'<div data-photo-editor></div><p><a href="#/participation">Family &amp; participation controls</a></p>');
@@ -73,6 +74,7 @@
   observer.observe(root,{childList:true});
  };
  community.pages.participation=async(root,route,client,user,esc)=>{
+  root.scrollTop=0;
   community.shell(root,'Your nugget crew','<div class="photo-sticker">ALL AGES. SAME GAME.</div><p>Individual identities. Equal votes. Private by default.</p>'+
    '<div class="wave-card"><h2>Parent-managed profiles</h2><p>Children get their own pseudonym, stamps and votes after verified parental consent. Teens get private defaults. No public age, friend directory, contact uploads or direct messages.</p><p>Account creation and invitation codes are not enabled in this preview.</p></div>'+
    '<div data-participants><p role="status">'+(user?'Checking your private profiles…':'Sign in to view your private profiles. No information is public here.')+'</p></div>'+
@@ -81,7 +83,7 @@
   const panel=root.querySelector('[data-participants]');
   try{
    const rows=await community.rpc(client,'my_participants');if(!panel.isConnected)return;
-   panel.innerHTML=rows.length?rows.map(p=>'<article class="wave-card"><h2>'+esc(p.pseudonym)+'</h2><p>'+(p.paused?'Paused':'Private participant')+'</p><ul>'+Object.entries(p.capabilities).map(([key,on])=>'<li>'+esc(key)+': '+(on?'Available':'Awaiting requirements')+'</li>').join('')+'</ul><button type="button" data-pause="'+esc(p.id)+'">Pause participation</button></article>').join(''):'<p>No participant profiles are provisioned. Consent setup is still on hold.</p>';
+   panel.innerHTML=rows.length?rows.map(p=>'<article class="wave-card"><h2>'+esc(p.pseudonym)+'</h2><p>'+(p.paused?'Paused':'Private participant')+'</p><ul>'+Object.entries(p.capabilities).map(([key,on])=>'<li>'+esc(key)+': '+(on?'Available':'Awaiting requirements')+'</li>').join('')+'</ul><button class="big ghost" type="button" data-pause="'+esc(p.id)+'">Pause participation</button></article>').join(''):'<p>No participant profiles are provisioned. Consent setup is still on hold.</p>';
    panel.querySelectorAll('[data-pause]').forEach(button=>button.onclick=async()=>{button.disabled=true;try{await community.rpc(client,'pause_participant',{p_participant:button.dataset.pause});button.textContent='Participation paused';}catch(error){button.disabled=false;button.textContent='Could not pause. Try again.';}});
   }catch(error){if(panel.isConnected)panel.textContent='Participation controls are not connected yet. No permissions have been enabled.';}
  };

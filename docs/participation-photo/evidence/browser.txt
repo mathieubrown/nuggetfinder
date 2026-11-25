@@ -29,14 +29,42 @@ RPC error vote_matchup vote_cooldown
 390: #/court/1
 390: #/badges
 390: #/take
-PAGE Cannot set properties of null (setting 'hidden')
-locator.waitFor: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for locator('[data-take-photo] .photo-lab') to be visible[22m
-
-    at /Users/TESSERACT/Documents/Codex/2026-11-13/ok/work/nuggetfinder/tests/browser/local-database.cjs:150:318 {
-  log: [
-    "  - waiting for locator('[data-take-photo] .photo-lab') to be visible"
-  ],
-  name: 'TimeoutError'
-}
+390: #/photo?kind=product&ref=mcnuggets
+390: #/participation
+390: #/product/mcnuggets
+390: real database browser flows passed, including lost responses, moderation, blocking, stock, votes and prices
+1280: #/take
+1280: #/feed
+1280: #/mod
+1280: #/take-view?id=1
+1280: #/mod
+1280: #/take-view?id=1
+1280: #/take-view?id=1
+1280: #/
+1280: #/spot/node%2F1229920544
+1280: #/product/mcnuggets
+1280: #/product/mcnuggets
+1280: #/prices?place=node%2F1229920544
+1280: #/prices?place=node%2F1229920544
+1280: #/showdown/cane-vs-cfa
+RPC error vote_matchup vote_cooldown
+1280: #/showdown/cane-vs-cfa
+1280: #/take
+1280: #/badges
+1280: #/product/mcnuggets
+1280: #/prices?place=node%2F1229920544
+1280: #/
+1280: #/prices?place=node%2F1229920544
+1280: #/beef/cane-vs-cfa?from=local_creator
+1280: #/weekly
+1280: #/mod
+1280: #/court/1
+1280: #/court/1
+1280: #/mod
+1280: #/court/1
+1280: #/badges
+1280: #/take
+1280: #/photo?kind=product&ref=mcnuggets
+1280: #/participation
+1280: #/product/mcnuggets
+1280: real database browser flows passed, including lost responses, moderation, blocking, stock, votes and prices
