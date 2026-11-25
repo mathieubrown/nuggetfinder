@@ -1,7 +1,7 @@
 (function (community) {
   const {pages,rpc,shell,action} = community;
   pages.showdown = async function(root,route,client,user,esc,signIn) {
-    shell(root,NuggetfinderShowdown.title,'<p role="status">Loading matchups…</p><a class="wave-link" href="#/weekly-winners">'+NuggetfinderShowdown.weekly+'</a><div id="showdownResults" class="wave-grid"></div>');
+    shell(root,NuggetfinderShowdown.title,'<a class="wave-link" href="#/court">Is it a nugget? Visit Nugget Court</a><p role="status">Loading matchups…</p><a class="wave-link" href="#/weekly-winners">'+NuggetfinderShowdown.weekly+'</a><div id="showdownResults" class="wave-grid"></div>');
     const feedback=root.querySelector('[role=status]');
     const results=root.querySelector('#showdownResults');
     try {

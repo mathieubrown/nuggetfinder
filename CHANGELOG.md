@@ -135,3 +135,12 @@
 - Added Want to Try and Tried It lists for products, catalog places and Showdowns. Tap a selected button again to remove the item. These lists belong to the signed-in account and do not affect stock or scores.
 - Added lists to account export. Database writes check sign-in, age, bans and posting restrictions. The migration is for local testing and SQL review.
 - Design review needed for the list screen and save buttons. They use the existing paper, ink, pink and hard-shadow components.
+
+## Nugget Court and Field Guide
+
+- Added moderated food nominations, three-way voting, case arguments and rebuttals, reviewed location suggestions, personal saves and portrait ruling cards. A food keeps its proper name alongside its community classification.
+- Proposed voting rules for review: seven days, at least 20 distinct voters and a 60% winning answer. Changeable votes use the existing account checks and daily limits. No reward points are granted for voting.
+- Field Guide shows concluded Nugget and Nugget-adjacent rulings. Locations can be proposed while voting is open. No availability or allergen claims come from a court vote.
+- Photo nominations await the photo upload and moderation work. New text is reviewed before publication. Report and block controls cover nominations, arguments and location suggestions.
+- New screens need design review. The migration remains unapplied and is included in the PR.
+- Local PostgreSQL tests passed for voting boundaries, changeable votes, closed rounds, duplicate nominations, review visibility, location review, blocked accounts, hidden-case arguments and exports. Browser checks passed at 390px and 1280px for the court, nomination and Field Guide screens with reduced motion and no browser errors or horizontal overflow. Screenshots use local test content.

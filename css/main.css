@@ -246,3 +246,18 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
 .save-controls button[aria-pressed="true"] { background: var(--pink); box-shadow: 3px 3px var(--ink); }
 .save-controls p { margin: 10px 0 0; }
 .discovery-tabs { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; border-bottom: 3px solid var(--ink); }
+
+.discovery-section { margin-top: 28px; }
+.court-preview > .wave-link { font: 24px var(--display); }
+.court-case { padding: 22px; margin-right: 6px; background: var(--card); box-shadow: 6px 6px var(--ink); }
+.court-case h2 { font: clamp(28px, 6vw, 48px) var(--display); margin: 0; }
+.court-case > .tag { background: var(--pink); transform: rotate(-2deg); }
+.court-argument { font-size: 18px; }
+.court-ballot { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
+.court-ballot button { padding: 10px 14px; min-width: 145px; }
+.court-ballot button[aria-pressed="true"] { background: var(--gold); box-shadow: 3px 3px var(--ink); }
+.court-totals { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 16px; width: 100%; }
+.court-totals meter { display: block; width: 100%; height: 18px; }
+.court-rules { border-bottom: 2px dashed var(--ink); margin-bottom: 16px; }
+.court-nomination { max-width: 760px; }
+.court-nomination input { margin: 0; }
