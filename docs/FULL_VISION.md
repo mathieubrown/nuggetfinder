@@ -1,5 +1,7 @@
 # Nuggetfinder: the full vision and how to build all of it
 
+**2026-11-25 scope revision:** [FOUNDER_DIRECTIVE.md](FOUNDER_DIRECTIVE.md) supersedes earlier age exclusion and deferred photography. All-age capability-based participation and food/product photos are Day Zero launch requirements. Video stays deferred. See [implementation, privacy and release gates](participation-photo/PLAN.md). All live changes remain held.
+
 This is the whole product, built in waves. It replaces any older advice to build a smaller version or to park features. Nothing here is "later, maybe." Every wave must feel finished and sparkly when it ships, and no wave ships looking like a plain data tool.
 
 ## One-line pitch
@@ -25,7 +27,7 @@ The look stays the hybrid: street layer (Archivo Black, thick ink outlines, hard
 - **Accessibility is not optional:** respect prefers-reduced-motion (replace motion with a simple fade), status is always word plus icon plus color, 44px touch targets, captions on any video.
 
 ## App map (every screen)
-Core: Onboarding with neutral 13+ age gate, Map and list, Spot (card), Product page with "where to buy", Search, Report flow (seen it, sold out, price, with product picker).
+Core: Onboarding with age-appropriate, server-enforced participation and applicable verified parental consent, Map and list, Spot (card), Product page with "where to buy", Search, Report flow (seen it, sold out, price, with product picker).
 Social: Take composer, Feed grid, Swipe feed (full screen), Respond sheet, Showdown home, Showdown matchup (VS), Taste Test (swipe cards that feed Showdown votes), Creator profile, Share card builder.
 Collect: Profile (record, points, status, stickers), Field Guide (your discoveries with rarity), Nugget Card (punchcards, brand funded), Notifications and alerts.
 Business: Add a spot, Claim a business, Suggest an edit, Price ledger, Sponsored units (cobalt), Brand dashboard (aggregate only), Recall alert.
@@ -38,7 +40,7 @@ Trust and admin: Moderator queue, Strikes and appeals, Settings, Privacy, Delete
 **Wave 4: Business.** Claim flow, price ledger, sponsored system, brand dashboards (aggregate only), alerts, recall feeds, creator Critic badge.
 **Wave 5: Video and app.** Video takes with captions, AI triage plus human review, push notifications, the native iPhone app.
 
-Launch gates, none of which are optional before strangers can post: moderation queue and strikes, report and block on everything, neutral 13+ gate, delete my account, terms and privacy pages, DMCA contact, a rule that sponsored content is labeled and never changes votes, and nothing about allergens shown as confirmed without a source.
+Launch gates, none of which are optional before strangers can post: moderation queue and strikes, report and block on everything, age-appropriate participation and applicable verified parental consent, delete my account, terms and privacy pages, DMCA contact, a rule that sponsored content is labeled and never changes votes, and nothing about allergens shown as confirmed without a source.
 
 ## How to work
 - Follow AGENTS.md and docs/CODEX_BRIEF.md rules. docs/CODEX_ADDENDUM.md has the detailed steps and research tasks.

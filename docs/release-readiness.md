@@ -1,5 +1,7 @@
 # Hardening review and deployment plan
 
+2026-11-25: [All-age and photo release gates](participation-photo/PLAN.md) now apply in addition to these correction gates. Photos are Day Zero and all-age participation is the launch objective. This historical report does not certify the new requirements.
+
 Current correction candidate: [corrections/REVIEW.md](corrections/REVIEW.md). That report supersedes the earlier Court, voting and price-priority behavior below. This document remains the baseline review record; it is not deployment approval.
 
 Everything here is for review. No SQL was applied to live Supabase and no frontend was merged or deployed during this pass. The main branch checked at the start was 5752a75.

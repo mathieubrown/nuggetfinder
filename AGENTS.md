@@ -3,6 +3,10 @@
 ## Who you are working for
 Mat Brown. He is not a developer. Explain things in plain words, like to a smart friend who has never coded. Say what you are about to do, do it, then say what happened and what is next. No jargon without a one-line explanation. Do not use em dashes in anything you write, in chat or in the app.
 
+## Current governing scope
+
+Read [docs/FOUNDER_DIRECTIVE.md](docs/FOUNDER_DIRECTIVE.md) before older roadmap steps. Mat approved all-age capability-based participation and Day Zero food/product photography on 2026-11-25. It supersedes blanket age exclusion and deferred photos; video remains deferred. Work across authorized development items without stopping between them. Production SQL, merges, deployments, settings and live participation remain on hold. [Implementation plan and gates](docs/participation-photo/PLAN.md) distinguishes completed foundation from pending work. Do not remove legacy guards or enable child accounts before the reviewed participant cutover.
+
 ## What this is
 Nuggetfinder is a crowdsourced map and community for nuggets, tenders, sauces and sides in San Francisco, South San Francisco and Daly City. Anyone can browse. Signing in unlocks reporting, takes, votes and the fun stuff. Later: brands and stores pay to be part of it, and aggregated trends become a data product.
 
@@ -22,14 +26,16 @@ The publishable key inside index.html is public by design. Nothing else secret m
 - data/places_template.csv: format for importing places.
 - Mat's source material (notes, images, early files): /Users/TESSERACT/Desktop/NUGGETFINDER_NOV. Read it for context and ideas. Ask before opening anything outside that folder. Never copy anything from it into the repo without checking it for passwords, keys or private info first, and never upload the folder as is.
 
-## Status when this file was written
+## Historical status when this file was first written
+
+This subsection is historical, not the current build inventory. Use the changelog and current review reports.
 - Applied in Supabase: 20261112000000_reports_and_accounts.sql (accounts, reports, two-person agreement).
 - Written, probably applied, VERIFY before relying on it: 20261113000000_usernames.sql.
 - Live in the app: map and list with real chain and grocery spots, filters, spot detail, reporting, email sign-in, username picker.
 - Not built: everything from Part A steps 0 onward in docs/CODEX_ADDENDUM.md.
 
 ## How to work
-1. Do one build step at a time, in the order in docs/CODEX_ADDENDUM.md Part A. Stop after each step.
+1. Follow the current authorized scope and governing directive. Continue across authorized development items; report genuine blockers and keep production held.
 2. After each step: view the page at 390px and 1280px wide, check for console errors and sideways scrolling, and tell Mat plainly what you could not test.
 3. Before running any SQL on the live database, show Mat the SQL and explain what it does in plain words, and wait for a yes. Reads are fine. Anything that changes or deletes data or rules needs a yes.
 4. Commit in small steps with clear messages. Do not push to main without telling Mat what is in it.
