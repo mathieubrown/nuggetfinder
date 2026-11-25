@@ -15,32 +15,14 @@
     const feed = root.querySelector('#takesFeed');
     if (tab === 'following' && !user) { feedback.textContent = 'Sign in to see people you follow.'; return; }
     try {
-      const rows = await rpc(client, 'community_feed', {p_tab:tab});
+      const rows = await rpc(client, 'take_cards', {p_sort:tab==='hot'?'hot':'new',p_following:tab==='following'});
       if (!feed.isConnected) return;
       feedback.textContent = '';
       if (!rows.length) { feed.innerHTML = NuggetfinderSparkle.empty('No takes here yet.'); return; }
       rows.forEach(row => {
-        const card = document.createElement('article');
-        card.className = 'wave-card take-tile';
-        card.innerHTML = '<span class="tag">' + esc(row.subject_kind) + '</span><p>' + esc(row.body) +
-          '</p><a class="wave-link" href="#/taste?user=' + encodeURIComponent(row.author_id) + '">@' +
-          esc(row.handle) + '</a><time>' + esc(new Date(row.created_at).toLocaleDateString()) + '</time>';
+        const card=community.takeCard(row,client,user,esc,signIn,feedback);
+        if(!swipe)card.classList.add('feed-take-card');
         feed.append(card);
-        if (user && user.id !== row.author_id) {
-          const follow = document.createElement('button');
-          follow.className = 'big ghost';
-          follow.textContent = row.following ? 'Unfollow' : 'Follow';
-          card.append(follow);
-          action(follow, async () => {
-            await rpc(client,'set_follow',{p_user:row.author_id,p_follow:!row.following});
-            row.following = !row.following;
-            follow.textContent = row.following ? 'Unfollow' : 'Follow';
-            if (tab === 'following' && !row.following) card.remove();
-          },feedback);
-          community.addSafetyButtons(card,client,{kind:'take',ref:row.id,author:row.author_id},feedback);
-        }
-        if (community.addRespond) community.addRespond(card,client,user,row,esc,signIn,feedback);
-        if (community.addTakeShare) community.addTakeShare(card,row,feedback);
       });
       if (swipe) {
         const next = document.createElement('button');

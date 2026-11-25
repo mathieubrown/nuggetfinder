@@ -398,3 +398,44 @@ body[data-screen="showdown"] .wave-hero h1 { font-size: clamp(26px,4vw,44px); li
 @media (prefers-reduced-motion:no-preference) {
   .showdown-meter > span { animation: stamp-drop 300ms ease-out; }
 }
+
+body[data-screen="take"] { background: var(--ink); color: var(--paper); }
+body[data-screen="take"] .wave-page { padding: 16px 16px 28px; }
+body[data-screen="take"] .primary-nav { border-top: 1px solid #5a554c; }
+.composer { width: 100%; max-width: 700px; margin: auto; color: var(--paper); }
+.composer-header { display: flex; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.composer-header h1 { font: 13px var(--body); font-weight: 700; text-transform: uppercase; background: var(--pink); color: var(--ink); padding: 10px; margin: 0; }
+.composer-header > a,.composer-header > button { min-width: 44px; height: 44px; border: 2px solid var(--paper); color: var(--paper); background: transparent; display: grid; place-items: center; text-decoration: none; font-size: 26px; }
+.composer form { display: grid; gap: 12px; }
+.composer-context { display: grid; grid-template-columns: auto 90px minmax(0,1fr); gap: 8px; align-items: center; }
+.composer select,.composer input { min-height: 44px; min-width: 0; max-width: 100%; padding: 7px; border: 2px solid var(--paper); background: var(--ink); color: var(--paper); font: inherit; }
+.composer-preview { position: relative; min-height: 330px; border: 3px solid var(--paper); padding: 78px 16px 30px; background: #2a2926; }
+.composer-preview::before { content: ''; position: absolute; inset: 12px; pointer-events: none; border-top: 4px solid var(--paper); border-bottom: 4px solid var(--paper); opacity: .8; }
+.composer textarea { position: relative; width: 100%; border: 0; padding: 10px; background: transparent; color: var(--paper); font: 19px var(--body); line-height: 1.4; resize: vertical; min-height: 210px; }
+.composer textarea::placeholder { color: #c8c2b5; }
+.composer-stamp { position: absolute; top: 36px; left: 26px; transform: rotate(-7deg); padding: 7px 10px; background: var(--pink); color: var(--ink); border: 3px solid var(--ink); box-shadow: 3px 3px var(--ink); font: clamp(15px,4vw,23px) var(--display); text-transform: uppercase; }
+.composer-stamp.stamp-certified_tender { background: var(--gold); }
+.composer-stamp.stamp-nope { background: var(--red); color: white; }
+.composer-character-count { position: absolute; bottom: 20px; right: 25px; font-size: 12px; color: #c8c2b5; }
+.composer-media { display: flex; align-items: center; gap: 10px; }
+.composer-media button,.composer-actions > button:not(.post-take),.composer-tag-options button { min-height: 44px; border: 2px solid var(--paper); padding: 7px 10px; background: transparent; color: var(--paper); font-weight: 700; text-transform: uppercase; }
+.composer-media > span { margin-left: auto; font-size: 12px; color: #c8c2b5; }
+.composer-tag-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.composer-tag-options details { min-width: 0; padding: 8px; border: 2px dashed var(--paper); }
+.composer-tag-options summary { min-height: 44px; font-weight: 700; font-size: 12px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; }
+.composer-tag-options label { display: block; font-size: 12px; margin-bottom: 6px; }
+.composer-tag-options input,.composer-tag-options select { width: 100%; margin: 6px 0; }
+.composer-stamps { display: flex; gap: 8px; border: 0; padding: 0; margin: 0; }
+.composer-stamps button { flex: 1; min-width: 0; min-height: 48px; border: 3px solid var(--paper); background: var(--pink); color: var(--ink); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 5px; }
+.composer-stamps button[data-stamp="certified_tender"] { background: var(--gold); }
+.composer-stamps button[data-stamp="nope"] { background: var(--red); color: white; }
+.composer-stamps button[aria-pressed="true"] { outline: 2px solid var(--gold); outline-offset: 2px; }
+.composer-actions { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 4px; }
+.composer-actions .post-take { min-width: 76px; height: 76px; border: 5px solid var(--paper); border-radius: 50%; background: var(--red); color: white; font: 15px var(--display); text-transform: uppercase; }
+.composer [role="status"],.composer-guidance { font-size: 13px; margin: 0; color: #ddd6c6; text-align: center; }
+.composer [role="status"] .wave-link { color: var(--paper); }
+.feed-take-card { grid-template-columns: 88px minmax(0,1fr); border: 3px solid var(--ink); padding: 12px; background: var(--card); box-shadow: 4px 4px var(--ink); }
+@media(min-width:900px) {
+  body[data-screen="take"] .wave-page { padding: 20px 40px; }
+  .composer-preview { min-height: 400px; }
+}
