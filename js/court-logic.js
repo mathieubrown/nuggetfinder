@@ -15,6 +15,7 @@
   // LOGIC-END
   const labels = {
     open: '⋯ IN SESSION',
+    awaiting: '◷ AWAITING RECORDED RULING',
     insufficient: '◷ NOT ENOUGH VOTES',
     divided: '= COURT DIVIDED',
     nugget: '✓ NUGGET',

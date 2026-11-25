@@ -227,3 +227,9 @@
 
 - Added an unapplied private action ledger shared by Court and Showdowns. Initial votes and actual answer changes each consume one of 60 rolling 24-hour actions. The five-second cooldown remains enforced. No-op repeats do not consume an action.
 - Old Beef entry points use the same limit. Existing Showdown event history is carried forward; legacy Court rows cannot reconstruct past changes and are counted once each on upgrade. Local concurrency and boundary checks passed.
+
+## Release corrections: versioned Court rulings
+
+- Kept seven days, 20 voters and 60%, with no forced winner. Voting stops at the stored deadline; closed rounds await an explicit moderator recording before publishing a versioned ruling.
+- Added a private recorded ballot and append-only versions with reasons, notes, previous version and moderator identity. Corrections derive counts from reviewed exclusions; moderators cannot select an outcome or extend voting. Bans and deletions do not silently change a recorded ruling.
+- Added moderator recording/correction controls, public history and versioned community-opinion labels on share cards. These additions need design review. Local tests cover permissions, concurrent version conflicts, preserved counts and immutable history. New SQL remains unapplied.

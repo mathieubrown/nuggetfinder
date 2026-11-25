@@ -35,7 +35,8 @@
     const block = document.createElement('button');
     block.className = 'big ghost';
     block.textContent = 'Block author';
-    card.append(report, block);
+    card.append(report);
+    if(author)card.append(block);
     action(report, async () => {
       await rpc(client, ['court', 'court_location', 'trail'].includes(kind) ? 'report_discovery' : 'report_content', {p_kind:kind,p_ref:String(ref),p_reason:'other'});
       feedback.textContent = 'Report sent.';
