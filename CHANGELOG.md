@@ -144,3 +144,10 @@
 - Photo nominations await the photo upload and moderation work. New text is reviewed before publication. Report and block controls cover nominations, arguments and location suggestions.
 - New screens need design review. The migration remains unapplied and is included in the PR.
 - Local PostgreSQL tests passed for voting boundaries, changeable votes, closed rounds, duplicate nominations, review visibility, location review, blocked accounts, hidden-case arguments and exports. Browser checks passed at 390px and 1280px for the court, nomination and Field Guide screens with reduced motion and no browser errors or horizontal overflow. Screenshots use local test content.
+
+## Follow a taste
+
+- Added public taste profiles containing approved takes and their real subject links. Private Want to Try and Tried It lists stay private.
+- Reused Following and the existing follow graph. Added handle search, a follows directory and links from take authors. Blocking removes both follow directions and hides the profile.
+- Added no popularity score, purchase inference or sentiment rewards. Needs design review. SQL remains for review and local testing.
+- Local PostgreSQL and browser checks passed for taste profiles at both sizes. Tests cover mutual blocks, removal of follows on block, literal handle-prefix search, private lists and public approved takes.

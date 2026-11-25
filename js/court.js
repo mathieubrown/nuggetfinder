@@ -108,7 +108,8 @@
       takes.forEach(take => {
         const entry = document.createElement('article');
         entry.className = 'wave-card';
-        entry.innerHTML = '<p>' + esc(take.body) + '</p><strong>@' + esc(take.handle) + '</strong>';
+        entry.innerHTML = '<p>' + esc(take.body) + '</p><a class="wave-link" href="#/taste?user=' + encodeURIComponent(take.author_id) + '">@' +
+          esc(take.handle) + '</a>';
         argumentsGrid.append(entry);
         if (user && user.id !== take.author_id) community.addSafetyButtons(entry, client,
           {kind: 'take', ref: take.id, author: take.author_id}, feedback);

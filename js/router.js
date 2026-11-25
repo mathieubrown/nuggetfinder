@@ -28,7 +28,7 @@ window.NuggetfinderRouter = (function () {
       return {page:'court'};
     }
     var [page, query] = hash.slice(2).split("?", 2);
-    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners', 'lists', 'court', 'field-guide', 'nominate'].indexOf(page) !== -1) {
+    if (hash.indexOf('#/') === 0 && ['feed', 'showdown', 'me', 'products', 'mod', 'strikes', 'account', 'terms', 'privacy', 'dmca', 'take', 'weekly-winners', 'lists', 'court', 'field-guide', 'nominate', 'taste'].indexOf(page) !== -1) {
       return { page: page, query: query };
     }
     return { page: 'home' };

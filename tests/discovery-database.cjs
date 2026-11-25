@@ -130,6 +130,37 @@ test('discovery database permissions and normal entry points', async t => {
       const guide = (await db.query('select public.court_cases(null,true) cases')).rows[0].cases;
       assert.deepEqual(guide, []);
     });
+
+    await t.test('taste follows reuse the feed and honor mutual blocks without exposing saves', async () => {
+      await actor(1);
+      await assert.rejects(db.query('select public.set_follow($1,true)', [users[1]]), /invalid_follow/);
+      await db.query('select public.set_follow($1,true)', [users[2]]);
+      let profile = (await db.query('select public.taste_profile($1) profile', [users[2]])).rows[0].profile;
+      assert.equal(profile.following, true);
+      assert.equal(profile.take_count, 1);
+      assert.equal(profile.takes.length, 1);
+      assert.equal('saved_items' in profile, false);
+      assert.equal((await db.query("select * from public.community_feed('following')")).rowCount, 1);
+      assert.equal((await db.query('select public.my_taste_follows() follows')).rows[0].follows.length, 1);
+      await db.exec('reset role');
+      await db.query("update public.profiles set handle='test_taster' where id=$1", [users[2]]);
+      await actor(1);
+      assert.equal((await db.query("select public.find_tastes('test_') people")).rows[0].people.length, 1);
+      assert.deepEqual((await db.query("select public.find_tastes('%') people")).rows[0].people, []);
+      await actor(2);
+      await db.query('select public.set_user_block($1,true)', [users[1]]);
+      await actor(1);
+      assert.equal((await db.query('select public.taste_profile($1) profile', [users[2]])).rows[0].profile, null);
+      assert.deepEqual((await db.query('select public.my_taste_follows() follows')).rows[0].follows, []);
+      await assert.rejects(db.query('select public.set_follow($1,true)', [users[2]]), /profile_unavailable/);
+      await actor(2);
+      await db.query('select public.set_user_block($1,false)', [users[1]]);
+      await actor(null, 'anon');
+      profile = (await db.query('select public.taste_profile($1) profile', [users[2]])).rows[0].profile;
+      assert.equal(profile.following, false);
+      await assert.rejects(db.query('select public.my_taste_follows()'), /permission denied/);
+      await assert.rejects(db.query('select public.set_follow($1,true)', [users[2]]), /permission denied/);
+    });
   } finally {
     await db.close();
   }
