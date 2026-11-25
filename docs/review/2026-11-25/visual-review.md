@@ -38,3 +38,7 @@ Before deploying the new release: fix stale confidence display; separate product
 ## Decisions needed
 
 Approve the direction of personality, not illustrative scores or seeded user stories. My recommendation is to keep the loud street-layer design and playful debate, while moving factual explanations into short calm labels. Choose whether the central plus stays “Drop a take” or opens a labeled Report / Take chooser. I recommend keeping its current single purpose and making Report separately prominent. Decide whether discovery gets a grouped destination rather than another bottom tab.
+
+## Follow-up from Mat: Showdowns navigation mark
+
+Mat flagged the geometric navigation icon's resemblance to a swastika. Replaced it with clear VS lettering inside a small outline in a separate held visual-fix branch, draft PR #35. Both 390px and 1280px checks passed with reduced motion, no console errors and no horizontal overflow. It is not merged or deployed. The original candidate captures in this packet retain the old icon as the audit record; showdown-icon-preview.png shows the proposed replacement. No Court or technical rule changed.
