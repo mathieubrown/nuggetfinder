@@ -1,0 +1,134 @@
+{
+  "review_date": "2026-11-25",
+  "candidate": "d0174bb8228d12001938fb0fbaf2c0e488856cd9",
+  "node": "v22.18.0",
+  "migrations": [
+    {
+      "file": "20261112000000_reports_and_accounts.sql",
+      "sha256": "81794147c568aa3ebad9b48638e8f27083a74daaf2fc067ab3b33a48d8e628b9",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261113000000_usernames.sql",
+      "sha256": "8d3cd1c46e753ccf14fe743057d2b9991c0b8c919665832864ae23b74c601eed",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261114000100_products.sql",
+      "sha256": "73750feb64bcb311323e036ec660246e962519adf9e8002d409f37781b059ee2",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261114000200_seed_product_catalog.sql",
+      "sha256": "56eb2e38675f3bcc5b1598a655aaa54b8799ad79facf3fcc0d70b957e0bc8add",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261114000300_stock_reports.sql",
+      "sha256": "d71cc5f916fac4f9c91d825493d959cc16e722effd38966253c6fe4c56545818",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261114000400_stock_points.sql",
+      "sha256": "60e9db60231f5ddbdc956c583fc41c65ca8aec9a9c0d41d3113eddd7b0202724",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000100_moderation.sql",
+      "sha256": "f9e7b564c56dbae13b66c9b3fd51d0503288b750885f8d0832802ae843b671fb",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000200_account.sql",
+      "sha256": "c347884cec6015fadc6842e41e8a96bcce2e48e6115e2a0ae92e934b797bcec6",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000300_takes.sql",
+      "sha256": "263c4e782d15eab386054d96db2bb20ef4ce023dc92f6509a178342668a7e987",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000400_feed.sql",
+      "sha256": "5fb762e2a1e9a75e6264d2adecb6b8d6ba8898511e7ba6546fc129644ee1f9e6",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000500_respond.sql",
+      "sha256": "a3b317bc99646f854aea2a923f5bb4d0a6de02ce49c421b200a42011651146fd",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000600_beef.sql",
+      "sha256": "3dea7704e7503a1106c8c19931ebdc0a7475411b2ea9b35cadd7a9dc871eed74",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000700_weekly_beef.sql",
+      "sha256": "febc72db14db71054d376f95718f4a2d3b4ae46d66c3baba72a9da81f0f56578",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000800_grocery_catalog.sql",
+      "sha256": "824d4cec613101a36005d6050da5a801cb23de2b93320ded84cb1516a9979430",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115000900_profile_read_grants.sql",
+      "sha256": "f76789cc7cae040fc49473cb9355d36bee307b2bba6e2a529b5730d9ec9a1537",
+      "pending_in_review": false
+    },
+    {
+      "file": "20261115001000_handle_substrings.sql",
+      "sha256": "95768eebceff9e12f25be174825c27b0cc03231373534ef4887c799fefe49f2d",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261115001100_showdown_names.sql",
+      "sha256": "4a88089336445274ea665fed15f2f3852385ea17135e23a3e34745b7206c3453",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000100_personal_lists.sql",
+      "sha256": "adca52004eaf1624f7c6fce356a14a8d421a4f60f4ffcd76487c373ee856f7b0",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000200_nugget_court.sql",
+      "sha256": "e2374580d24d94a33189d6435f266964c240ba1880e61bb8cbb6d86399325a82",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000300_taste_profiles.sql",
+      "sha256": "d2ceca807bb5cfd88ea7a1de0daa5e896f743ffa47d464f7b6e65432ff37eb81",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000400_discovery_trails.sql",
+      "sha256": "6d8629c6981847148af1636f2e7a1a5acb01e6c440ddcb28f470d1db41570af6",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000500_place_scores.sql",
+      "sha256": "a92e188f8f5357ade919ac65bd67ddcbc999ec14c6d74520aae819a148abf4ce",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000600_take_stamps_and_rebuttals.sql",
+      "sha256": "dbc443015a58c2f3a9bc97221ad2dd9dfe80f7b4c08c05b72b2b9e108450dffe",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000700_price_ledger.sql",
+      "sha256": "c5bf4944ddd5d56ce2a866cff7ad1f16a21c24585985a4291e4fad8d26d0aa1b",
+      "pending_in_review": true
+    },
+    {
+      "file": "20261124000800_release_hardening.sql",
+      "sha256": "0934a5016812433001f82ff2ff2288fa324449e3f35067b50696c7315756a300",
+      "pending_in_review": true
+    }
+  ],
+  "application_javascript_syntax": "PASS",
+  "applied_migration_files_changed_vs_baseline": false
+}
