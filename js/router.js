@@ -3,6 +3,9 @@ window.NuggetfinderRouter = (function () {
 
   function read() {
     var hash = window.location.hash;
+    // Preserve links issued by the currently deployed frontend, including creators.
+    if(hash === '#/beef' || hash.startsWith('#/beef?') || hash.startsWith('#/beef/')) hash=hash.replace('#/beef','#/showdown');
+    if(hash === '#/weekly' || hash.startsWith('#/weekly?')) hash=hash.replace('#/weekly','#/weekly-winners');
     var spotPrefix = '#/spot/';
     if (hash.indexOf(spotPrefix) === 0) {
       try {

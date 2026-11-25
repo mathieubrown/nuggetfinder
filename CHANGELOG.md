@@ -216,3 +216,9 @@
 
 - Replaced the geometric Showdowns navigation mark with an outlined VS badge after visual review flagged an unwanted resemblance.
 - Checked at 390px and 1280px with reduced motion, no console errors and no sideways scroll. No JavaScript, database rules or migrations changed. The release/deployment hold remains in place.
+
+## Release corrections, November 25, 2026: safety, targets and old links
+
+- Preserved reporting/blocking during temporary posting restrictions without removing sign-in, age, ban, structured-target or safety rate checks.
+- Added an unapplied catalog-target guard for map reports. Live external map discovery cannot become a reporting target without catalog review. Existing valid store IDs remain shared with product stock.
+- Restored legacy Beef and weekly routes, including creator query parameters. Regression tests passed on native local PostgreSQL and the plain router functions. Production remains held.

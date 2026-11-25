@@ -461,6 +461,7 @@ function refreshStatuses() {
 }
 
 function serverReport(id, s) {
+  if(!catalogPlaceIds.has(id)){toast('This place needs catalog review before reporting.');return;}
   if (!state.user) { openAuth('Sign in to report. Browsing stays open to everyone.'); return; }
   sb.rpc('submit_report', { p_place: id, p_status: s, p_near: nearPlace(id) }).then(function (res) {
     if (res.error) { toast(errorText(res.error.message)); return; }
@@ -717,6 +718,8 @@ function start() {
     var places = new Map(res.places.map(function (place) { return [place.id, place]; }));
     results[1].forEach(function (place) { places.set(place.id, place); });
     state.places = Array.from(places.values());
+    // Live discovery cannot turn an unreviewed external pin into a reporting target.
+    if(results[1].length)state.places=state.places.filter(function(place){return catalogPlaceIds.has(place.id);});
     state.usingSeed = res.seed;
     return refreshStatuses();
   }).then(function () {
