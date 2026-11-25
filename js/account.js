@@ -16,6 +16,7 @@
       const data = await rpc(client, 'export_my_data');
       Object.assign(data, await rpc(client, 'export_wave2_take_data'));
       Object.assign(data, await rpc(client, 'export_matchup_data'));
+      Object.assign(data, await rpc(client, 'export_discovery_data'));
       download(data);
     }, root.querySelector('[role=status]'));
   };

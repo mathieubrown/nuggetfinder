@@ -239,3 +239,10 @@ dialog input[type="email"], dialog input[type="text"] { height: 48px; padding: 0
   .map-home .leaflet-control-zoom { margin-top: 200px; }
   .map-home .leaflet-control-attribution { font-size: 10px; }
 }
+
+.save-controls { width: 100%; }
+.save-controls .btns { display: flex; flex-wrap: wrap; }
+.save-controls button { padding: 8px 12px; min-width: 130px; }
+.save-controls button[aria-pressed="true"] { background: var(--pink); box-shadow: 3px 3px var(--ink); }
+.save-controls p { margin: 10px 0 0; }
+.discovery-tabs { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; border-bottom: 3px solid var(--ink); }

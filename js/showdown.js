@@ -42,6 +42,7 @@
           if(community.addShowdownShare)community.addShowdownShare(card,row,feedback);
         }
         results.append(card);
+        if (route.id) community.addSaveButtons(card, client, user, 'matchup', row.id, signIn);
       });
     }catch(error){feedback.textContent='Could not load Showdown. '+error.message;}
   };
