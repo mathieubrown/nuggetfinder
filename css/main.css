@@ -520,3 +520,6 @@ button, select, input:not([type="checkbox"]), textarea { min-height: 44px; }
 }
 .active-showdown a, .allergen-badge[href] { min-height: 44px; display: inline-flex; align-items: center; }
 .leaflet-control-zoom a { width: 44px; height: 44px; line-height: 44px; }
+
+/* Plain VS lettering makes the matchup destination unambiguous. */
+.primary-nav a > .showdown-nav-icon { width: 28px; height: 24px; border: 2px solid currentColor; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; align-self: center; font: 900 13px/1 var(--body); letter-spacing: -1px; }

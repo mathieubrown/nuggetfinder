@@ -211,3 +211,8 @@
 - Passed 34 automated checks with native PostgreSQL, real PostgREST and PGlite enabled. Browser flows passed at 390px and 1280px, plus a long-name check at 320px, with reduced motion, no console errors and no horizontal overflow. The browser uses simulated Auth/transport with real SQL; separate tests use the real REST service. All application JavaScript passed syntax checks.
 - Added review screenshots under docs/screenshots/hardening, a read-only verification script and an ordered deployment/recovery checklist. Local screenshot contributions are test data only. No live SQL, main merge, deployment, paid service or LLM call was performed.
 - Could not test production sign-in/email, hosted Supabase, existing live data, real phones, a screen reader or a live backup restore. Account deletion and reviewed legal/contact pages remain launch gates. Photo/video uploads and business claims remain pending.
+
+## Showdown navigation icon
+
+- Replaced the geometric Showdowns navigation mark with an outlined VS badge after visual review flagged an unwanted resemblance.
+- Checked at 390px and 1280px with reduced motion, no console errors and no sideways scroll. No JavaScript, database rules or migrations changed. The release/deployment hold remains in place.
