@@ -11,3 +11,9 @@ The grocery snapshot uses the same BBBike PBF extract. The filtered records are 
 ## Self-hosted fonts
 
 Archivo Black and Space Grotesk are distributed under the SIL Open Font License 1.1. Font files and their license notices are in `vendor/fonts/`. Sources: [Archivo Black](https://github.com/google/fonts/tree/main/ofl/archivoblack) and [Space Grotesk](https://github.com/google/fonts/tree/main/ofl/spacegrotesk), accessed November 25, 2026. The private participation client serves these locally and shows OpenStreetMap credit for its store catalog.
+
+## Search candidates, November 25, 2026
+
+`place_search_snapshot.json` contains 4,609 named public food businesses from the same BBBike San Francisco PBF extract, whose header reports `2026-11-07T00:00:00Z`. This subset is © OpenStreetMap contributors, under ODbL 1.0, and preserves node/way IDs. The extract was downloaded November 14 and this search subset was processed November 25, 2026. The input SHA-256 is recorded in the JSON. Way positions are bounding-box centers. Bounds are 37.62 to 37.812 latitude and -122.53 to -122.35 longitude. Search results are dated candidates, not approved places, stock, menu, price or allergen claims. Use `scripts/extract-place-search.py` to reproduce the subset from the source PBF.
+
+The optional bounded live adapter uses [Overpass](https://dev.overpass-api.de/overpass-doc/en/preface/commons.html); it is not a generic Nominatim geocoder. New search and pin maps retain visible OpenStreetMap credit. The map proxy follows the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/) with application identification, origin-only Referer, response-driven caching and conditional revalidation. It has no prefetch or offline-download feature. Sources checked November 25, 2026. Live service availability remains unproven; default search works from the dated local snapshot.

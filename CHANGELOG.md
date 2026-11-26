@@ -1,3 +1,16 @@
+# Search, community places and menu evidence, November 25, 2026
+
+- Fixed the map dropping approved businesses outside its hard-coded chain list. Approved community places now use the same ID in map pages, reporting and menu evidence.
+- Added Go/Enter search from the map, with business-name and street-address results from the reviewed catalog and a dated 4,609-business OpenStreetMap search snapshot. Results show their source date and remain unreviewed candidates until accepted. Missing businesses can be added by clicking a map pin or entering public coordinates.
+- Preserved location/menu drafts when sign-in finishes, disabled corrections until current details load, and refreshed approved map details after review. Nearby stores with different OSM IDs remain distinct report targets.
+- Added moderated place additions and corrections for names, addresses, categories, reported hours and official menu links. Added duplicate checks, stable retry IDs, ten submissions per rolling day, a 100-item pending queue ceiling and version checks against stale edits. No stock, price or allergen claims are seeded or inferred.
+- Added View or upload a menu on place pages. JPEG/PNG/WebP images use crop/redaction, own-photo attestation, private staging, server re-encoding, human review, dated public serving, safety reports, corrected revisions and deletion. Public menu metadata omits contributor IDs and rounds dates to the day.
+- Added one unapplied migration: 20261126000100_places_and_menus.sql. It adds private source-cache/submission/detail/audit records and restricted search, submission and review functions. Existing migrations were not edited. No live database changes or deployments.
+- Tested 81 Node cases plus six image-processing cases with zero skips, and new end-to-end browser journeys at 390px/1280px. Checked search, missing-place submission, review, non-chain map visibility, menu upload/review/publication, safety reports, correction withdrawal, console errors, touch targets, horizontal scrolling and reduced motion. Also reran the complete app browser checks. Screenshots and evidence are in docs/places-and-menus and docs/screenshots/places-and-menus.
+- Verified fresh-schema permissions for 76 public tables and 162 security-definer functions; all readiness/publication/cutover gates remain off in the default schema. The new source records are search candidates, not an extra seed of approved stores.
+- Could not verify reliable live Overpass lookup in this environment. Default search now works locally from the dated snapshot; manual pin submission works independently. Actual iPhone/Android capture, real consent, production hosting/scheduling, staffed review, actual catalog/menu accuracy and production restore remain release gates. PDF file uploads are not supported; an official HTTPS PDF menu can be submitted as a link.
+- Needs design review: search results, add/edit place forms, menu evidence page and location-review cards. They follow Main/Spot card outlines, cream/yellow/pink, hard shadows and status stamps. No paid services or app LLM calls.
+
 # Complete app review preview, November 25, 2026
 
 - Added a single local entry point for the whole current candidate: original map, shopping, feed, Showdown, Court, prices, profiles, stickers, discovery and account screens, plus the new family/photo tools.

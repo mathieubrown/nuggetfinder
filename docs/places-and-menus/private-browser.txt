@@ -1,0 +1,2 @@
+390: scoped parent/player, discovery, stock, Showdown, sandboxed photo upload, private crew and moderator UI passed
+1280: scoped parent/player, discovery, stock, Showdown, sandboxed photo upload, private crew and moderator UI passed

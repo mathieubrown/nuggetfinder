@@ -4,3 +4,5 @@
 .crew-attribution{padding:8px 24px;font-size:12px;border-bottom:1px solid #161514}.crew-attribution a{display:inline-block;min-height:44px;align-content:center}
 
 [data-photo-state=approved]{background:#c5e4bc}[data-photo-state=rejected],[data-photo-state=removed]{background:#ffb9c4}[data-photo-state=deleting],[data-photo-state=deleted]{background:#ddd8cd}
+
+.place-review .wave-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px}.place-review .wave-card{background:#fffaf0;border:3px solid;padding:20px;box-shadow:4px 4px 0;margin:12px 4px 20px 0}.place-review button{margin:8px 8px 0 0}.location-attest{display:flex;align-items:center;gap:12px;min-height:48px}.location-attest input{width:24px;height:24px;flex:none}

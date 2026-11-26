@@ -1,0 +1,2 @@
+390: address/business search, OSM ID, moderated addition, non-chain map pin, menu upload/review/publication safety reporting and correction withdrawal pass
+1280: address/business search, OSM ID, moderated addition, non-chain map pin, menu upload/review/publication safety reporting and correction withdrawal pass

@@ -1,0 +1,499 @@
+TAP version 13
+# Subtest: allergen claims need a recognized state and confirmed claims need an HTTPS source
+ok 1 - allergen claims need a recognized state and confirmed claims need an HTTPS source
+  ---
+  duration_ms: 1.60525
+  type: 'test'
+  ...
+# Subtest: sponsored and verified components cannot imply organic voting or grant verification
+ok 2 - sponsored and verified components cannot imply organic voting or grant verification
+  ---
+  duration_ms: 0.175125
+  type: 'test'
+  ...
+# Subtest: starter stock links use the same OSM locations as the map
+ok 3 - starter stock links use the same OSM locations as the map
+  ---
+  duration_ms: 4.1625
+  type: 'test'
+  ...
+# Subtest: release correction regressions on native PostgreSQL
+    # Subtest: posting restrictions retain report/block but never posting or moderator powers
+    ok 1 - posting restrictions retain report/block but never posting or moderator powers
+      ---
+      duration_ms: 67.687083
+      type: 'test'
+      ...
+    # Subtest: map and product reports reject invented, malformed and unregistered OSM targets
+    ok 2 - map and product reports reject invented, malformed and unregistered OSM targets
+      ---
+      duration_ms: 95.299333
+      type: 'test'
+      ...
+    # Subtest: all individual changes count, failed/no-op votes do not, and the window rolls
+    ok 3 - all individual changes count, failed/no-op votes do not, and the window rolls
+      ---
+      duration_ms: 837.762209
+      type: 'test'
+      ...
+    # Subtest: concurrent actions cannot exceed 60 and old Beef entry points share the ledger
+    ok 4 - concurrent actions cannot exceed 60 and old Beef entry points share the ledger
+      ---
+      duration_ms: 16.541333
+      type: 'test'
+      ...
+    # Subtest: closed rulings are recorded, corrected by version and never silently changed by bans or deletions
+    ok 5 - closed rulings are recorded, corrected by version and never silently changed by bans or deletions
+      ---
+      duration_ms: 194.424375
+      type: 'test'
+      ...
+    # Subtest: a shared action limit also protects Court and safety reports remain available there
+    ok 6 - a shared action limit also protects Court and safety reports remain available there
+      ---
+      duration_ms: 16.790792
+      type: 'test'
+      ...
+    # Subtest: stock leases expire at the earliest contributing vote, not the newest report
+    ok 7 - stock leases expire at the earliest contributing vote, not the newest report
+      ---
+      duration_ms: 44.933958
+      type: 'test'
+      ...
+    # Subtest: price source verification cannot override newer evidence and all approved age bands are exact
+    ok 8 - price source verification cannot override newer evidence and all approved age bands are exact
+      ---
+      duration_ms: 35.531625
+      type: 'test'
+      ...
+    # Subtest: read-only verifier fails closed on bad grants and legacy column privileges are removed
+    ok 9 - read-only verifier fails closed on bad grants and legacy column privileges are removed
+      ---
+      duration_ms: 568.886917
+      type: 'test'
+      ...
+    # Subtest: ruling audit facts are immutable and survive deletion of the nominator
+    ok 10 - ruling audit facts are immutable and survive deletion of the nominator
+      ---
+      duration_ms: 26.739334
+      type: 'test'
+      ...
+    # Subtest: removing a price author preserves the private observation without resurrecting public evidence
+    ok 11 - removing a price author preserves the private observation without resurrecting public evidence
+      ---
+      duration_ms: 20.863125
+      type: 'test'
+      ...
+    # Subtest: deleted authors never resurrect banned or blocked Court content
+    ok 12 - deleted authors never resurrect banned or blocked Court content
+      ---
+      duration_ms: 26.33725
+      type: 'test'
+      ...
+    1..12
+ok 4 - release correction regressions on native PostgreSQL
+  ---
+  duration_ms: 2783.61175
+  type: 'test'
+  ...
+# Subtest: upgrade removes explicit legacy column privileges as well as broad table grants
+ok 5 - upgrade removes explicit legacy column privileges as well as broad table grants
+  ---
+  duration_ms: 236.4435
+  type: 'test'
+  ...
+# Subtest: legacy Court voters have an explicit bounded hold rather than fabricated change history
+ok 6 - legacy Court voters have an explicit bounded hold rather than fabricated change history
+  ---
+  duration_ms: 200.097792
+  type: 'test'
+  ...
+# Subtest: Court waits for the round and quorum, then requires 60 percent
+ok 7 - Court waits for the round and quorum, then requires 60 percent
+  ---
+  duration_ms: 0.919958
+  type: 'test'
+  ...
+# Subtest: discovery database permissions and normal entry points
+    # Subtest: private saved lists use real targets and upsert a single state
+    ok 1 - private saved lists use real targets and upsert a single state
+      ---
+      duration_ms: 25.098542
+      type: 'test'
+      ...
+    # Subtest: Court nominations, locations and arguments stay hidden until reviewed
+    ok 2 - Court nominations, locations and arguments stay hidden until reviewed
+      ---
+      duration_ms: 31.079291
+      type: 'test'
+      ...
+    # Subtest: Court verdict rules and closed rounds
+    ok 3 - Court verdict rules and closed rounds
+      ---
+      duration_ms: 4.192
+      type: 'test'
+      ...
+    # Subtest: taste follows reuse the feed and honor mutual blocks without exposing saves
+    ok 4 - taste follows reuse the feed and honor mutual blocks without exposing saves
+      ---
+      duration_ms: 7.717167
+      type: 'test'
+      ...
+    # Subtest: trails enforce real stops, review versions and private progress
+    ok 5 - trails enforce real stops, review versions and private progress
+      ---
+      duration_ms: 24.157625
+      type: 'test'
+      ...
+    # Subtest: all discovery tables and helper functions are private
+    ok 6 - all discovery tables and helper functions are private
+      ---
+      duration_ms: 6.07925
+      type: 'test'
+      ...
+    # Subtest: place scores require three people and ratings stay private
+    ok 7 - place scores require three people and ratings stay private
+      ---
+      duration_ms: 6.960916
+      type: 'test'
+      ...
+    # Subtest: stamps, team votes, rebuttals and hidden ancestors use real content
+    ok 8 - stamps, team votes, rebuttals and hidden ancestors use real content
+      ---
+      duration_ms: 13.999042
+      type: 'test'
+      ...
+    # Subtest: price history is append-only, unit-comparable and verification is server-controlled
+    ok 9 - price history is append-only, unit-comparable and verification is server-controlled
+      ---
+      duration_ms: 20.516375
+      type: 'test'
+      ...
+    1..9
+ok 8 - discovery database permissions and normal entry points
+  ---
+  duration_ms: 1364.536583
+  type: 'test'
+  ...
+# Subtest: deep links resolve to the same pages used when sign-in restores
+ok 9 - deep links resolve to the same pages used when sign-in restores
+  ---
+  duration_ms: 1.46925
+  type: 'test'
+  ...
+# Subtest: deployed Beef and weekly URLs retain identity, creator and sort parameters
+ok 10 - deployed Beef and weekly URLs retain identity, creator and sort parameters
+  ---
+  duration_ms: 0.710166
+  type: 'test'
+  ...
+# Subtest: participant permissions and private evidence fail closed without cross-account leaks
+ok 11 - participant permissions and private evidence fail closed without cross-account leaks
+  ---
+  duration_ms: 1381.74375
+  type: 'test'
+  ...
+# Subtest: place search normalizes input, bounds food businesses, escapes query syntax and preserves OSM IDs
+ok 12 - place search normalizes input, bounds food businesses, escapes query syntax and preserves OSM IDs
+  ---
+  duration_ms: 1.049375
+  type: 'test'
+  ...
+# Subtest: provider caching, single-flight and error fallback retain catalog search without logging user history
+ok 13 - provider caching, single-flight and error fallback retain catalog search without logging user history
+  ---
+  duration_ms: 13.634542
+  type: 'test'
+  ...
+# Subtest: new locations stay private until checked human approval, deduplicate and remain valid report/menu targets
+ok 14 - new locations stay private until checked human approval, deduplicate and remain valid report/menu targets
+  ---
+  duration_ms: 1105.01225
+  type: 'test'
+  ...
+# Subtest: source IDs cannot be forged; expired sources, bans, revocation and out-of-area pins fail closed
+ok 15 - source IDs cannot be forged; expired sources, bans, revocation and out-of-area pins fail closed
+  ---
+  duration_ms: 550.050875
+  type: 'test'
+  ...
+# Subtest: edit review detects stale detail versions instead of silently replacing newer approved evidence
+ok 16 - edit review detects stale detail versions instead of silently replacing newer approved evidence
+  ---
+  duration_ms: 398.422125
+  type: 'test'
+  ...
+# Subtest: tile caching respects provider headers, revalidates expired images and sends only the request origin
+ok 17 - tile caching respects provider headers, revalidates expired images and sends only the request origin
+  ---
+  duration_ms: 5.94975
+  type: 'test'
+  ...
+# Subtest: dated public business snapshot supplies real OSM candidates offline and common punctuation does not hide brands
+ok 18 - dated public business snapshot supplies real OSM candidates offline and common punctuation does not hide brands
+  ---
+  duration_ms: 272.522709
+  type: 'test'
+  ...
+# Subtest: unreviewed source names are filtered through the same blocked-term rules before reaching search clients
+ok 19 - unreviewed source names are filtered through the same blocked-term rules before reaching search clients
+  ---
+  duration_ms: 218.806667
+  type: 'test'
+  ...
+# Subtest: optional photo publication is restricted to an explicit disposable review fixture, never migration defaults
+ok 20 - optional photo publication is restricted to an explicit disposable review fixture, never migration defaults
+  ---
+  duration_ms: 483.373166
+  type: 'test'
+  ...
+# Subtest: place status never turns business approval into a stock claim, and UI pin bounds fail closed
+ok 21 - place status never turns business approval into a stock claim, and UI pin bounds fail closed
+  ---
+  duration_ms: 1.178333
+  type: 'test'
+  ...
+# Subtest: migration preserves a warmed existing participant runtime and adds own location rows to nested account exports
+ok 22 - migration preserves a warmed existing participant runtime and adds own location rows to nested account exports
+  ---
+  duration_ms: 287.856958
+  type: 'test'
+  ...
+# Subtest: nearby same-brand stores with different verified OSM IDs remain separate report targets
+ok 23 - nearby same-brand stores with different verified OSM IDs remain separate report targets
+  ---
+  duration_ms: 201.099292
+  type: 'test'
+  ...
+# Subtest: real PostgREST checks JWT roles, profile columns, receipts and private table access
+ok 24 - real PostgREST checks JWT roles, profile columns, receipts and private table access
+  ---
+  duration_ms: 2090.794375
+  type: 'test'
+  ...
+# Subtest: complete local review cannot expose private files, internal SQL helpers, arbitrary actors or cross-origin writes
+ok 25 - complete local review cannot expose private files, internal SQL helpers, arbitrary actors or cross-origin writes
+  ---
+  duration_ms: 1136.342584
+  type: 'test'
+  ...
+# Subtest: real isolated Supabase Auth validates parent sessions, rejects forgery and deletes accounts through the admin API
+ok 26 - real isolated Supabase Auth validates parent sessions, rejects forgery and deletes accounts through the admin API
+  ---
+  duration_ms: 3106.276542
+  type: 'test'
+  ...
+# Subtest: private crews require guardian joins, moderate text, isolate contact and share the vote action budget
+ok 27 - private crews require guardian joins, moderate text, isolate contact and share the vote action budget
+  ---
+  duration_ms: 1259.343458
+  type: 'test'
+  ...
+# Subtest: group image disclosure is independent, member-only and withdrawn by blocks or membership removal
+ok 28 - group image disclosure is independent, member-only and withdrawn by blocks or membership removal
+  ---
+  duration_ms: 498.558459
+  type: 'test'
+  ...
+# Subtest: scoped contributor sessions retain legacy rules, isolate siblings and preserve safety controls
+ok 29 - scoped contributor sessions retain legacy rules, isolate siblings and preserve safety controls
+  ---
+  duration_ms: 1120.409458
+  type: 'test'
+  ...
+# Subtest: retention removes old minor store associations, preserves points and historical price rows, and cutover rejects legacy bypasses
+ok 30 - retention removes old minor store associations, preserves points and historical price rows, and cutover rejects legacy bypasses
+  ---
+  duration_ms: 605.352541
+  type: 'test'
+  ...
+# Subtest: public takes use independent permission, anonymous minor authorship, safe reactions and a real moderation queue
+ok 31 - public takes use independent permission, anonymous minor authorship, safe reactions and a real moderation queue
+  ---
+  duration_ms: 1083.141542
+  type: 'test'
+  ...
+# Subtest: creator erasure preserves other crew members contributions and hides replies whose context was removed
+ok 32 - creator erasure preserves other crew members contributions and hides replies whose context was removed
+  ---
+  duration_ms: 603.851792
+  type: 'test'
+  ...
+# Subtest: broker and independent verifier have exact function permissions and no direct table, login or RLS bypass rights
+ok 33 - broker and independent verifier have exact function permissions and no direct table, login or RLS bypass rights
+  ---
+  duration_ms: 790.41825
+  type: 'test'
+  ...
+# Subtest: erasing a parent’s own player keeps their login and children but retires consumed consent and blocks legacy re-entry
+ok 34 - erasing a parent’s own player keeps their login and children but retires consumed consent and blocks legacy re-entry
+  ---
+  duration_ms: 299.51775
+  type: 'test'
+  ...
+# Subtest: SQL and image backup restore replays independent deletion journal before reopening any capability
+ok 35 - SQL and image backup restore replays independent deletion journal before reopening any capability
+  ---
+  duration_ms: 2562.413
+  type: 'test'
+  ...
+# Subtest: real HTTP broker and image worker enforce consent, private review, revision, export and retried erasure
+ok 36 - real HTTP broker and image worker enforce consent, private review, revision, export and retried erasure
+  ---
+  duration_ms: 2312.99375
+  type: 'test'
+  ...
+# Subtest: real isolated Supabase Storage denies browser access and accepts only server-side private JPEG variants
+ok 37 - real isolated Supabase Storage denies browser access and accepts only server-side private JPEG variants
+  ---
+  duration_ms: 3289.8065
+  type: 'test'
+  ...
+# Subtest: native PostgreSQL adversarial permissions and concurrency
+    # Subtest: legacy grants cannot expose private columns or truncate accounts
+    ok 1 - legacy grants cannot expose private columns or truncate accounts
+      ---
+      duration_ms: 83.934958
+      type: 'test'
+      ...
+    # Subtest: all private tables deny reads and writes and every table has row security
+    ok 2 - all private tables deny reads and writes and every table has row security
+      ---
+      duration_ms: 171.9815
+      type: 'test'
+      ...
+    # Subtest: member cannot moderate, self-promote or impersonate another author
+    ok 3 - member cannot moderate, self-promote or impersonate another author
+      ---
+      duration_ms: 21.382083
+      type: 'test'
+      ...
+    # Subtest: posting lock stops map and product reports without granting points
+    ok 4 - posting lock stops map and product reports without granting points
+      ---
+      duration_ms: 23.462583
+      type: 'test'
+      ...
+    # Subtest: request retries are atomic, private and reject changed payloads
+    ok 5 - request retries are atomic, private and reject changed payloads
+      ---
+      duration_ms: 46.046833
+      type: 'test'
+      ...
+    # Subtest: simultaneous username changes cannot bypass the cooldown
+    ok 6 - simultaneous username changes cannot bypass the cooldown
+      ---
+      duration_ms: 7.03075
+      type: 'test'
+      ...
+    # Subtest: simultaneous prices share one cooldown and one successful insert
+    ok 7 - simultaneous prices share one cooldown and one successful insert
+      ---
+      duration_ms: 22.114041
+      type: 'test'
+      ...
+    # Subtest: simultaneous takes cannot exceed the daily limit
+    ok 8 - simultaneous takes cannot exceed the daily limit
+      ---
+      duration_ms: 53.602625
+      type: 'test'
+      ...
+    # Subtest: daily price cap counts simultaneous distinct store products
+    ok 9 - daily price cap counts simultaneous distinct store products
+      ---
+      duration_ms: 77.643625
+      type: 'test'
+      ...
+    # Subtest: banned accounts cannot write through any public reporting or social entry point
+    ok 10 - banned accounts cannot write through any public reporting or social entry point
+      ---
+      duration_ms: 34.9095
+      type: 'test'
+      ...
+    # Subtest: duplicate stock submissions cannot manufacture confirmation or points
+    ok 11 - duplicate stock submissions cannot manufacture confirmation or points
+      ---
+      duration_ms: 32.713792
+      type: 'test'
+      ...
+    # Subtest: different people confirm once, exports remain private, verified badges cannot be forged
+    ok 12 - different people confirm once, exports remain private, verified badges cannot be forged
+      ---
+      duration_ms: 21.386583
+      type: 'test'
+      ...
+    1..12
+ok 38 - native PostgreSQL adversarial permissions and concurrency
+  ---
+  duration_ms: 1020.419959
+  type: 'test'
+  ...
+# Subtest: upgrade preserves pre-existing Wave 2 content and grants
+ok 39 - upgrade preserves pre-existing Wave 2 content and grants
+  ---
+  duration_ms: 251.198375
+  type: 'test'
+  ...
+# Subtest: one stock report prints UNCONFIRMED on the PNG after Archivo Black loads
+ok 40 - one stock report prints UNCONFIRMED on the PNG after Archivo Black loads
+  ---
+  duration_ms: 5.853708
+  type: 'test'
+  ...
+# Subtest: stock is checked again after delayed font loading before the PNG is drawn
+ok 41 - stock is checked again after delayed font loading before the PNG is drawn
+  ---
+  duration_ms: 2.949625
+  type: 'test'
+  ...
+# Subtest: uncertain submissions reuse their request ID, acknowledged or edited drafts get new IDs
+ok 42 - uncertain submissions reuse their request ID, acknowledged or edited drafts get new IDs
+  ---
+  duration_ms: 2.828416
+  type: 'test'
+  ...
+# Subtest: same-account retries survive reload and edited drafts without saving draft text
+ok 43 - same-account retries survive reload and edited drafts without saving draft text
+  ---
+  duration_ms: 11.005
+  type: 'test'
+  ...
+# Subtest: an account switch prevents a pending draft from being sent as a different account
+ok 44 - an account switch prevents a pending draft from being sent as a different account
+  ---
+  duration_ms: 1.518041
+  type: 'test'
+  ...
+# Subtest: stock uses votes from distinct reporters counted by the database
+ok 45 - stock uses votes from distinct reporters counted by the database
+  ---
+  duration_ms: 1.715875
+  type: 'test'
+  ...
+# Subtest: levels and stickers unlock at the published thresholds
+ok 46 - levels and stickers unlock at the published thresholds
+  ---
+  duration_ms: 1.405541
+  type: 'test'
+  ...
+# Subtest: stock snapshots expire conservatively, including delayed responses and missing metadata
+ok 47 - stock snapshots expire conservatively, including delayed responses and missing metadata
+  ---
+  duration_ms: 0.739
+  type: 'test'
+  ...
+# Subtest: price observation bands use exact elapsed seven and thirty day boundaries
+ok 48 - price observation bands use exact elapsed seven and thirty day boundaries
+  ---
+  duration_ms: 0.319875
+  type: 'test'
+  ...
+1..48
+# tests 81
+# suites 0
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3623.424875

@@ -12,7 +12,7 @@ window.NuggetfinderSpot = (function (community) {
         '<option value="">Choose</option>' + [1,2,3,4,5].map(value => '<option value="' + value + '">' + value +
           '</option>').join('') + '</select></label>').join('') +
       '<button type="submit" class="big pink">Save my rating</button><p class="small">One rating per person. Change it after 10 minutes, up to 20 places per rolling day.</p></form></details></section>' +
-      '<section data-spot-showdown></section><section><div class="section-heading"><h2>Top Takes Here</h2>' +
+      '<section><h2>Menus &amp; field notes</h2><a class="big pink" href="#/menus?place='+encodeURIComponent(place.id)+'">View or upload a menu</a><a class="wave-link" href="#/add-place?place='+encodeURIComponent(place.id)+'">Suggest hours, address or menu-link changes</a></section><section data-spot-showdown></section><section><div class="section-heading"><h2>Top Takes Here</h2>' +
       '<a class="wave-link" href="#/take?kind=place&ref=' + encodeURIComponent(place.id) + '&label=' +
       encodeURIComponent(place.name) + '">Drop a take</a></div><div class="spot-takes" data-spot-takes></div></section><p role="status"></p>';
     root.querySelector('.block').after(section);

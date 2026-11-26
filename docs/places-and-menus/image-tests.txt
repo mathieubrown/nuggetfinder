@@ -1,0 +1,11 @@
+test_animation_and_byte_pixel_bombs (test_process_image.PhotoTests.test_animation_and_byte_pixel_bombs) ... ok
+test_bad_coordinates (test_process_image.PhotoTests.test_bad_coordinates) ... ok
+test_bytes_not_filename_determine_type (test_process_image.PhotoTests.test_bytes_not_filename_determine_type) ... ok
+test_crop_redaction_and_limits (test_process_image.PhotoTests.test_crop_redaction_and_limits) ... ok
+test_metadata_removed_and_orientation_applied (test_process_image.PhotoTests.test_metadata_removed_and_orientation_applied) ... ok
+test_transparency_flattened (test_process_image.PhotoTests.test_transparency_flattened) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.128s
+
+OK
