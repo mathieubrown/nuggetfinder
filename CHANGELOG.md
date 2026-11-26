@@ -1,3 +1,12 @@
+# Complete app review preview, November 25, 2026
+
+- Added a single local entry point for the whole current candidate: original map, shopping, feed, Showdown, Court, prices, profiles, stickers, discovery and account screens, plus the new family/photo tools.
+- Added a compact screen menu, two compatibility test players, a moderator role and a visible inventory of working paths and unfinished integrations. The original app is no longer hidden behind a crew-only preview.
+- The preview uses a disposable PostgreSQL database and private test files. Synthetic sign-ins/consent and sample posts are labeled. No stock or price reports are seeded. Browser assets/fonts are local; map imagery has a labeled fallback.
+- Added transport security tests and 390px/1280px browser checks/screenshots. Final results: 69 Node tests and six Python tests, zero failures or skips. Checked no browser console errors, no sideways scrolling and reduced motion. Fixed restore-test username and browser context assumptions exposed by the new local setup.
+- Still unfinished: production identity cutover between the original and private surfaces, photo attachment in the original composer, actual consent verification, production service setup, legal review, moderation staffing, real phone testing and catalog/production restore validation. The app inventory calls these out. This is the complete current review candidate, not a completed public release.
+- No migration changes, live database access, merges or deployments. Needs design review: the temporary review menu and inventory, separate from product design.
+
 # Scoped participation and Day Zero photo implementation, November 25, 2026
 
 - Added a separate secure participation service and mobile-first private client. Players have individual votes, reports, points and private rankings, with verified-permission gates and parent/account controls. Siblings never impersonate the parent login.

@@ -10,12 +10,12 @@ test('SQL and image backup restore replays independent deletion journal before r
   const photo=await runtime.photo(a.token,'reserve',{request:randomUUID(),attested:true,purpose:'packaging',kind:'product',ref:'mcnuggets'});
   const python=process.env.NUGGETFINDER_PYTHON||path.resolve(__dirname,'../../photo-python/bin/python');const jpeg=execFileSync(python,['-c',"from PIL import Image;from io import BytesIO;import sys;b=BytesIO();Image.new('RGB',(100,100),'orange').save(b,'JPEG');sys.stdout.buffer.write(b.getvalue())"]);
   await runtime.upload(a.token,photo.id,1,jpeg);
-  const dump=(await exec('docker',['exec',container,'pg_dump','--no-owner','--dbname',new URL(db.url).pathname.slice(1)],{maxBuffer:25*1024*1024})).stdout;
+  const dump=(await exec('docker',['exec',container,'pg_dump','--username',decodeURIComponent(new URL(db.url).username)||'postgres','--no-owner','--dbname',new URL(db.url).pathname.slice(1)],{maxBuffer:25*1024*1024})).stdout;
   await fs.cp(path.join(directory,'source'),path.join(directory,'backup'),{recursive:true});
   await runtime.parent('local','delete',{participant:a.id});await runtime.cleanup();assert.equal((await fs.readdir(path.join(directory,'source'))).length,0);
   const journal=(await db.pool.query('select subject_hash,kind,created_at from erasure_tombstones')).rows;
   const url=new URL(db.url);url.pathname='/postgres';admin=new Pool({connectionString:url.href});await admin.query('create database '+name);url.pathname='/'+name;restored=new Pool({connectionString:url.href});
-  await new Promise((resolve,reject)=>{const p=spawn('docker',['exec','-i',container,'psql','--dbname',name,'-v','ON_ERROR_STOP=1'],{stdio:['pipe','ignore','pipe']});let error='';p.stderr.on('data',c=>error+=c);p.on('error',reject);p.on('close',code=>code?reject(Error(error)):resolve());p.stdin.end(dump);});
+  await new Promise((resolve,reject)=>{const p=spawn('docker',['exec','-i',container,'psql','--username',decodeURIComponent(new URL(db.url).username)||'postgres','--dbname',name,'-v','ON_ERROR_STOP=1'],{stdio:['pipe','ignore','pipe']});let error='';p.stderr.on('data',c=>error+=c);p.on('error',reject);p.on('close',code=>code?reject(Error(error)):resolve());p.stdin.end(dump);});
   assert.equal((await restored.query('select count(*)::int n from participants where id=$1',[a.id])).rows[0].n,1,'Old snapshot contains deleted identity');
   for(const record of journal)await restored.query('insert into erasure_tombstones values($1,$2,$3) on conflict do nothing',[record.subject_hash,record.kind,record.created_at]);
   const recovered=new Runtime({database:new Database(restored),blobs:new LocalBlobs(path.join(directory,'backup')),auth:{},processImage:null});
