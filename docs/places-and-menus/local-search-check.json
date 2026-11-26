@@ -1,0 +1,27 @@
+{
+  "snapshotAsOf": "2026-11-07",
+  "businesses": 4609,
+  "checks": [
+    {
+      "query": "Krispy Krunchy",
+      "http": 200,
+      "source": "snapshot",
+      "reviewed": 0,
+      "candidates": 3
+    },
+    {
+      "query": "3950 24th Street",
+      "http": 200,
+      "source": "snapshot",
+      "reviewed": 1,
+      "candidates": 1
+    },
+    {
+      "query": "mcdonalds",
+      "http": 200,
+      "source": "snapshot",
+      "reviewed": 15,
+      "candidates": 16
+    }
+  ]
+}
