@@ -47,6 +47,10 @@ window.NuggetfinderCommunity = (function () {
     });
   }
   pages.mod = async function (root, route, client, user, esc) {
+    if(window.NuggetfinderParticipant?.enabled){
+      shell(root,'Moderator desk','<p><a class="wave-link" href="crew.html#mod">Open unified moderation</a></p>');
+      return;
+    }
     shell(root, 'Moderator desk', '<p role="status">Checking access…</p>');
     try {
       if (!user) throw new Error('Sign in as a moderator.');

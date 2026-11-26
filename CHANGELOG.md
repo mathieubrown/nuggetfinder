@@ -1,3 +1,13 @@
+# Functional launch candidate, November 26, 2026
+
+- Connected the original app and crew screens to the same scoped player. Refresh checks the existing session, sign-out revokes it, and migrated write paths keep existing voting, stock and moderation rules.
+- Added product and store-listing suggestions for human review. Approved combinations can receive dated stock and price reports. A store or brand can request verified access and submit separately tagged stock observations within its claim.
+- Connected food evidence to stock reports, prices, places, products, takes, Court, Showdowns and trails. The take composer can post text and send the prepared image. If the image transfer fails, retry it without reposting the text.
+- Put place, catalog, claim, photo, Court, appeal and community review into the moderator interface. Your submissions shows the latest decision, and account deletion supplies a private completion receipt.
+- Added same-origin candidate service startup, a database health check and serialized cleanup and erasure for isolated testing. Ran a real local SMTP and magic-link test with the existing Auth service. No paid services were provisioned.
+- Added three unapplied migrations, 20261126000200 through 20261126000400. See docs/functional-launch for the migration order, verification, data audit and launch budget.
+- Tested at 390px and 1280px, with screenshots, reduced motion, console and overflow checks. The integrated browser journey includes product review, stock quorum, photo attachment and business claims. New screens need design review. Physical phone cameras, approved consent verification, real sending-domain delivery, production hosting, staffed moderation and production restore remain release gates.
+
 # Search, community places and menu evidence, November 25, 2026
 
 - Fixed the map dropping approved businesses outside its hard-coded chain list. Approved community places now use the same ID in map pages, reporting and menu evidence.

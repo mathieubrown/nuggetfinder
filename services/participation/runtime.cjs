@@ -8,7 +8,7 @@ const fail=code=>{throw Error(code);};
 class Database {
  constructor(pool){this.pool=pool;}
  async call(name,args){
-  if(!['runtime_parent','runtime_action','runtime_photo','runtime_review_photos','runtime_photo_public','runtime_cleanup','runtime_erasure','runtime_group','runtime_catalog','runtime_pair','runtime_review_crew','runtime_read','runtime_rating','runtime_group_request','runtime_retention','runtime_replay_erasure','runtime_legacy_review','runtime_locations','runtime_review_locations','runtime_location_cache'].includes(name))fail('invalid_broker_call');
+  if(!['runtime_parent','runtime_action','runtime_photo','runtime_review_photos','runtime_photo_public','runtime_cleanup','runtime_erasure','runtime_group','runtime_catalog','runtime_pair','runtime_review_crew','runtime_read','runtime_rating','runtime_group_request','runtime_retention','runtime_replay_erasure','runtime_legacy_review','runtime_locations','runtime_review_locations','runtime_location_cache','runtime_identity','runtime_screen','public_context_photos','runtime_catalog_request','runtime_review_catalog','business_stock_for','runtime_feed_screen','runtime_response_screen','runtime_browse','runtime_erasure_status'].includes(name))fail('invalid_broker_call');
   for(let attempt=0;attempt<3;attempt++){
    const client=await this.pool.connect();let retry;
    try{await client.query('begin');await client.query('set local role nugget_broker');const result=await client.query('select public.'+name+'('+args.map((_,i)=>'$'+(i+1)).join(',')+') data',args);await client.query('commit');return result.rows[0].data;}

@@ -1,0 +1,35 @@
+{
+  "counts": {
+    "products": 25,
+    "approved_places": 83,
+    "product_place_links": 189,
+    "places_to_check": 96,
+    "products_without_places": 0,
+    "places_without_address_label": 4,
+    "places_outside_bounds": 0,
+    "stock_observations": 0,
+    "price_observations": 0,
+    "allergen_evidence": 0
+  },
+  "kinds": [
+    {
+      "kind": "nuggets",
+      "count": 8
+    },
+    {
+      "kind": "sauce",
+      "count": 10
+    },
+    {
+      "kind": "tenders",
+      "count": 7
+    }
+  ],
+  "snapshot": {
+    "date": "2026-11-07",
+    "businesses": 4609,
+    "source": "OpenStreetMap contributors, BBBike San Francisco extract",
+    "source_hash": "a107571cb50ba450719ff3cea53eb3d02021fd6dce55b5335dab1e3dca629c1d"
+  },
+  "checked": "Row counts, links, source date and launch bounds. Business accuracy requires review."
+}

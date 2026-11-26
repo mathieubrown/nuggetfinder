@@ -31,11 +31,16 @@
       '<p role="status"></p><p class="composer-guidance">Stamps express opinions. Roast the nugget, not the person. Reports can pull a take down.</p></form></div>';
     const form=root.querySelector('form');
     const feedback=form.querySelector('[role=status]');
-    let photoEditor;
+    let photoEditor,preparedPhoto;
     form.querySelector('[data-photo]').onclick=()=>{
       const panel=form.querySelector('[data-take-photo]');panel.hidden=false;
-      if(!photoEditor)photoEditor=community.mountPhotoEvidence(panel);
-      feedback.textContent='Photo preparation stays private. Photos cannot be attached to published takes until upload and moderation safeguards are connected. Your text draft stays here.';
+      const scoped=window.NuggetfinderParticipant?.enabled;
+      if(!photoEditor)photoEditor=community.mountPhotoEvidence(panel,scoped?{
+        onChange(){preparedPhoto=null;},
+        onPrepared({blob}){preparedPhoto={blob,request:crypto.randomUUID(),owner:NuggetfinderParticipant.current()?.participant};},
+        preparedMessage:'Photo ready. Post your take to send it for review.'
+      }:{});
+      feedback.textContent=scoped?'Crop or cover private details, then prepare your photo.':'Photo preparation stays private. Photos cannot be attached to published takes until upload and moderation safeguards are connected. Your text draft stays here.';
     };
     const photoCleanup=new MutationObserver(()=>{if(!form.isConnected){photoEditor?.dispose();photoCleanup.disconnect();}});
     photoCleanup.observe(root,{childList:true});
@@ -135,6 +140,7 @@
       if(!user)return signIn('Sign in to post a take.');
       posting=true;
       const submittedBody=body.value;
+      const submittedPhoto=preparedPhoto;
       form.setAttribute('aria-busy','true');
       submit.disabled=true;
       try {
@@ -142,6 +148,24 @@
           p_stamp:selectedStamp,p_parent:parentRow?parentRow.id:null,p_tagged:tagged,
           p_place:kind==='place'?target.value:place});
         feedback.textContent=result.status==='published'?'Take posted.':'Take sent for review.';
+        if(window.NuggetfinderParticipant?.enabled && result.id && result.status!=='hidden'){
+          if(submittedPhoto){
+            const upload=async()=>{
+              const person=NuggetfinderParticipant.current();
+              if(!person||person.participant!==user.id||(submittedPhoto.owner&&submittedPhoto.owner!==user.id))throw Error('account_changed');
+              return NuggetfinderFunctional.sendEvidence({person,kind:'take',ref:result.id,purpose:'take',draft:submittedPhoto});
+            };
+            try{await upload();feedback.textContent=result.status==='published'?'Take posted. Photo sent for review.':'Take and photo sent for review.';}
+            catch{
+              feedback.textContent='Take saved. Photo upload needs a retry.';
+              const retry=document.createElement('button');
+              retry.className='big ghost';retry.type='button';retry.textContent='Retry photo upload';
+              retry.onclick=async()=>{retry.disabled=true;try{await upload();feedback.textContent='Photo sent for review.';}catch{retry.disabled=false;}};
+              feedback.append(' ',retry);
+            }
+            if(preparedPhoto===submittedPhoto){preparedPhoto=null;photoEditor?.dispose();photoEditor=null;form.querySelector('[data-take-photo]').replaceChildren();form.querySelector('[data-take-photo]').hidden=true;}
+          }else feedback.append(' ',window.NuggetfinderFunctional.photoLink('take',result.id,'take','Attach food photo'));
+        }
         if(result.status==='published'){
           const link=document.createElement('a');link.className='wave-link';link.href='#/take-view?id='+result.id;link.textContent='Read your take';
           feedback.append(' ',link);

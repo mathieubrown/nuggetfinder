@@ -20,7 +20,7 @@
     card.append(tile);
     const content=document.createElement('div');
     content.className='take-thread-content';
-    content.innerHTML='<a class="take-author" href="#/taste?user='+encodeURIComponent(row.author_id)+'">@'+esc(row.handle)+'</a>'+
+    content.innerHTML=(row.author_id?'<a class="take-author" href="#/taste?user='+encodeURIComponent(row.author_id)+'">@'+esc(row.handle)+'</a>':'<strong>'+esc(row.handle)+'</strong>')+
       (row.stamp?'<span class="take-stamp stamp-'+row.stamp+'">'+stamps[row.stamp]+'</span>':'')+
       (row.parent_handle?'<p class="small">Rebuttal to @'+esc(row.parent_handle)+'</p>':'')+
       '<p>'+esc(row.body)+'</p>'+
@@ -32,7 +32,13 @@
       '<div class="reaction-buttons"></div>';
     card.append(content);
     const reactions=content.querySelector('.reaction-buttons');
-    if (!user || user.id!==row.author_id) {
+    if(user?.scoped){
+      const rebut=content.querySelector('.rebut-button');
+      rebut.href='crew.html#crew';
+      rebut.textContent='Discuss in your crew';
+    }
+    if(window.NuggetfinderParticipant?.enabled)window.NuggetfinderFunctional.gallery(content,'take',row.id);
+    if (!row.mine && (!user || user.id!==row.author_id)) {
       for (const [value,label] of [['with','I’m with them'],['against','I’m against']]) {
         const button=document.createElement('button');
         button.className='reaction-button';
@@ -67,13 +73,20 @@
           const entry=document.createElement('article');
           entry.className='legacy-reply';
           entry.innerHTML='<strong>@'+esc(reply.handle)+'</strong><p>'+esc(reply.body)+'</p>';
-          target.append(entry);
+          target.append(entry);if(window.NuggetfinderParticipant?.enabled)window.NuggetfinderFunctional.gallery(entry,'reply',reply.id);
           if(user && user.id!==reply.author_id) community.addSafetyButtons(entry,client,{kind:'reply',ref:reply.id,author:reply.author_id},feedback);
         });
         loaded=true;
       } catch(error) { feedback.textContent='Could not load responses. Please try again.'; }
     });
-    if(user && user.id!==row.author_id) community.addSafetyButtons(content,client,{kind:'take',ref:row.id,author:row.author_id},feedback);
+    if(user && !row.mine && user.id!==row.author_id){
+      community.addSafetyButtons(content,client,{kind:'take',ref:row.id,author:user.scoped?null:row.author_id},feedback);
+      if(user.scoped){
+        const block=document.createElement('button');block.className='big ghost';block.textContent='Block author';
+        content.append(block);
+        action(block,async()=>{await NuggetfinderParticipant.api('screen',{operation:'block_take',data:{id:row.id}},true,user.id);card.remove();},feedback);
+      }
+    }
     if(community.addTakeShare) community.addTakeShare(content,row,feedback);
     return card;
   };
