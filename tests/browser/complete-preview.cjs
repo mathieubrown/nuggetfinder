@@ -1,0 +1,25 @@
+const assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path');
+const {startReview}=require('../../scripts/review-server.cjs');const {chromium}=require(process.env.NUGGETFINDER_PLAYWRIGHT||'playwright');
+(async()=>{process.env.NUGGETFINDER_REVIEW_ONLY='1';const review=await startReview({port:0});let browser;
+try{
+ for(const width of [390,1280]){
+  browser=await chromium.launch({args:['--single-process','--disable-gpu']});
+  const context=await browser.newContext({viewport:{width,height:width===390?844:960},reducedMotion:'reduce'}),page=await context.newPage(),errors=[],outside=[];page.setDefaultTimeout(15000);
+  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('request',req=>{if(/^https?:/.test(req.url())&&!req.url().startsWith(review.url+'/'))outside.push(req.url());});
+  await page.route('**/review/tiles/**',route=>route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#ede9dc"/><path d="M0 64h256M0 192h256M64 0v256M192 0v256" stroke="#c7c1af"/><text x="10" y="125" font-size="12">Review map tile fixture</text></svg>'}));
+  async function open(route){await page.goto(review.url+route);if(route.startsWith('/index')||route==='/')await page.waitForFunction(()=>document.querySelector('#who')?.textContent?.length);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(150);}
+  async function screenshot(name){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,name+' overflow');const dir=path.resolve(__dirname,'../../docs/screenshots/complete-preview',name);await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,width+'.png')});}
+  for(const [name,route] of [['map','/'],['products','/index.html#/products'],['product','/index.html#/product/mcnuggets'],['showdown','/index.html#/showdown'],['composer','/index.html#/take'],['feed','/index.html#/feed'],['court','/index.html#/court'],['prices','/index.html#/prices'],['profile','/index.html#/me'],['spot','/index.html#/spot/node%2F1229920544'],['badges','/index.html#/badges'],['lists','/index.html#/lists'],['field-guide','/index.html#/field-guide'],['trails','/index.html#/trails'],['trail-builder','/index.html#/trail-builder'],['nominate','/index.html#/nominate'],['taste','/index.html#/taste'],['weekly','/index.html#/weekly-winners'],['account','/index.html#/account'],['strikes','/index.html#/strikes'],['terms','/index.html#/terms'],['privacy','/index.html#/privacy'],['dmca','/index.html#/dmca'],['inventory','/review']]){await open(route);await screenshot(name);}
+  // Exercise the compatibility path against the same local database, including a second actor.
+  await open('/index.html#/product/mcnuggets');const card=page.locator('[data-place="node/1229920544"]');await card.getByRole('button',{name:'Seen it',exact:true}).click();await card.getByText('UNCONFIRMED',{exact:false}).waitFor();
+  await page.locator('#reviewControls summary').click();await page.locator('[data-role]').selectOption('b');await page.waitForFunction(()=>document.querySelector('#who')?.textContent?.includes('crunch_case_b'));await page.locator('[data-place="node/1229920544"]').getByRole('button',{name:'Seen it',exact:true}).click();await page.locator('[data-place="node/1229920544"]').getByText('IN STOCK',{exact:false}).waitFor();
+  await open('/crew.html#parents');await page.getByRole('heading',{name:'Add a verified player'}).waitFor();await screenshot('parent-controls');await page.getByRole('button',{name:'Play as this participant'}).first().click();await page.getByRole('heading',{name:'Find your next obsession.'}).waitFor();
+  await page.locator('nav a[href="#crew"]').click();await page.getByRole('heading',{name:'The crunch council.'}).waitFor();await screenshot('private-crew');
+  await page.locator('nav a[href="#photos"]').click();await page.locator('[data-library]').waitFor();await screenshot('photos');
+  await page.locator('#reviewControls summary').click();await page.locator('[data-role]').selectOption('mod');await page.getByRole('heading',{name:'Check the exhibit.'}).waitFor();await screenshot('moderator');
+  for(const mode of ['reduce','no-preference']){await page.emulateMedia({reducedMotion:mode});assert.equal(await page.locator('#reviewControls').evaluate(e=>getComputedStyle(e).animationName),'none');}
+  assert.deepEqual(outside,[],'No browser requests outside review origin');assert.deepEqual(errors,[],'Console/page errors');console.log(width+': complete original screens, stock quorum, family controls, private crews, photos and moderation pass');await context.close();await browser.close();browser=null;
+  // Reset only test reports between viewport passes; never a live database.
+  await review.db.pool.query('truncate public.stock_point_awards,public.stock_reports restart identity cascade');
+ }
+}finally{if(browser)await browser.close();await review.close();}})().catch(error=>{console.error(error);process.exitCode=1});
