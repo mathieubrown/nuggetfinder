@@ -3,7 +3,8 @@ const http=require('node:http');const {readFile}=require('node:fs/promises');con
 const {randomBytes}=require('node:crypto');const {hash,requireRecentAuthentication}=require('./runtime.cjs');
 const uuid=value=>typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 async function body(request,max){let chunks=[],size=0;for await(const part of request){size+=part.length;if(size>max)throw Error('request_size_limit');chunks.push(part);}return Buffer.concat(chunks);}
-function createServer({runtime,root,origins=[],authConfig=null}){
+function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,mapTiles=null}){
+ if(!placeSearch){const {PlaceSearch}=require('./place-search.cjs');placeSearch=new PlaceSearch({database:runtime.db,snapshot:require('../../data/place_search_snapshot.json').places});}
  const buckets=new Map();let inflight=0,uploadInFlight=0;
  return http.createServer({requestTimeout:15000,headersTimeout:5000,maxHeaderSize:8192},async(request,response)=>{
   response.setHeader('Cache-Control','no-store');response.setHeader('X-Content-Type-Options','nosniff');response.setHeader('Referrer-Policy','no-referrer');response.setHeader('Cross-Origin-Resource-Policy','same-origin');
@@ -25,6 +26,9 @@ function createServer({runtime,root,origins=[],authConfig=null}){
    if(request.method==='GET'&&url.pathname.startsWith('/api/public-photo/')){
     const [,id,variant]=url.pathname.match(/^\/api\/public-photo\/([^/]+)\/(thumb|display)$/)||[];if(!uuid(id))throw Error('invalid_photo');return image(await runtime.publicPhoto(id,variant));
    }
+   if(request.method==='GET'&&/^\/api\/map-tiles\/\d+\/\d+\/\d+\.png$/.test(url.pathname)){
+    const {fallback}=require('./map-tiles.cjs');const [z,x,y]=url.pathname.slice('/api/map-tiles/'.length,-4).split('/').map(Number);const tile=mapTiles?await mapTiles.get(z,x,y,request.headers.referer):fallback();response.setHeader('Content-Type',tile.contentType);response.setHeader('Cache-Control',tile.cacheControl);return response.end(tile.body);
+   }
    if(request.method==='POST'){
     if(url.pathname.startsWith('/api/upload/')){
      const id=url.pathname.slice('/api/upload/'.length),revision=Number(request.headers['x-revision']);
@@ -40,6 +44,10 @@ function createServer({runtime,root,origins=[],authConfig=null}){
      return send(await runtime.parent(token,data.operation,data.data||{}));
     }
     if(url.pathname==='/api/action'){if(!uuid(data.request))throw Error('request_required');return send(await runtime.action(token,data.request,data.operation,data.data||{}));}
+    if(url.pathname==='/api/place-search')return send(placeSearch?await placeSearch.search(data.query):{catalog:await runtime.db.call('runtime_locations',[null,'search',{query:data.query}]),external:[],provider:'not_configured'});
+    if(url.pathname==='/api/place-details')return send(await runtime.db.call('runtime_locations',[null,'details',{place:data.place}]));
+    if(url.pathname==='/api/locations')return send(await runtime.db.call('runtime_locations',[hash(token),data.operation,data.data||{}]));
+    if(url.pathname==='/api/mod-locations'){const account=requireRecentAuthentication(await runtime.auth.verify(token));return send(await runtime.db.call('runtime_review_locations',[account,data.id||null,data.decision||null,data.version||null,data.checked===true]));}
     if(url.pathname==='/api/read')return send(await runtime.db.call('runtime_read',[hash(token),data.operation,data.data||{}]));
     if(url.pathname==='/api/rating')return send(await runtime.db.call('runtime_rating',[hash(token),data.operation,data.data||{}]));
     if(url.pathname==='/api/photo'){if(!['reserve','list','delete','correct','report','attest'].includes(data.operation))throw Error('photo_operation_not_public');return send(await runtime.photo(token,data.operation,data.data||{}));}

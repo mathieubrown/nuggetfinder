@@ -35,7 +35,7 @@ test('creator erasure preserves other crew members contributions and hides repli
 test('broker and independent verifier have exact function permissions and no direct table, login or RLS bypass rights',async()=>{
  const db=await fixture();
  try{
-  const broker=new Set(['runtime_parent','runtime_action','runtime_photo','runtime_review_photos','runtime_photo_public','runtime_cleanup','runtime_pair','runtime_group','runtime_review_crew','runtime_catalog','runtime_erasure','runtime_rating','runtime_read','runtime_group_request','runtime_retention','runtime_replay_erasure','runtime_legacy_review']);
+  const broker=new Set(['runtime_parent','runtime_action','runtime_photo','runtime_review_photos','runtime_photo_public','runtime_cleanup','runtime_pair','runtime_group','runtime_review_crew','runtime_catalog','runtime_erasure','runtime_rating','runtime_read','runtime_group_request','runtime_retention','runtime_replay_erasure','runtime_legacy_review','runtime_locations','runtime_review_locations','runtime_location_cache']);
   for(const role of ['nugget_broker','nugget_consent_verifier']){
    assert.deepEqual((await db.pool.query('select rolsuper,rolbypassrls,rolcanlogin,rolinherit from pg_roles where rolname=$1',[role])).rows[0],{rolsuper:false,rolbypassrls:false,rolcanlogin:false,rolinherit:false});
    const allowed=role==='nugget_broker'?broker:new Set(['runtime_verify_consent','runtime_verify_group_disclosure']);const funcs=(await db.pool.query("select proname,has_function_privilege($1,oid,'execute') allowed from pg_proc where pronamespace='public'::regnamespace and prosecdef",[role])).rows;
