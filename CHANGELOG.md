@@ -1,3 +1,15 @@
+# Scoped participation and Day Zero photo implementation, November 25, 2026
+
+- Added a separate secure participation service and mobile-first private client. Players have individual votes, reports, points and private rankings, with verified-permission gates and parent/account controls. Siblings never impersonate the parent login.
+- Added private crews, moderated takes/replies, structured reactions, product challenges and protected anonymous public takes. Public posting, photo disclosure and group sharing have separate verified permissions. Invitations never substitute for consent.
+- Connected food photos to product/report/social contexts: crop/redact, own-photo attestation, isolated server re-encoding, private storage, human review, corrected revisions, reporting and immediate serving withdrawal.
+- Added retried physical-file cleanup, account/individual deletion, exports with image bytes and deletion replay after restoring a backup. Preserved other crew members and historical prices. No privileged key is in the browser.
+- Added eleven unapplied migrations, 20261125000900 through 20261125001900, plus separate unapplied private Storage configuration. The detailed ordered list and release gates are in docs/participation-runtime/README.md. No live SQL or settings were changed.
+- Tested 68 Node cases and six Python cases with zero failures or skips, including real isolated PostgreSQL, Auth, Storage, PostgREST, HTTP, image containers and database/blob restore. Verified 72 public tables, RLS, inherited permissions and 156 protected functions. All 36 readiness gates remain off.
+- Browser checks passed at 390px and 1280px: no console errors, no horizontal scrolling, reduced motion and touch targets checked. Screenshots are in docs/screenshots/participation-runtime/. The private client requests no third-party scripts, fonts, maps or analytics. Existing browser flows also passed against the default-off new schema.
+- Needs design review: account controls, private discovery/product, crew/challenge, food evidence/moderator, anonymous takes and weekly views. They use the existing cream, yellow, pink, hard-shadow, stamp and VS system.
+- Could not test: actual iOS/Android cameras and accessibility, HEIC conversion, production sign-in/email delivery, an actual legally reviewed consent method, production infrastructure/scheduling/restore, staffed moderation or real catalog accuracy. Those remain explicit gates. No paid services or app LLM calls were made. Merges, deployment and live participation remain held.
+
 # Wave 1
 
 ## Products and where to buy
