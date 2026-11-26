@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "catalog": {
+    "products": 25,
+    "places": 83,
+    "links": 189
+  },
+  "publicTables": 78,
+  "functionsChecked": 173,
+  "readOnly": true,
+  "readiness": {
+    "gates": 36,
+    "enabled": 0
+  },
+  "controls": {
+    "id": true,
+    "cutover": false,
+    "photo_publication_ready": false,
+    "photo_pending_limit": 100,
+    "text_pending_limit": 200,
+    "entry_url": null
+  }
+}
