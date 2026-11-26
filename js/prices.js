@@ -145,11 +145,13 @@
       const button=form.querySelector('button');
       button.disabled=true;
       try {
-        await post({p_place:place,p_product:products.value,
+        const result=await post({p_place:place,p_product:products.value,
           p_price:Number(form.querySelector('#priceAmount').value),
           p_quantity:Number(form.querySelector('#priceQuantity').value),p_unit:unit});
         await refresh();
         feedback.textContent='Price entry saved.';
+        if(window.NuggetfinderParticipant?.enabled && result?.id)
+          feedback.append(' ',window.NuggetfinderFunctional.photoLink('price_entry',result.id,'price','Attach price or receipt photo'));
         if(form.querySelector('#priceAmount').value===amount)form.querySelector('#priceAmount').value='';
         if(form.querySelector('#priceQuantity').value===quantity)form.querySelector('#priceQuantity').value='';
       }catch(error){feedback.textContent=error.message.includes('cooldown')?'Wait 10 minutes before adding another price for this product here.':'Could not confirm the price. Check the numbers and retry safely.';}

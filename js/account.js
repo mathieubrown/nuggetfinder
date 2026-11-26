@@ -11,6 +11,9 @@
     shell(root, 'Account', '<div class="wave-card"><p><a href="#/participation">Family &amp; participation controls</a></p><h2>My data</h2><button class="big pink" id="exportData">Download my data</button>' +
       '<p role="status"></p><h2>Delete my account</h2><p>Use the private account controls for deletion, managed profiles and photo exports. Production activation remains held.</p><a class="wave-link" href="crew.html#parents">Open private account controls</a></div>' +
       '<nav class="wave-nav" aria-label="Policies"><a href="#/terms">Terms</a><a href="#/privacy">Privacy</a><a href="#/dmca">DMCA contact</a></nav>');
+    if(window.NuggetfinderParticipant?.enabled){
+      root.querySelector('.wave-card').insertAdjacentHTML('afterbegin','<p><a href="#/activity">Your submissions and review status</a> · <a href="#/business">Business access</a></p>');
+    }
     action(root.querySelector('#exportData'), async () => {
       if (!user) return signIn('Sign in to export your data.');
       const data = await rpc(client, 'export_my_data');

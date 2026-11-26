@@ -16,6 +16,11 @@ window.NuggetfinderSpot = (function (community) {
       '<a class="wave-link" href="#/take?kind=place&ref=' + encodeURIComponent(place.id) + '&label=' +
       encodeURIComponent(place.name) + '">Drop a take</a></div><div class="spot-takes" data-spot-takes></div></section><p role="status"></p>';
     root.querySelector('.block').after(section);
+    if(window.NuggetfinderParticipant?.enabled){
+      const listing=document.createElement('a');listing.className='wave-link';listing.href='#/suggest-product?place='+encodeURIComponent(place.id);listing.textContent='Suggest a product sold here';section.append(listing);
+      section.append(window.NuggetfinderFunctional.photoLink('place',place.id,'review'));
+      window.NuggetfinderFunctional.gallery(section,'place',place.id);
+    }
     const feedback = section.querySelector('[role=status]');
     const form = section.querySelector('form');
 

@@ -226,6 +226,7 @@ async function readCatalogMapPlaces() {
 }
 
 function fetchPlaces() {
+  if(window.NuggetfinderParticipant.enabled)return Promise.resolve({places:[],seed:false});
   var cached = loadJSON(CACHE_KEY, null);
   if (cached && cached.places && cached.places.length && Date.now() - cached.ts < CACHE_TTL) {
     return Promise.resolve({ places: withCatalogPlaces(cached.places.filter(function (place) { return /^(node|way|relation)\/[0-9]+$/.test(place.id); })), seed: false });
@@ -485,6 +486,7 @@ function serverReport(id, s) {
 }
 
 function openAuth(msg) {
+  if(window.NuggetfinderParticipant.enabled){window.NuggetfinderParticipant.connect().catch(function(){});return;}
   if(runtimeEntry && runtimeEntry.active){enterPrivateRuntime();return;}
   if(runtimeEntry && (runtimeEntry.checking || runtimeEntry.unavailable)){toast('Account access is being checked or is unavailable. Browsing still works.');return;}
   document.getElementById('authMsg').textContent = msg || 'We email you a sign-in link. No password.';
@@ -499,6 +501,16 @@ function closeAuth() {
 
 function setUser(u) {
   state.user = u;
+  if(window.NuggetfinderParticipant.enabled){
+    authBtn.textContent=u?'SIGN OUT':'CONNECT PLAYER';
+    whoEl.textContent=u?'@'+u.handle:'';
+    whoEl.hidden=!u;
+    if(wavePage&&!wavePage.hidden){
+      var route=NuggetfinderRouter.current();
+      if(!['map-search','add-place','menus','take','photo','prices'].includes(route.page))showRoute(route);
+    }
+    return;
+  }
   var page = NuggetfinderRouter.current().page;
   // Scoped place forms manage their own identity; legacy login completion must not replace their drafts.
   var scopedPlaceFlow=['map-search','add-place','menus'].indexOf(page)!==-1;
@@ -549,7 +561,7 @@ function closeName() {
   if (nameDlg.close) nameDlg.close(); else nameDlg.removeAttribute('open');
 }
 
-whoEl.addEventListener('click', openName);
+whoEl.addEventListener('click',function(){if(window.NuggetfinderParticipant.enabled)location.href='crew.html#parents';else openName();});
 document.getElementById('nameCancel').addEventListener('click', closeName);
 document.getElementById('nameForm').addEventListener('submit', function (e) {
   e.preventDefault();
@@ -569,6 +581,10 @@ document.getElementById('nameForm').addEventListener('submit', function (e) {
 function initSupabase() {
   if (!window.supabase || !SUPABASE_URL) return;
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  if(window.NuggetfinderParticipant.enabled){
+    sb=window.NuggetfinderScopedApp(sb,setUser);
+    return;
+  }
   sb.rpc('participation_runtime_entry').then(function(result){runtimeEntry=result.error?{unavailable:true}:result.data;}).catch(function(){runtimeEntry={unavailable:true};});
   sb.auth.getSession().then(function (r) { setUser(r.data && r.data.session ? r.data.session.user : null); });
   sb.auth.onAuthStateChange(function (event, session) { setUser(session ? session.user : null); });
@@ -577,7 +593,7 @@ function initSupabase() {
 authBtn.addEventListener('click', function () {
   if(runtimeEntry && runtimeEntry.active){enterPrivateRuntime();return;}
   if (!sb) { toast('Sign-in is not available right now.'); return; }
-  if (state.user) { sb.auth.signOut(); toast('Signed out.'); return; }
+  if (state.user) { Promise.resolve(sb.auth.signOut()).then(function(){toast('Signed out.');}).catch(function(){toast('This tab is signed out. The server could not confirm revocation.');}); return; }
   openAuth();
 });
 document.getElementById('authCancel').addEventListener('click', closeAuth);
@@ -640,7 +656,7 @@ panel.addEventListener('input', function (e) {
 
 function initMap() {
   map = L.map('map', { zoomControl: true });
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer(window.NuggetfinderParticipant.enabled?'/api/map-tiles/{z}/{x}/{y}.png':'https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
@@ -668,7 +684,7 @@ var wavePage = document.getElementById('wavePage');
 var mapApp = document.getElementById('mapApp');
 
 function showProfile() {
-  return NuggetfinderProfile.show(wavePage, sb, state.user, esc, openAuth, openName);
+  return NuggetfinderProfile.show(wavePage, sb, state.user, esc, openAuth, function(){if(window.NuggetfinderParticipant.enabled)location.href='crew.html#parents';else openName();});
 }
 
 function renderRouteContent(route) {
@@ -717,6 +733,15 @@ function showRoute(route) {
     var title=heading?heading.textContent.trim():'Map';
     document.title=title+' | Nuggetfinder';
     if(!wavePage.hidden)wavePage.setAttribute('aria-label',title);
+    if(window.NuggetfinderParticipant.enabled&&['products','product','court','showdown','trails'].includes(route.page)){
+      var path=route.page==='product'?'#/suggest-product?product='+encodeURIComponent(route.productId):'#/suggest-product';
+      if(route.page==='products'||route.page==='product'){
+        var suggest=document.createElement('a');suggest.href=path;suggest.className='wave-link';suggest.textContent=route.page==='product'?'Suggest another store':'Suggest a missing product';var hero=content.querySelector('.wave-hero');if(hero)hero.after(suggest);else content.prepend(suggest);
+      }
+      var kind=route.page==='trails'?'trail':route.page;
+      var ref=route.productId||route.id;
+      if(ref){if(kind!=='product')content.append(window.NuggetfinderFunctional.photoLink(kind,ref,kind));window.NuggetfinderFunctional.gallery(content,kind,ref);}
+    }
     if(changed && !document.querySelector('dialog[open]')) {
       var destination=heading || content;
       destination.setAttribute('tabindex','-1');

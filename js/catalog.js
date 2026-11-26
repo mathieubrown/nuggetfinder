@@ -106,6 +106,7 @@ window.NuggetfinderCatalog = (function () {
 
     cards.forEach(function (card) {
       card.classList.toggle('spot-foil', placeIsRare(card));
+      if(window.NuggetfinderParticipant?.enabled)window.NuggetfinderFunctional.businessStock(card,product.id,card.dataset.place);
       var share = card.querySelector('[data-share]');
       var place = links.find(function (link) { return link.place_id === card.dataset.place; }).places;
       share.addEventListener('click', async function () {
@@ -137,6 +138,11 @@ window.NuggetfinderCatalog = (function () {
             p_product: product.id, p_place: card.dataset.place, p_status: button.dataset.stock
           });
           if (response.error) throw response.error;
+          if(window.NuggetfinderParticipant?.enabled && response.data?.id){
+            card.querySelector('[data-report-evidence]')?.remove();
+            var evidence=window.NuggetfinderFunctional.photoLink('stock_report',response.data.id,'stock','Attach shelf photo');
+            evidence.dataset.reportEvidence='';card.append(evidence);
+          }
           if (id !== renderId || root.hidden) return;
           feedback.textContent = 'Report saved. It takes two people to confirm a stock status.';
           await refresh();

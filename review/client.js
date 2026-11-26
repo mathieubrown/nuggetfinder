@@ -1,7 +1,7 @@
 /* Only injected by the loopback review server. Contains no production authentication. */
 (function(){
  'use strict';
- const role=()=>['a','b','mod'].includes(sessionStorage.getItem('nugget-review-role'))?sessionStorage.getItem('nugget-review-role'):'a';
+ const role=()=>['a','b','mod','business'].includes(sessionStorage.getItem('nugget-review-role'))?sessionStorage.getItem('nugget-review-role'):'a';
  const request=async(operation,input)=>{const response=await fetch('/__review/'+operation,{method:'POST',headers:{'Content-Type':'application/json','X-Review-Role':role()},body:JSON.stringify(input)});return response.json();};
  const signedIn=()=>sessionStorage.getItem('nugget-review-signed-out')!=='yes';
  let callbacks=[];
@@ -14,9 +14,16 @@
   const bar=document.querySelector('#reviewControls');if(!bar)return;
   let previousHeight=0;new ResizeObserver(()=>{const height=bar.getBoundingClientRect().height;if(height!==previousHeight){previousHeight=height;document.documentElement.style.setProperty('--review-bar-height',height+'px');window.dispatchEvent(new Event('resize'));}}).observe(bar);
   const feature=bar.querySelector('select[data-feature]');feature.onchange=()=>{if(feature.value)location.href=feature.value;};
-  const picker=bar.querySelector('select[data-role]');picker.value=role();picker.onchange=()=>{sessionStorage.setItem('nugget-review-role',picker.value);sessionStorage.removeItem('nugget-review-signed-out');if(window.NuggetfinderCrew){location.href='/crew.html?role='+picker.value+'#'+(picker.value==='mod'?'mod':'parents');}else location.reload();};
-  bar.querySelector('[data-signin]').onclick=()=>{sessionStorage.removeItem('nugget-review-signed-out');location.reload();};
-  if(window.NuggetfinderParticipant&&role()!=='mod'){const result=await request('participant-session',{});if(result.token)NuggetfinderParticipant.setSession(result);}
+  const picker=bar.querySelector('select[data-role]');picker.value=role();picker.onchange=()=>{window.NuggetfinderParticipant?.clear();sessionStorage.setItem('nugget-review-role',picker.value);sessionStorage.removeItem('nugget-review-player-signout');sessionStorage.removeItem('nugget-review-signed-out');if(window.NuggetfinderCrew){location.href='/crew.html?role='+picker.value+'#'+(picker.value==='mod'?'mod':'parents');}else location.reload();};
+  bar.querySelector('[data-signin]').onclick=()=>{sessionStorage.removeItem('nugget-review-signed-out');sessionStorage.removeItem('nugget-review-player-signout');location.reload();};
+  if(window.NuggetfinderParticipant&&role()!=='mod'){
+   const player=NuggetfinderParticipant;
+   if(player.enabled)await player.restore();
+   if(!player.current()&&(!player.enabled||sessionStorage.getItem('nugget-review-player-signout')!=='yes')){
+    const result=await request('participant-session',{});if(result.token)player.setSession(result);
+   }
+   if(player.enabled)window.addEventListener('nugget-player-connected',()=>{if(!player.current())sessionStorage.setItem('nugget-review-player-signout','yes');});
+  }
   if(window.NuggetfinderCrew){
    const token=role()==='mod'?'local-moderator':'local-parent';
    const controls=bar.querySelector('[data-controls]');controls.onclick=()=>{history.replaceState(null,'','#'+(role()==='mod'?'mod':'parents'));NuggetfinderCrew.setParentToken(token);};
