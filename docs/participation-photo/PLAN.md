@@ -1,3 +1,7 @@
+# Implementation update, November 25, 2026
+
+The next development pass implemented the previously missing scoped runtime, private photo lifecycle, private crews, exports and erasure. See [the current implementation and release gates](../participation-runtime/README.md) and its test evidence. The foundation assessment below is historical; its statements that these components are unbuilt are superseded by that report. Production activation, real consent verification and launch approval remain held.
+
 # All ages and Day Zero photography
 
 Development review, 2026-11-25. Not launch approval. [Founder directive](../FOUNDER_DIRECTIVE.md) governs conflicting older material.

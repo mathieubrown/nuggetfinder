@@ -1,7 +1,7 @@
 (function (community) {
  'use strict';
  // One editor for every evidence context. No originals, drafts or coordinates go to a network.
- function mount(root, {onPrepared=()=>{}}={}) {
+ function mount(root, {onPrepared=()=>{},onChange=()=>{},preparedMessage='Private draft prepared. Uploads are held pending consent, secure storage and moderation setup. A photo does not confirm stock or price.'}={}) {
   root.innerHTML='<section class="photo-lab"><div class="photo-sticker" aria-hidden="true">EXHIBIT A</div><h2>Let the nugget testify.</h2>'+
    '<p>Food, packaging and shelf details only. Keep people, payment details and personal information out.</p>'+
    '<div class="photo-pickers"><label class="photo-button">Take a photo<input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" data-camera></label>'+
@@ -12,7 +12,7 @@
    '<fieldset><legend>Cover private details</legend><p>Choose a rectangle. Black it out, then inspect the whole image.</p>'+
    ['Left','Top','Width','Height'].map((label,i)=>'<label>'+label+' (%)<input data-coordinate="'+i+'" type="number" min="'+(i<2?'0':'1')+'" max="100" value="'+[10,10,25,25][i]+'"></label>').join('')+
    '<button type="button" data-redact>Black out rectangle</button><button type="button" data-clear>Undo all redactions</button></fieldset>'+
-   '<label class="photo-attest"><input type="checkbox" data-attest> I checked: food or products only, no people or private details.</label>'+
+   '<label class="photo-attest"><input type="checkbox" data-attest> I took this photo. Food or products only, no people or private details.</label>'+
    '<button class="photo-button" type="button" data-prepare>Prepare private draft</button><button type="button" data-discard>Discard photo</button></div>'+
    '<p role="status" aria-live="polite">Private on this device. Nothing has been uploaded.</p></section>';
   const work=root.querySelector('.photo-work'), canvas=root.querySelector('canvas'), status=root.querySelector('[role=status]');
@@ -27,10 +27,10 @@
    ctx.drawImage(image,sx,sy,width,height,0,0,canvas.width,canvas.height);
    ctx.fillStyle='#000';redactions.forEach(([x,y,w,h])=>ctx.fillRect((x*image.width-sx)*scale,(y*image.height-sy)*scale,w*image.width*scale,h*image.height*scale));
   }
-  function changed(){revision++;root.querySelector('[data-attest]').checked=false;status.textContent='Private draft changed. Inspect it again before preparing.';draw();}
+  function changed(){onChange();revision++;root.querySelector('[data-attest]').checked=false;status.textContent='Private draft changed. Inspect it again before preparing.';draw();}
   root.querySelectorAll('input[type=file]').forEach(input=>input.onchange=async()=>{
    const file=input.files[0];input.value='';if(!file)return;
-   const attempt=++revision;
+   onChange();const attempt=++revision;
    try{
     if(!file.size||file.size>8*1024*1024)throw Error('Choose a photo smaller than 8 MB.');
     if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Use JPEG, PNG or WebP.');
@@ -56,10 +56,10 @@
    canvas.toBlob(blob=>{
     if(disposed||revision!==expected||!blob)return;
     onPrepared({blob,mime:'image/jpeg',width:canvas.width,height:canvas.height});
-    status.textContent='Private draft prepared. Uploads are held pending consent, secure storage and moderation setup. A photo does not confirm stock or price.';
+    status.textContent=preparedMessage;
    },'image/jpeg',0.82);
   };
-  function discard(){revision++;image?.close();image=null;redactions=[];canvas.width=1;canvas.height=1;work.hidden=true;status.textContent='Photo discarded. Nothing was uploaded.';}
+  function discard(){onChange();revision++;image?.close();image=null;redactions=[];canvas.width=1;canvas.height=1;work.hidden=true;status.textContent='Photo discarded. Nothing was uploaded.';}
   root.querySelector('[data-discard]').onclick=discard;
   return {dispose(){disposed=true;discard();}};
  }

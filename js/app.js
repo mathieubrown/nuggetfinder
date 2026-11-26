@@ -423,6 +423,13 @@ function report(id, s) {
 }
 
 var sb = null;
+var runtimeEntry = {checking:true};
+function enterPrivateRuntime(){
+  var target='crew.html#parents';
+  if(runtimeEntry && runtimeEntry.url){try{var url=new URL(runtimeEntry.url);if(url.protocol==='https:' && !url.username && !url.password)target=url.href+'#parents';}catch(error){/* Held local entry remains the fallback. */}}
+  var signOut=sb && state.user && sb.auth.signOut?sb.auth.signOut():Promise.resolve();
+  Promise.resolve(signOut).then(function(result){if(result && result.error){toast('Sign out could not finish. Try again before switching accounts.');return;}window.location.assign(target);},function(){toast('Sign out could not finish. Try again before switching accounts.');});
+}
 var authDlg = document.getElementById('auth');
 var authBtn = document.getElementById('authBtn');
 var whoEl = document.getElementById('who');
@@ -478,6 +485,8 @@ function serverReport(id, s) {
 }
 
 function openAuth(msg) {
+  if(runtimeEntry && runtimeEntry.active){enterPrivateRuntime();return;}
+  if(runtimeEntry && (runtimeEntry.checking || runtimeEntry.unavailable)){toast('Account access is being checked or is unavailable. Browsing still works.');return;}
   document.getElementById('authMsg').textContent = msg || 'We email you a sign-in link. No password.';
   document.getElementById('authSend').disabled = false;
   if (authDlg.showModal) authDlg.showModal(); else authDlg.setAttribute('open', '');
@@ -558,11 +567,13 @@ document.getElementById('nameForm').addEventListener('submit', function (e) {
 function initSupabase() {
   if (!window.supabase || !SUPABASE_URL) return;
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  sb.rpc('participation_runtime_entry').then(function(result){runtimeEntry=result.error?{unavailable:true}:result.data;}).catch(function(){runtimeEntry={unavailable:true};});
   sb.auth.getSession().then(function (r) { setUser(r.data && r.data.session ? r.data.session.user : null); });
   sb.auth.onAuthStateChange(function (event, session) { setUser(session ? session.user : null); });
 }
 
 authBtn.addEventListener('click', function () {
+  if(runtimeEntry && runtimeEntry.active){enterPrivateRuntime();return;}
   if (!sb) { toast('Sign-in is not available right now.'); return; }
   if (state.user) { sb.auth.signOut(); toast('Signed out.'); return; }
   openAuth();
