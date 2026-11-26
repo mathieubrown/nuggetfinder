@@ -4,6 +4,7 @@ window.NuggetfinderCommunity = (function () {
   async function rpc(client, name, parameters) {
     const result = await client.rpc(name, parameters);
     if (result.error) {
+      if(result.error.message==='participant_session_required')throw new Error('Open Your crew to participate with your individual profile.');
       if(result.error.message==='vote_history_hold')throw new Error('Voting is paused until previous activity is outside the 24-hour window.');
       throw result.error;
     }
