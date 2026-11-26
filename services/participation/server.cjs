@@ -3,7 +3,7 @@ const http=require('node:http');const {readFile}=require('node:fs/promises');con
 const {randomBytes}=require('node:crypto');const {hash,requireRecentAuthentication}=require('./runtime.cjs');
 const uuid=value=>typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 async function body(request,max){let chunks=[],size=0;for await(const part of request){size+=part.length;if(size>max)throw Error('request_size_limit');chunks.push(part);}return Buffer.concat(chunks);}
-function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,mapTiles=null}){
+function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,mapTiles=null,scopedApp=false,assets=null}){
  if(!placeSearch){const {PlaceSearch}=require('./place-search.cjs');placeSearch=new PlaceSearch({database:runtime.db,snapshot:require('../../data/place_search_snapshot.json').places});}
  const buckets=new Map();let inflight=0,uploadInFlight=0;
  return http.createServer({requestTimeout:15000,headersTimeout:5000,maxHeaderSize:8192},async(request,response)=>{
@@ -21,6 +21,10 @@ function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,
   try{
    const url=new URL(request.url,'http://localhost');if(url.search)throw Error('query_parameters_not_supported');
    const token=(request.headers.authorization||'').replace(/^Bearer /,'');
+   if(request.method==='GET'&&url.pathname==='/api/health'){
+    await runtime.db.call('runtime_browse',['discovery_targets',{}]);
+    return send({status:'ready'});
+   }
    if(request.method==='GET'&&url.pathname==='/api/config')return send({auth:authConfig,productionEnabled:false});
    if(request.method==='GET'&&url.pathname==='/api/catalog')return send(await runtime.db.call('runtime_catalog',[]));
    if(request.method==='GET'&&url.pathname.startsWith('/api/public-photo/')){
@@ -48,6 +52,25 @@ function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,
     if(url.pathname==='/api/place-details')return send(await runtime.db.call('runtime_locations',[null,'details',{place:data.place}]));
     if(url.pathname==='/api/locations')return send(await runtime.db.call('runtime_locations',[hash(token),data.operation,data.data||{}]));
     if(url.pathname==='/api/mod-locations'){const account=requireRecentAuthentication(await runtime.auth.verify(token));return send(await runtime.db.call('runtime_review_locations',[account,data.id||null,data.decision||null,data.version||null,data.checked===true]));}
+    if(url.pathname==='/api/catalog-data')return send(await runtime.db.call('runtime_catalog',[]));
+    if(url.pathname==='/api/deletion-status'){
+     if(!uuid(data.receipt))throw Error('receipt_unavailable');
+     const result=await runtime.db.call('runtime_erasure_status',[data.receipt]);
+     if(!result)throw Error('receipt_unavailable');
+     return send(result);
+    }
+    if(url.pathname==='/api/browse')return send(await runtime.db.call('runtime_browse',[data.operation,data.data||{}]));
+    if(url.pathname==='/api/feed')return send(await runtime.db.call('runtime_feed_screen',[token?hash(token):null,data]));
+    if(url.pathname==='/api/responses')return send(await runtime.db.call('runtime_response_screen',[token?hash(token):null,data.id]));
+    if(url.pathname==='/api/player')return send(await runtime.db.call('runtime_identity',[hash(token)]));
+    if(url.pathname==='/api/screen')return send(await runtime.db.call('runtime_screen',[hash(token),data.operation,data.data||{}]));
+    if(url.pathname==='/api/context-photos')return send(await runtime.db.call('public_context_photos',[data.kind,data.ref]));
+    if(url.pathname==='/api/business-stock')return send(await runtime.db.call('business_stock_for',[data.product,data.place||null]));
+    if(url.pathname==='/api/catalog-request')return send(await runtime.db.call('runtime_catalog_request',[hash(token),data.operation,data.data||{}]));
+    if(url.pathname==='/api/mod-catalog'){
+     const account=requireRecentAuthentication(await runtime.auth.verify(token));
+     return send(await runtime.db.call('runtime_review_catalog',[account,data.id||null,data.decision||null,data.checked===true]));
+    }
     if(url.pathname==='/api/read')return send(await runtime.db.call('runtime_read',[hash(token),data.operation,data.data||{}]));
     if(url.pathname==='/api/rating')return send(await runtime.db.call('runtime_rating',[hash(token),data.operation,data.data||{}]));
     if(url.pathname==='/api/photo'){if(!['reserve','list','delete','correct','report','attest'].includes(data.operation))throw Error('photo_operation_not_public');return send(await runtime.photo(token,data.operation,data.data||{}));}
@@ -75,12 +98,29 @@ function createServer({runtime,root,origins=[],authConfig=null,placeSearch=null,
     throw Error('endpoint_unavailable');
    }
    if(request.method==='GET'&&root){
-    const file=url.pathname==='/'?'crew.html':decodeURIComponent(url.pathname).slice(1);
-    if(!/^(crew\.html|(?:js|css|vendor)\/[a-zA-Z0-9_./-]+)$/.test(file)||file.includes('..'))throw Error('file_unavailable');
+    const file=url.pathname==='/'?(scopedApp?'index.html':'crew.html'):decodeURIComponent(url.pathname).slice(1);
+    if(scopedApp&&assets&&['assets/leaflet.js','assets/leaflet.css','assets/markercluster.js'].includes(file)){
+     response.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':'text/css');
+     return response.end(await readFile(path.join(assets,path.basename(file))));
+    }
+    if((!(/^(crew\.html|(?:js|css|vendor)\/[a-zA-Z0-9_./-]+)$/.test(file))&&!(scopedApp&&file==='index.html'))||file.includes('..'))throw Error('file_unavailable');
     const extension=path.extname(file);const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf'};
     if(!types[extension])throw Error('file_unavailable');response.setHeader('Content-Type',types[extension]);
-    response.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' blob: data:; style-src 'self'; font-src 'self'; connect-src 'self' "+(authConfig?new URL(authConfig.url).origin:'')+"; base-uri 'none'; form-action 'none'; frame-ancestors 'none'");
-    let bytes=await readFile(path.join(root,file));if(file==='crew.html')bytes=bytes.toString().replace('name="nugget-runtime" content="held"','name="nugget-runtime" content="enabled"');return response.end(bytes);
+    response.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' blob: data:; style-src 'self' "+(scopedApp?"'unsafe-inline' ":"")+"; font-src 'self'; connect-src 'self' "+(authConfig?new URL(authConfig.url).origin:'')+"; base-uri 'none'; form-action 'none'; frame-ancestors 'none'");
+    if(scopedApp&&file==='index.html')response.setHeader('Referrer-Policy','strict-origin');
+    let bytes=await readFile(path.join(root,file));
+    if(file==='crew.html')bytes=bytes.toString().replace('name="nugget-runtime" content="held"','name="nugget-runtime" content="enabled"');
+    if(scopedApp&&file.endsWith('.html')){
+      bytes=bytes.toString().replace('</head>','<meta name="nugget-scoped-app" content="enabled"></head>');
+      if(file==='index.html')bytes=bytes
+       .replace(/<link[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>/g,'')
+       .replace('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css','/assets/leaflet.css')
+       .replace('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js','/assets/leaflet.js')
+       .replace('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js','/assets/markercluster.js')
+       .replace(/<script src="https:\/\/cdn\.jsdelivr[^>]*><\/script>/g,'')
+       .replace('</head>','<script src="/js/public-browser.js"></script></head>');
+    }
+    return response.end(bytes);
    }
    throw Error('endpoint_unavailable');
   }catch(error){
