@@ -6,7 +6,7 @@ test('participant permissions and private evidence fail closed without cross-acc
  try {
   const ids=[];
   for(const [index,band] of [[1,'under13'],[2,'teen'],[3,'adult']]){
-   const row=await db.pool.query(`insert into participants(account_id,pseudonym,age_band,managed,invited_at) values($1,$2,$3,$4,now()) returning id`,[db.users[index],'nugget_'+index,band,band==='under13']);ids.push(row.rows[0].id);
+   const row=await db.pool.query(`insert into participants(account_id,pseudonym,age_band,managed,invited_at) values($1,$2,$3,$4,now()) returning id`,[db.users[index],'nugget_'+index,band,band==='under13']);ids.push(row.rows[0].id);const pid=row.rows[0].id;await db.pool.query('insert into account_invitations(account_id) values($1)',[db.users[index]]);if(band==='under13')await db.pool.query("insert into profiles(id,handle,age_confirmed,public_identity) values($1,$2,true,false)",[pid,'private_fixture']);await db.pool.query('insert into participant_profiles values($1,$2)',[pid,band==='under13'?pid:db.users[index]]);
   }
   for(let i=0;i<ids.length;i++)assert.equal((await db.actor(i+1,'select participant_can($1,\'photo\') ok',[ids[i]])).rows[0].ok,false);
   await assert.rejects(db.actor(1,`update participation_readiness set enabled=true`),/permission denied/);
