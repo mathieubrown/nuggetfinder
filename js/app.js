@@ -219,8 +219,8 @@ async function readCatalogMapPlaces() {
     result.data.forEach(function (place) { catalogPlaceIds.add(place.id); });
     return result.data.flatMap(function (place) {
       var chain = matchChain(place.name);
-      return chain ? [{id:place.id,name:place.name,chain:chain.id,lat:place.latitude,
-        lng:place.longitude,place:place.area}] : [];
+      return [{id:place.id,name:place.name,chain:chain?chain.id:'community',lat:place.latitude,
+        lng:place.longitude,place:place.area}];
     });
   } catch (error) { return []; }
 }
@@ -339,7 +339,7 @@ function renderPanel() {
   var menus = ['nuggets', 'tenders', 'sauce', 'sides'];
   html += '<div class="search"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#161514" stroke-width="2.5" stroke-linecap="square"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg>' +
     '<label class="visually-hidden" for="q">Search spots</label>' +
-    '<input id="q" type="search" placeholder="Search spots or streets" autocomplete="off" value="' + esc(state.query) + '"></div>';
+    '<input id="q" type="search" placeholder="Search spots or streets" autocomplete="off" value="' + esc(state.query) + '"><button class="map-search-go" data-action="search-places" aria-label="Search food businesses and addresses">GO</button></div>';
   html += '<div class="chips" role="group" aria-label="Filter by menu">';
   menus.forEach(function (m) {
     html += '<button class="chip" data-menu="' + m + '" aria-pressed="' + (state.menu === m) + '">' + (m === 'all' ? 'ALL' : m.toUpperCase()) + '</button>';
@@ -356,7 +356,7 @@ function renderPanel() {
   html += '<div class="sheet-handle" aria-hidden="true"></div><div class="tools"><span class="heading">' + (state.userLoc ? 'NEAR YOU' : 'NEAR YOU') + '</span>' +
     '<button class="link-btn" data-action="locate">USE MY LOCATION</button></div>' +
     '<button class="found-report" data-action="choose-report">I FOUND NUGGETS / NOPE</button>'+
-    '<a class="product-finder-link" href="#/products">Find a product in stores →</a>';
+    '<a class="product-finder-link" href="#/products">Find a product in stores →</a><a class="product-finder-link" href="#/add-place">Missing a place? Add a pin →</a>';
   html += '<div class="small">' + list.length + (list.length === 1 ? ' spot' : ' spots') + ' · ' +
     (state.server ? 'reports fade after 2 hours' : 'shared reports unavailable; browsing saved locations') + '</div>';
   html += '<details class="legend"><summary>What the icons mean</summary><p>Check: nuggets. X: nope. Bars: mixed. Dots: unconfirmed, a second person has to agree. Clock: stale. Dash: no reports.</p></details>';
@@ -500,7 +500,9 @@ function closeAuth() {
 function setUser(u) {
   state.user = u;
   var page = NuggetfinderRouter.current().page;
-  if (NuggetfinderCommunity.pages[page] && !wavePage.hidden) {
+  // Scoped place forms manage their own identity; legacy login completion must not replace their drafts.
+  var scopedPlaceFlow=['map-search','add-place','menus'].indexOf(page)!==-1;
+  if (NuggetfinderCommunity.pages[page] && !wavePage.hidden && !scopedPlaceFlow) {
     setTimeout(function () { window.dispatchEvent(new Event('hashchange')); }, 0);
   }
   if (location.hash === '#/me' && !wavePage.hidden) showProfile();
@@ -513,7 +515,7 @@ function setUser(u) {
       whoEl.textContent = '@' + res.data.handle;
       whoEl.hidden = false;
       state.handleSet = !!res.data.handle_set;
-      if (!res.data.handle_set && state.nameAsked !== u.id) { state.nameAsked = u.id; openName(); }
+      if (!res.data.handle_set && state.nameAsked !== u.id && !scopedPlaceFlow) { state.nameAsked = u.id; openName(); }
     });
   }
 }
@@ -613,6 +615,7 @@ panel.addEventListener('click', function (e) {
   if (t.dataset.menu) { state.menu = state.menu === t.dataset.menu ? 'all' : t.dataset.menu; renderMarkers(); return renderPanel(); }
   if (t.dataset.report) return report(state.selected, t.dataset.report);
   var a = t.dataset.action;
+  if (a === 'search-places') { location.hash='/map-search?q='+encodeURIComponent(state.query); return; }
   if (a === 'back') { NuggetfinderRouter.openHome(); return showSpot(null, false); }
   if (a === 'now') { state.nowOnly = !state.nowOnly; renderMarkers(); return renderPanel(); }
   if (a === 'locate') return locate();
@@ -622,6 +625,8 @@ panel.addEventListener('click', function (e) {
     if (first) { first.focus(); first.scrollIntoView({block:'nearest'}); }
   }
 });
+
+panel.addEventListener('keydown',function(e){if(e.target.id==='q'&&e.key==='Enter'){e.preventDefault();location.hash='/map-search?q='+encodeURIComponent(state.query);}});
 
 panel.addEventListener('input', function (e) {
   if (e.target.id !== 'q') return;
@@ -688,9 +693,14 @@ function renderRouteContent(route) {
   });
   requestAnimationFrame(function () { map.invalidateSize(); });
   var id = route.spotId;
-  var found = id && state.places.some(function (place) { return place.id === id; });
-  showSpot(found ? id : null, !!found);
-  if(state.places.length)refreshStatuses().then(function(){if(!mapApp.hidden){renderMarkers();redrawMapConfidence();}});
+  var requestedHash=location.hash,requestedVersion=routeVersion;
+  return readCatalogMapPlaces().then(function(rows){
+    if(location.hash!==requestedHash||routeVersion!==requestedVersion)return;
+    if(rows.length)state.places=rows;
+    var found=id&&state.places.some(function(place){return place.id===id;});
+    showSpot(found?id:null,!!found);
+    if(state.places.length)return refreshStatuses().then(function(){if(location.hash===requestedHash&&!mapApp.hidden){renderMarkers();redrawMapConfidence();}});
+  });
 }
 
 var routeVersion=0;

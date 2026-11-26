@@ -1,6 +1,7 @@
 window.NuggetfinderCommunity = (function () {
   'use strict';
   const pages = {};
+  function communityPlaceReviewAvailable(){return !!window.NuggetfinderCommunity.mountPlaceReview;}
   async function rpc(client, name, parameters) {
     const result = await client.rpc(name, parameters);
     if (result.error) {
@@ -70,6 +71,10 @@ window.NuggetfinderCommunity = (function () {
         await pages.mod(root, route, client, user, esc);
       }, root.querySelector('[role=status]')));
       if(window.NuggetfinderCommunity.mountCourtReview)await window.NuggetfinderCommunity.mountCourtReview(root,client,esc);
+      const session=await client.auth?.getSession();
+      if(location.hash!=='#/mod')return;
+      if(communityPlaceReviewAvailable()&&session?.data?.session?.access_token)await window.NuggetfinderCommunity.mountPlaceReview(root,session.data.session.access_token,esc);
+      root.insertAdjacentHTML('beforeend','<p><a class="wave-link" href="crew.html#mod">Open private photo and menu review</a></p>');
     } catch (error) {
       if (location.hash === '#/mod') shell(root, 'Moderator desk', '<p>Moderator access required.</p>');
     }
